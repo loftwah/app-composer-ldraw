@@ -13,6 +13,6 @@
     "png-export",
     "svg-export"
   ],
-  "offline": "service-worker-after-complete-asset-cache",
+  "offline": "core-editor-precache; requested-fonts-and-helpers-cached-after-load",
   "agentConnection": "same-browser-window.ldraw; no MCP server"
 }

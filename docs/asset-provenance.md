@@ -10,7 +10,10 @@ The mark is the approved flat Composer identity, used for the return link.
 
 The drawing engine is the npm published `@excalidraw/excalidraw@0.18.1`, MIT.
 The lockfile pins integrity. Build copies the package's entire `dist/prod/fonts`
-tree, including font licenses, to this app's own `excalidraw-assets/fonts`.
+tree to this app's own `excalidraw-assets/fonts`. The published package contains
+only font binaries, so distribution notices are retained separately under
+`public/licenses`: the exact Excalidraw v0.18.1 MIT notice, font metadata comments
+from that source tag, and the named fonts' official upstream license notices.
 The asset path is set before editor code loads. No font CDN is required.
 
 LDraw's initial diagram palettes are simple named configuration. Infrastructure,

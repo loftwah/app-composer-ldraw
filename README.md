@@ -29,9 +29,13 @@ elements. Native element metadata, IDs, text and embedded image bytes are kept.
 PNG/SVG preview and download use the same Excalidraw renderer as the editor,
 with 24 px padding, chosen background and PNG 1×/2×/3× scale. Huge PNGs fail
 with an actionable message instead of allocating an unbounded canvas.
-All engine fonts are self-hosted. The service worker caches the full asset set
-before reporting “Offline copy ready”. Drawing in an already loaded tab and a
-fresh offline relaunch require separate browser qualification.
+All engine fonts are self-hosted. The service worker precaches the core editor
+and default fonts, then caches additional local fonts and import/export helpers
+as they load. “Offline workspace cached” describes that core cache, not proof
+that every drawing/font/helper works offline. Load the current drawing and run
+its export once before going offline. New fonts may need a connection. Drawing
+in an already loaded tab and a fresh offline relaunch require separate browser
+qualification with the current scene and export assets actually loaded.
 
 ## Local agent use
 

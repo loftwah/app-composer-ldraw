@@ -7,8 +7,18 @@ import { join } from "node:path";
 const sha = execFileSync("git", ["rev-parse", "HEAD"], {
   encoding: "utf8",
 }).trim();
+const sourceTree = execFileSync("git", ["rev-parse", "HEAD^{tree}"], {
+  encoding: "utf8",
+}).trim();
+const workingTreeClean = !execFileSync("git", ["status", "--porcelain"], {
+  encoding: "utf8",
+}).trim();
 await build({
-  build: { outDir: "dist", chunkSizeWarningLimit: 1800 },
+  build: {
+    outDir: "dist",
+    manifest: "asset-manifest.json",
+    chunkSizeWarningLimit: 1800,
+  },
   define: { "process.env.IS_PREACT": "false" },
 });
 await mkdir("dist/excalidraw-assets", { recursive: true });
@@ -22,6 +32,8 @@ await writeFile(
   JSON.stringify(
     {
       source: sha,
+      sourceTree,
+      workingTreeClean,
       app: "ldraw",
       excalidraw: "0.18.1",
       builtAt: new Date().toISOString(),
@@ -45,12 +57,52 @@ const digest = createHash("sha256");
 for (const file of files)
   digest.update(file).update(await readFile(join("dist", file)));
 const cache = `ldraw-${digest.digest("hex").slice(0, 24)}`;
-const urls = ["/", ...files.map((file) => `/${file}`)];
+// Precache the editor's static dependency graph and default fonts only. Other
+// bundled languages, import helpers and fonts are cached after actual requests.
+const manifest = JSON.parse(await readFile("dist/asset-manifest.json", "utf8"));
+const core = new Set([
+  "index.html",
+  "asset-path.js",
+  "build.json",
+  "app.manifest.json",
+  "brand/composer-mark.svg",
+  "brand/space.woff2",
+]);
+const visited = new Set();
+function collect(key) {
+  if (visited.has(key)) return;
+  visited.add(key);
+  const chunk = manifest[key];
+  if (!chunk) return;
+  core.add(chunk.file);
+  for (const css of chunk.css ?? []) core.add(css);
+  for (const dependency of chunk.imports ?? []) collect(dependency);
+}
+for (const [key, chunk] of Object.entries(manifest))
+  if (chunk.isEntry) collect(key);
+for (const file of files)
+  if (/^excalidraw-assets\/fonts\/(Assistant|Excalifont)\//.test(file))
+    core.add(file);
+// Cloudflare consumes control files without serving them as assets.
+const available = files.filter(
+  (file) => !["_headers", "_redirects"].includes(file),
+);
+const urls = [
+  "/",
+  ...[...core]
+    .filter((file) => available.includes(file))
+    .sort()
+    .map((file) => `/${file}`),
+];
+let precacheBytes = 0;
+for (const file of core)
+  precacheBytes += (await readFile(join("dist", file))).length;
 await writeFile(
   "dist/sw.js",
   `/* Generated local-only offline cache; no scene data is cached here. */
 const CACHE = ${JSON.stringify(cache)};
 const URLS = ${JSON.stringify(urls, null, 2)};
+const ASSETS = new Set(${JSON.stringify(["/", ...available.map((file) => `/${file}`)])});
 self.addEventListener('install', (event) => event.waitUntil((async () => {
   const cache = await caches.open(CACHE);
   await cache.addAll(URLS);
@@ -67,14 +119,28 @@ self.addEventListener('activate', (event) => event.waitUntil((async () => {
 })()));
 self.addEventListener('message', (event) => { if (event.data?.type === 'LDRAW_CHECK_READY') event.waitUntil(notify()); });
 self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET' || new URL(event.request.url).origin !== self.location.origin) return;
+  const url = new URL(event.request.url);
+  if (event.request.method !== 'GET' || url.origin !== self.location.origin || !ASSETS.has(url.pathname)) return;
   event.respondWith((async () => {
-    const cached = await (await caches.open(CACHE)).match(event.request, { ignoreSearch: true });
-    return cached || fetch(event.request);
+    const cache = await caches.open(CACHE);
+    const cached = await cache.match(event.request, { ignoreSearch: true });
+    if (cached) return cached;
+    const response = await fetch(event.request);
+    if (response.ok) await cache.put(url.pathname, response.clone());
+    return response;
   })());
 });
 `,
 );
 console.log(
-  JSON.stringify({ source: sha, cache, assets: urls.length, app: "ldraw" }),
+  JSON.stringify({
+    source: sha,
+    sourceTree,
+    workingTreeClean,
+    cache,
+    precacheAssets: urls.length,
+    precacheBytes,
+    bundledAssets: available.length,
+    app: "ldraw",
+  }),
 );

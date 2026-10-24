@@ -58,6 +58,25 @@ export function validateScene(input) {
         "Drawing contains duplicate IDs or unsupported elements. Web embeds are unavailable.",
       );
     ids.add(element.id);
+    if (element.type === "text" && typeof element.text !== "string")
+      throw new Error("Drawing contains invalid text.");
+    if (
+      element.points &&
+      (!Array.isArray(element.points) ||
+        element.points.length > 100000 ||
+        element.points.some(
+          (point) =>
+            !Array.isArray(point) ||
+            point.length !== 2 ||
+            point.some(
+              (value) =>
+                typeof value !== "number" ||
+                !Number.isFinite(value) ||
+                Math.abs(value) > 1e8,
+            ),
+        ))
+    )
+      throw new Error("Drawing contains invalid line geometry.");
     for (const key of ["x", "y", "width", "height", "angle"]) {
       if (
         typeof element[key] !== "number" ||
@@ -72,7 +91,7 @@ export function validateScene(input) {
       element.type === "image" &&
       !element.isDeleted &&
       element.fileId &&
-      !files[element.fileId]
+      !Object.hasOwn(files, element.fileId)
     )
       throw new Error("An image is missing its embedded file.");
   }
@@ -93,7 +112,7 @@ export function nextDraft(current, expectedRevision, scene) {
     revision: expectedRevision + 1,
     savedAt: new Date().toISOString(),
     scene: validateScene(scene),
-    previous: current?.scene ?? null,
+    previous: current ? recoverDraft(current).scene : null,
   };
 }
 

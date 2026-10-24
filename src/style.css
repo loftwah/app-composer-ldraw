@@ -159,13 +159,8 @@ input:focus-visible {
   background: #fff;
   box-shadow: 0 12px 70px #0005;
 }
-.preview::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: #0003;
-  z-index: -1;
-  pointer-events: none;
+.preview::backdrop {
+  background: #0005;
 }
 .preview-heading {
   display: flex;

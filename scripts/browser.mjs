@@ -22,6 +22,8 @@ export async function withBrowser(action) {
       const pathname = decodeURIComponent(
         new URL(request.url, "http://localhost").pathname,
       );
+      if (["/_headers", "/_redirects"].includes(pathname))
+        throw new Error("Cloudflare control file is not served");
       const root = resolve("dist");
       const file = resolve(
         root,
@@ -63,10 +65,26 @@ export async function withBrowser(action) {
         downloadsPath: join(temporaryRoot, "downloads"),
       },
     );
+    const browserErrors = [];
+    const externalRequests = [];
+    context.on("page", (page) =>
+      page.on("pageerror", (error) => browserErrors.push(error.message)),
+    );
+    context.on("request", (request) => {
+      if (!request.url().startsWith(origin) && /^https?:/.test(request.url()))
+        externalRequests.push(new URL(request.url()).origin);
+    });
     const page = await context.newPage();
     await page.goto(origin, { waitUntil: "networkidle" });
     await page.waitForFunction(() => Boolean(window.ldraw));
-    return await action({ context, page, origin, temporaryRoot });
+    return await action({
+      context,
+      page,
+      origin,
+      temporaryRoot,
+      browserErrors,
+      externalRequests,
+    });
   } finally {
     await cleanup();
   }

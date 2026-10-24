@@ -48,6 +48,11 @@ const afterPaint = () =>
   new Promise<void>((resolve) =>
     requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
   );
+const composerReturn = new URL("https://composer.loftwah.com/");
+for (const key of ["analytics", "qa"]) {
+  const value = new URLSearchParams(window.location.search).get(key);
+  if (value !== null) composerReturn.searchParams.set(key, value);
+}
 
 export function App() {
   const [api, setApi] = useState<ExcalidrawImperativeAPI>();
@@ -62,6 +67,7 @@ export function App() {
   const [busy, setBusy] = useState(false);
   const [offline, setOffline] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
+  const previewDialog = useRef<HTMLDialogElement>(null);
   const initialized = useRef(false);
   const enabled = useRef(false);
   const pending = useRef("");
@@ -122,11 +128,13 @@ export function App() {
     initialized.current = true;
     let disposed = false;
     void (async () => {
+      let shouldSave = true;
       try {
         const draft = await readDraft();
         if (disposed) return;
         storageRevision.current = draft.revision;
         if (draft.scene) {
+          shouldSave = draft.recovered;
           const restored = await loadFromBlob(
             new Blob([JSON.stringify(draft.scene)]),
             null,
@@ -175,7 +183,11 @@ export function App() {
         api.getFiles(),
         "local",
       );
-      observe(raw);
+      if (shouldSave) observe(raw);
+      else {
+        lastObserved.current = raw;
+        revision.current += 1;
+      }
     })();
     return () => {
       disposed = true;
@@ -340,6 +352,10 @@ export function App() {
     },
     [preview],
   );
+  useEffect(() => {
+    if (preview && !previewDialog.current?.open)
+      previewDialog.current?.showModal();
+  }, [preview]);
 
   async function openFile(file: File) {
     setBusy(true);
@@ -416,7 +432,7 @@ export function App() {
       <header className="toolbar" aria-label="LDraw drawing actions">
         <a
           className="composer-return"
-          href="https://composer.loftwah.com/?analytics=off"
+          href={composerReturn.href}
           aria-label="Return to App Composer"
         >
           <img src="/brand/composer-mark.svg" alt="" width="28" height="28" />
@@ -465,9 +481,19 @@ export function App() {
             onClick={() => {
               try {
                 download(
-                  new Blob([JSON.stringify(capture().scene)], {
-                    type: "application/json",
-                  }),
+                  new Blob(
+                    [
+                      serializeAsJSON(
+                        api!.getSceneElementsIncludingDeleted(),
+                        api!.getAppState(),
+                        api!.getFiles(),
+                        "local",
+                      ),
+                    ],
+                    {
+                      type: "application/json",
+                    },
+                  ),
                   "drawing.excalidraw",
                 );
               } catch (failure) {
@@ -527,7 +553,7 @@ export function App() {
         <span role="status">{status}</span>
         <span>
           {offline
-            ? "Offline copy ready"
+            ? "Offline workspace cached · new fonts may need a connection"
             : "Local browser storage · keep an editable download"}
         </span>
       </div>
@@ -541,6 +567,7 @@ export function App() {
       ) : null}
       <section className="canvas" aria-label="Drawing canvas">
         <Excalidraw
+          viewModeEnabled={!ready}
           excalidrawAPI={setApi}
           onChange={(elements, appState, files) => {
             if (initialized.current && ready)
@@ -558,7 +585,8 @@ export function App() {
       </section>
       {preview ? (
         <dialog
-          open
+          ref={previewDialog}
+          onCancel={() => setPreview(undefined)}
           className="preview"
           aria-label={`${preview.kind.toUpperCase()} export preview`}
         >

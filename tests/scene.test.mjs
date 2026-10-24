@@ -83,4 +83,14 @@ test("damaged latest save recovers previous snapshot and reports it", () => {
     /could not be read/,
   );
   assert.equal(recoverDraft(null).revision, 0);
+  const repaired = nextDraft(
+    { scene: {}, previous: scene, revision: 9 },
+    9,
+    scene,
+  );
+  assert.deepEqual(
+    repaired.previous,
+    scene,
+    "Recovery retains a valid fallback after the next save",
+  );
 });
