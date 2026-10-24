@@ -74,6 +74,42 @@ await withBrowser(
         .scene.elements.some((e) => e.text === "Human note stays editable"),
     );
     const human = await page.evaluate(() => window.ldraw.readScene());
+    const modifier = process.platform === "darwin" ? "Meta" : "Control";
+    const humanElement = human.scene.elements.find(
+      (e) => e.text === "Human note stays editable",
+    );
+    await page.keyboard.press(`${modifier}+z`);
+    await page.waitForFunction(
+      () =>
+        !window.ldraw
+          .readScene()
+          .scene.elements.some(
+            (e) => !e.isDeleted && e.text === "Human note stays editable",
+          ),
+    );
+    await page.keyboard.press(`${modifier}+Shift+z`);
+    await page.waitForFunction(
+      (id) =>
+        window.ldraw
+          .readScene()
+          .scene.elements.some((e) => !e.isDeleted && e.id === id),
+      humanElement.id,
+    );
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    assert.equal(
+      await page.evaluate(
+        () => matchMedia("(prefers-reduced-motion: reduce)").matches,
+      ),
+      true,
+    );
+    await page.keyboard.press("Alt+Shift+d");
+    await page.locator(".excalidraw.theme--dark").waitFor();
+    await page.screenshot({ path: "output/desktop-dark-reduced-motion.png" });
+    await page.keyboard.press("Alt+Shift+d");
+    await page.locator(".excalidraw:not(.theme--dark)").first().waitFor();
+    checks.push(
+      "native keyboard undo/redo preserves text ID; desktop native dark/light canvases exercised with reduced motion; LDraw toolbar remains neutral light",
+    );
     const stale = await page.evaluate(async (old) => {
       try {
         await window.ldraw.replaceScene(old.scene, {
@@ -226,6 +262,33 @@ await withBrowser(
     checks.push("actual IndexedDB concurrent-tab stale save refused");
 
     const beforeBadImport = await page.evaluate(() => window.ldraw.readScene());
+    await page.evaluate(async () => {
+      const current = window.ldraw.readScene();
+      await window.ldraw.replaceScene(
+        { ...current.scene, elements: [] },
+        { expectedRevision: current.revision },
+      );
+    });
+    await page.getByRole("button", { name: "PNG", exact: true }).click();
+    await page
+      .getByRole("alert")
+      .filter({ hasText: "Add something to the drawing" })
+      .waitFor();
+    assert.equal(
+      (await page.evaluate(() => window.ldraw.readScene())).scene.elements
+        .length,
+      0,
+    );
+    await page.evaluate(async (prior) => {
+      const current = window.ldraw.readScene();
+      await window.ldraw.replaceScene(prior, {
+        expectedRevision: current.revision,
+      });
+    }, beforeBadImport.scene);
+    await page.getByRole("button", { name: "Dismiss message" }).click();
+    checks.push(
+      "empty export fails visibly without losing the editable scene; prior drawing restores through the validated revision API",
+    );
     await writeFile(
       join(temporaryRoot, "invalid.excalidraw"),
       JSON.stringify({
@@ -297,6 +360,12 @@ await withBrowser(
     });
     await page.screenshot({ path: "output/phone-edit-import-export.png" });
     await page.getByRole("button", { name: "Close export preview" }).click();
+    await page.mouse.click(280, 470);
+    await page.keyboard.press("Alt+Shift+d");
+    await page.locator(".excalidraw.theme--dark").waitFor();
+    await page.screenshot({ path: "output/phone-dark-reduced-motion.png" });
+    await page.keyboard.press("Alt+Shift+d");
+    await page.locator(".excalidraw:not(.theme--dark)").first().waitFor();
     assert.ok(
       await page
         .locator(".canvas")
