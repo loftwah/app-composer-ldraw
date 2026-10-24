@@ -124,7 +124,7 @@ await withBrowser(
     checks.push("native human text entry and stale agent revision rejection");
 
     const pixel =
-      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aWyQAAAAASUVORK5CYII=";
+      "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=";
     const fixture = structuredClone(human.scene);
     const base = fixture.elements.find((e) => e.type === "rectangle");
     fixture.elements.push({
