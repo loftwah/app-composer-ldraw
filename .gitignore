@@ -1,0 +1,8 @@
+node_modules
+dist/
+.wrangler/
+.vite/
+output/
+.env*
+.dev.vars*
+*.db*

@@ -1,0 +1,35 @@
+{
+  "name": "app-composer-ldraw",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.8.1",
+  "engines": {
+    "node": ">=22 <23"
+  },
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 4396",
+    "build": "node scripts/build.mjs",
+    "check": "tsc --noEmit && node --test tests/*.test.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "format": "prettier --write src scripts tests *.json *.html",
+    "scene": "node scripts/scene.mjs",
+    "render": "node scripts/render.mjs",
+    "qualify": "node scripts/qualify.mjs",
+    "deploy": "node scripts/deploy.mjs"
+  },
+  "dependencies": {
+    "@excalidraw/excalidraw": "0.18.1",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.31",
+    "@types/react-dom": "18.3.7",
+    "playwright": "1.62.1",
+    "prettier": "3.9.10",
+    "typescript": "6.0.3",
+    "vite": "8.3.5",
+    "wrangler": "4.143.1"
+  }
+}

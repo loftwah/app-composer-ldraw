@@ -1,0 +1,18 @@
+{
+  "id": "ldraw",
+  "name": "LDraw",
+  "description": "Local editable drawings, powered by Excalidraw.",
+  "version": "1.0.0",
+  "entry": "/",
+  "storage": "independent-browser-indexeddb",
+  "schema": "excalidraw/2",
+  "support": { "desktop": "unknown", "tablet": "unknown", "phone": "unknown" },
+  "capabilities": [
+    "local-drawing",
+    "editable-file-import-export",
+    "png-export",
+    "svg-export"
+  ],
+  "offline": "service-worker-after-complete-asset-cache",
+  "agentConnection": "same-browser-window.ldraw; no MCP server"
+}
