@@ -39,6 +39,12 @@ qualification with the current scene and export assets actually loaded.
 
 ## Local agent use
 
+Responses include `Cache-Control: public, no-transform` so Cloudflare's automatic
+Web Analytics cannot inject an external beacon into the local drawing workspace.
+The strict CSP and the zero-external-request browser check stay intact. This
+app-local response policy follows [Cloudflare's documented control](https://developers.cloudflare.com/web-analytics/get-started/)
+and does not change analytics settings for other portfolio sites.
+
 Use the native `.excalidraw` version 2 file format; there is no second scene
 protocol or MCP service. Authorise browser access yourself. In this exact editor
 tab, `window.ldraw.readScene()` returns `{ revision, scene }` and

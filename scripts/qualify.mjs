@@ -200,7 +200,7 @@ await withBrowser(
     );
     await writeFile("output/qualification.svg", svg);
     await page.getByRole("button", { name: "PNG", exact: true }).click();
-    await page.getByRole("dialog").waitFor();
+    await page.getByRole("dialog", { name: "PNG export preview" }).waitFor();
     await page.waitForFunction(() => {
       const image = document.querySelector(".preview img");
       return image?.complete && image.naturalWidth > 0;
@@ -360,7 +360,7 @@ await withBrowser(
         .scene.elements.some((e) => e.text === "Phone viewport edit"),
     );
     await page.getByRole("button", { name: "SVG", exact: true }).click();
-    await page.getByRole("dialog").waitFor();
+    await page.getByRole("dialog", { name: "SVG export preview" }).waitFor();
     await page.waitForFunction(() => {
       const image = document.querySelector(".preview img");
       return image?.complete && image.naturalWidth > 0;
