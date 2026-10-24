@@ -4,6 +4,22 @@ import { execFileSync } from "node:child_process";
 import { join } from "node:path";
 import { withBrowser, sceneAndExports } from "./browser.mjs";
 
+async function clearOwnedHttpCache(page, context) {
+  const workerCaches = await page.evaluate(() => caches.keys());
+  assert.ok(workerCaches.length, "The offline workspace must be cached first.");
+  const protocol = await context.newCDPSession(page);
+  try {
+    await protocol.send("Network.clearBrowserCache");
+  } finally {
+    await protocol.detach();
+  }
+  assert.deepEqual(
+    await page.evaluate(() => caches.keys()),
+    workerCaches,
+    "Browser HTTP cache clearing must retain service-worker CacheStorage.",
+  );
+}
+
 await mkdir("output", { recursive: true });
 const source = execFileSync("git", ["rev-parse", "HEAD"], {
   encoding: "utf8",
@@ -227,6 +243,7 @@ await withBrowser(
       undefined,
       { timeout: 90000 },
     );
+    await clearOwnedHttpCache(page, context);
     await context.setOffline(true);
     await page.reload({ waitUntil: "networkidle" });
     await page.waitForFunction(() =>
@@ -453,6 +470,7 @@ await withBrowser(
         document.querySelector("[role=status]")?.textContent ===
         "Saved on this browser",
     );
+    await clearOwnedHttpCache(page, context);
     await context.setOffline(true);
     await page.reload({ waitUntil: "networkidle" });
     await page.waitForFunction(() =>

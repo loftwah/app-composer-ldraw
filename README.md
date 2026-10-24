@@ -39,6 +39,14 @@ qualification with the current scene and export assets actually loaded.
 
 ## Local agent use
 
+The core cache follows Vite's static imports, CSS and referenced assets, plus the
+seven tiny conditional file-picker/save and canvas-polyfill modules needed at
+native startup. Their published manifest identities are checked at build time.
+Offline qualification clears the owned browser's HTTP cache while retaining
+service-worker CacheStorage, so a normal browser cache cannot hide missing
+startup resources. Additional fonts and optional import helpers still cache only
+after they load.
+
 Responses include `Cache-Control: public, no-transform` so Cloudflare's automatic
 Web Analytics cannot inject an external beacon into the local drawing workspace.
 The strict CSP and the zero-external-request browser check stay intact. This

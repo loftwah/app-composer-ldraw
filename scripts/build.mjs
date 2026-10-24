@@ -70,13 +70,25 @@ function collect(key) {
   if (!chunk) return;
   core.add(chunk.file);
   for (const css of chunk.css ?? []) core.add(css);
+  for (const asset of chunk.assets ?? []) core.add(asset);
   for (const dependency of chunk.imports ?? []) collect(dependency);
 }
-for (const [key, chunk] of Object.entries(manifest))
-  if (chunk.isEntry) collect(key);
+const bootstrapHelpers = [];
+for (const [key, chunk] of Object.entries(manifest)) {
+  // These tiny conditional imports run during a fresh native editor boot,
+  // often before the first service worker controls the page's requests.
+  const bootstrap = /\/(browser-fs-access|canvas-roundrect-polyfill)\//.test(
+    key,
+  );
+  if (bootstrap) bootstrapHelpers.push(chunk.file);
+  if (chunk.isEntry || bootstrap) collect(key);
+}
+if (bootstrapHelpers.length !== 7)
+  throw new Error(
+    "Pinned native browser bootstrap imports changed. Review offline startup before release.",
+  );
 for (const file of files)
-  if (/^excalidraw-assets\/fonts\/(Assistant|Excalifont)\//.test(file))
-    core.add(file);
+  if (/^excalidraw-assets\/fonts\/Excalifont\//.test(file)) core.add(file);
 // Cloudflare consumes control files without serving them as assets.
 const available = files.filter(
   (file) => !["_headers", "_redirects"].includes(file),
@@ -135,6 +147,7 @@ console.log(
     cache,
     precacheAssets: urls.length,
     precacheBytes,
+    bootstrapHelpers: bootstrapHelpers.length,
     bundledAssets: available.length,
     app: "ldraw",
   }),
