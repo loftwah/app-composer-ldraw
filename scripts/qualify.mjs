@@ -47,6 +47,7 @@ assert.equal(
   "Qualification source must be clean.",
 );
 const checks = [];
+const startupGeometry = [];
 await withBrowser(
   async ({
     page,
@@ -57,6 +58,9 @@ await withBrowser(
     externalRequests,
   }) => {
     const initial = await page.evaluate(() => window.ldraw.readScene());
+    await page.evaluate(() =>
+      document.fonts.load("32px Excalifont", "Creator journey ·"),
+    );
     assert.ok(
       initial.scene.elements.length > 8,
       "Real editable starting diagram is present.",
@@ -71,7 +75,40 @@ await withBrowser(
       "Project choice must not recolour existing content.",
     );
     await page.getByRole("button", { name: "Insert example" }).click();
+    await page.waitForFunction(
+      () =>
+        window.ldraw
+          .readScene()
+          .scene.elements.filter(
+            (element) => element.text === "Creator journey",
+          ).length === 2,
+    );
     const appended = await page.evaluate(() => window.ldraw.readScene());
+    for (const text of [
+      "Creator journey",
+      "One owner · independent apps · shared discovery",
+    ]) {
+      const cold = initial.scene.elements.find(
+        (element) => element.text === text,
+      );
+      const later = appended.scene.elements.find(
+        (element) => element.text === text && element.id !== cold.id,
+      );
+      assert.equal(cold.fontFamily, later.fontFamily);
+      assert.equal(cold.fontSize, later.fontSize);
+      assert.ok(
+        Math.abs(cold.width - later.width) < 0.01,
+        "Cold startup text must have the same native font geometry as insertion after font load.",
+      );
+      startupGeometry.push({
+        text,
+        initialWidth: cold.width,
+        loadedWidth: later.width,
+      });
+    }
+    checks.push(
+      "cold initial preset title/subtitle geometry matches native insertion after Excalifont loads",
+    );
     for (const element of initial.scene.elements)
       assert.ok(appended.scene.elements.some((e) => e.id === element.id));
     checks.push(
@@ -188,6 +225,23 @@ await withBrowser(
         `Lost imported ID ${element.id}`,
       );
     assert.equal(saved.files["qualification-pixel"].dataURL, pixel);
+    const restoredHuman = saved.elements.find(
+      (element) => element.id === humanElement.id,
+    );
+    for (const key of [
+      "x",
+      "y",
+      "width",
+      "height",
+      "fontSize",
+      "fontFamily",
+      "text",
+    ])
+      assert.deepEqual(
+        restoredHuman[key],
+        humanElement[key],
+        "Imported human text geometry and identity must remain intact.",
+      );
     assert.ok(
       saved.elements.some((e) => e.text === "Human note stays editable"),
     );
@@ -497,6 +551,7 @@ await writeFile(
       environment: "local static assets / Playwright Chromium",
       engine: "0.18.1",
       checks,
+      startupGeometry,
       temporaryResources: "owned profile/download root removed",
       production: "unverified",
       physicalDevices: "unverified",

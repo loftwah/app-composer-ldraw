@@ -10,6 +10,7 @@ import {
 import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
 import {
   makePreset,
+  preparePresetFont,
   presets,
   projects,
   type Preset,
@@ -59,6 +60,7 @@ export function App() {
   const [ready, setReady] = useState(false);
   const [status, setStatus] = useState("Opening local drawing…");
   const [error, setError] = useState("");
+  const [fontIssue, setFontIssue] = useState(false);
   const [project, setProject] = useState<Project>("composer");
   const [preset, setPreset] = useState<Preset>("journey");
   const [background, setBackground] = useState(true);
@@ -156,8 +158,22 @@ export function App() {
               "The latest local save was damaged. The previous save was recovered; download a copy.",
             );
         } else {
+          let generated: ReturnType<typeof makePreset> = [];
+          try {
+            await preparePresetFont();
+            if (disposed) return;
+            generated = makePreset("journey", "composer");
+          } catch (failure) {
+            if (disposed) return;
+            setFontIssue(true);
+            setError(
+              failure instanceof Error
+                ? failure.message
+                : "The example font is unavailable. Local saves still work.",
+            );
+          }
           api.updateScene({
-            elements: makePreset("journey", "composer"),
+            elements: generated,
             appState: { viewBackgroundColor: "#ffffff" },
             captureUpdate: CaptureUpdateAction.NEVER,
           });
@@ -399,23 +415,40 @@ export function App() {
       setBusy(false);
     }
   }
-  function insertPreset() {
-    if (!api || !ready) return;
-    const existing = api.getSceneElementsIncludingDeleted();
-    const bottom = Math.max(
-      0,
-      ...existing.filter((e) => !e.isDeleted).map((e) => e.y + e.height),
-    );
-    const inserted = makePreset(
-      preset,
-      project,
-      existing.length ? bottom + 70 : 0,
-    );
-    api.updateScene({
-      elements: [...existing, ...inserted],
-      captureUpdate: CaptureUpdateAction.IMMEDIATELY,
-    });
-    api.scrollToContent(inserted, { fitToContent: true });
+  async function insertPreset() {
+    if (!api || !ready || busy) return;
+    setBusy(true);
+    try {
+      await preparePresetFont().catch((failure) => {
+        setFontIssue(true);
+        throw failure;
+      });
+      setFontIssue(false);
+      // Read after the wait so concurrent human edits remain in the scene.
+      const existing = api.getSceneElementsIncludingDeleted();
+      const bottom = Math.max(
+        0,
+        ...existing.filter((e) => !e.isDeleted).map((e) => e.y + e.height),
+      );
+      const inserted = makePreset(
+        preset,
+        project,
+        existing.length ? bottom + 70 : 0,
+      );
+      api.updateScene({
+        elements: [...existing, ...inserted],
+        captureUpdate: CaptureUpdateAction.IMMEDIATELY,
+      });
+      api.scrollToContent(inserted, { fitToContent: true });
+    } catch (failure) {
+      setError(
+        failure instanceof Error
+          ? failure.message
+          : "The example could not be inserted. Your drawing is unchanged.",
+      );
+    } finally {
+      setBusy(false);
+    }
   }
   function selectProject(value: Project) {
     setProject(value);
@@ -550,7 +583,10 @@ export function App() {
         </div>
       </header>
       <div className="save-status">
-        <span role="status">{status}</span>
+        <span role="status">
+          {fontIssue ? "Example font unavailable · " : ""}
+          {status}
+        </span>
         <span>
           {offline
             ? "Offline workspace cached · new fonts may need a connection"

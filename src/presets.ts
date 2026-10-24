@@ -1,6 +1,56 @@
 import { convertToExcalidrawElements } from "@excalidraw/excalidraw";
 import type { ExcalidrawElementSkeleton } from "@excalidraw/excalidraw/data/transform";
 
+let presetFont: Promise<void> | undefined;
+/** Wait for the native registered font before measuring any new preset text. */
+export function preparePresetFont(): Promise<void> {
+  return (presetFont ??= new Promise<void>((resolve, reject) => {
+    let frame = 0;
+    let settled = false;
+    const timer = setTimeout(
+      () =>
+        finish(
+          new Error(
+            "The example font could not load. Local drawing and downloads remain available; try Insert example again when connected.",
+          ),
+        ),
+      8000,
+    );
+    function finish(error?: unknown) {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      cancelAnimationFrame(frame);
+      if (error) reject(error);
+      else resolve();
+    }
+    function registered() {
+      const available = [...document.fonts].some(
+        (font) => font.family.replace(/["']/g, "") === "Excalifont",
+      );
+      if (!available) {
+        frame = requestAnimationFrame(registered);
+        return;
+      }
+      void document.fonts
+        .load("32px Excalifont", "Creator journey ·")
+        .then((fonts) => {
+          if (!fonts.length || fonts.some((font) => font.status !== "loaded"))
+            finish(
+              new Error(
+                "The example font is unavailable. Your existing drawing is unchanged.",
+              ),
+            );
+          else finish();
+        }, finish);
+    }
+    registered();
+  }).catch((error) => {
+    presetFont = undefined;
+    throw error;
+  }));
+}
+
 export const projects = {
   composer: { label: "Composer", stroke: "#FC5B05", fill: "#fff4ed" },
   infrastructure: {
@@ -41,6 +91,7 @@ export const presets = {
   },
 } as const;
 export type Preset = keyof typeof presets;
+/** Call preparePresetFont() before measuring newly generated scene elements. */
 export function makePreset(name: Preset, project: Project, offsetY = 0) {
   const { labels, notes } = presets[name];
   const palette = projects[project];
