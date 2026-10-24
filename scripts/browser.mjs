@@ -14,7 +14,7 @@ const contentTypes = {
   ".woff2": "font/woff2",
   ".wasm": "application/wasm",
 };
-export async function withBrowser(action) {
+export async function withBrowser(action, options = {}) {
   const temporaryRoot = await mkdtemp(join(tmpdir(), "ldraw-owned-"));
   let context;
   const server = createServer(async (request, response) => {
@@ -63,6 +63,7 @@ export async function withBrowser(action) {
         headless: true,
         viewport: { width: 1440, height: 1000 },
         downloadsPath: join(temporaryRoot, "downloads"),
+        serviceWorkers: options.serviceWorkers ?? "allow",
       },
     );
     const browserErrors = [];
@@ -75,6 +76,7 @@ export async function withBrowser(action) {
         externalRequests.push(new URL(request.url()).origin);
     });
     const page = await context.newPage();
+    await options.beforeNavigate?.({ page, context, origin });
     await page.goto(origin, { waitUntil: "networkidle" });
     await page.waitForFunction(() => Boolean(window.ldraw));
     return await action({

@@ -2,20 +2,14 @@ import { convertToExcalidrawElements } from "@excalidraw/excalidraw";
 import type { ExcalidrawElementSkeleton } from "@excalidraw/excalidraw/data/transform";
 
 let presetFont: Promise<void> | undefined;
+export const PRESET_FONT_ERROR =
+  "The example font is unavailable. Your drawing is unchanged. Save editable, then reload when connected.";
 /** Wait for the native registered font before measuring any new preset text. */
 export function preparePresetFont(): Promise<void> {
   return (presetFont ??= new Promise<void>((resolve, reject) => {
     let frame = 0;
     let settled = false;
-    const timer = setTimeout(
-      () =>
-        finish(
-          new Error(
-            "The example font could not load. Local drawing and downloads remain available; try Insert example again when connected.",
-          ),
-        ),
-      8000,
-    );
+    const timer = setTimeout(() => finish(new Error(PRESET_FONT_ERROR)), 8000);
     function finish(error?: unknown) {
       if (settled) return;
       settled = true;
@@ -36,18 +30,15 @@ export function preparePresetFont(): Promise<void> {
         .load("32px Excalifont", "Creator journey ·")
         .then((fonts) => {
           if (!fonts.length || fonts.some((font) => font.status !== "loaded"))
-            finish(
-              new Error(
-                "The example font is unavailable. Your existing drawing is unchanged.",
-              ),
-            );
+            finish(new Error(PRESET_FONT_ERROR));
           else finish();
         }, finish);
     }
     registered();
-  }).catch((error) => {
-    presetFont = undefined;
-    throw error;
+  }).catch(() => {
+    // A failed native FontFace can stay rejected for this document's lifetime.
+    // Recovery is an explicit saved-drawing reload, never a promised in-page retry.
+    throw new Error(PRESET_FONT_ERROR);
   }));
 }
 

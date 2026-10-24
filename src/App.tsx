@@ -11,6 +11,7 @@ import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
 import {
   makePreset,
   preparePresetFont,
+  PRESET_FONT_ERROR,
   presets,
   projects,
   type Preset,
@@ -60,7 +61,7 @@ export function App() {
   const [ready, setReady] = useState(false);
   const [status, setStatus] = useState("Opening local drawing…");
   const [error, setError] = useState("");
-  const [fontIssue, setFontIssue] = useState(false);
+  const [fontError, setFontError] = useState("");
   const [project, setProject] = useState<Project>("composer");
   const [preset, setPreset] = useState<Preset>("journey");
   const [background, setBackground] = useState(true);
@@ -162,14 +163,12 @@ export function App() {
           try {
             await preparePresetFont();
             if (disposed) return;
+            setFontError("");
             generated = makePreset("journey", "composer");
           } catch (failure) {
             if (disposed) return;
-            setFontIssue(true);
-            setError(
-              failure instanceof Error
-                ? failure.message
-                : "The example font is unavailable. Local saves still work.",
+            setFontError(
+              failure instanceof Error ? failure.message : PRESET_FONT_ERROR,
             );
           }
           api.updateScene({
@@ -416,14 +415,18 @@ export function App() {
     }
   }
   async function insertPreset() {
-    if (!api || !ready || busy) return;
+    if (!api || !ready || busy || fontError) return;
     setBusy(true);
     try {
-      await preparePresetFont().catch((failure) => {
-        setFontIssue(true);
-        throw failure;
-      });
-      setFontIssue(false);
+      try {
+        await preparePresetFont();
+        setFontError("");
+      } catch (failure) {
+        setFontError(
+          failure instanceof Error ? failure.message : PRESET_FONT_ERROR,
+        );
+        return;
+      }
       // Read after the wait so concurrent human edits remain in the scene.
       const existing = api.getSceneElementsIncludingDeleted();
       const bottom = Math.max(
@@ -500,7 +503,10 @@ export function App() {
             ))}
           </select>
         </label>
-        <button onClick={insertPreset} disabled={!ready || busy}>
+        <button
+          onClick={insertPreset}
+          disabled={!ready || busy || Boolean(fontError)}
+        >
           Insert example
         </button>
         <div className="file-actions">
@@ -584,7 +590,7 @@ export function App() {
       </header>
       <div className="save-status">
         <span role="status">
-          {fontIssue ? "Example font unavailable · " : ""}
+          {fontError ? "Example font unavailable · " : ""}
           {status}
         </span>
         <span>
@@ -593,6 +599,11 @@ export function App() {
             : "Local browser storage · keep an editable download"}
         </span>
       </div>
+      {fontError ? (
+        <div className="error" role="alert" aria-label="Example font">
+          {fontError}
+        </div>
+      ) : null}
       {error ? (
         <div className="error" role="alert">
           {error}
