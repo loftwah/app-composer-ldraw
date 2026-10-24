@@ -261,7 +261,9 @@ await withBrowser(
     await second.close();
     checks.push("actual IndexedDB concurrent-tab stale save refused");
 
-    const beforeBadImport = await page.evaluate(() => window.ldraw.readScene());
+    const beforeEmptyExport = await page.evaluate(() =>
+      window.ldraw.readScene(),
+    );
     await page.evaluate(async () => {
       const current = window.ldraw.readScene();
       await window.ldraw.replaceScene(
@@ -284,11 +286,14 @@ await withBrowser(
       await window.ldraw.replaceScene(prior, {
         expectedRevision: current.revision,
       });
-    }, beforeBadImport.scene);
+    }, beforeEmptyExport.scene);
     await page.getByRole("button", { name: "Dismiss message" }).click();
     checks.push(
       "empty export fails visibly without losing the editable scene; prior drawing restores through the validated revision API",
     );
+    // Excalidraw's supported restore normalizes native bindings/line geometry.
+    // Isolate the invalid-import assertion from that preceding valid restore.
+    const beforeBadImport = await page.evaluate(() => window.ldraw.readScene());
     await writeFile(
       join(temporaryRoot, "invalid.excalidraw"),
       JSON.stringify({
