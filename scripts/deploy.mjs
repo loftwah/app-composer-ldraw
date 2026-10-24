@@ -1,5 +1,6 @@
 import { execFileSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
+import { readReleaseConfig } from "./release-config.mjs";
 
 const git = (...args) => execFileSync("git", args, { encoding: "utf8" }).trim();
 function guard() {
@@ -11,26 +12,7 @@ function guard() {
   return sha;
 }
 const sha = guard();
-const config = JSON.parse(await readFile("wrangler.jsonc", "utf8"));
-if (
-  config.name !== "composer-ldraw" ||
-  config.account_id !== "1003dc1d93af0ebea56b2f1252f89627" ||
-  config.assets?.directory !== "dist" ||
-  config.routes?.length !== 1 ||
-  config.routes[0].pattern !== "ldraw.loftwah.com" ||
-  config.routes[0].custom_domain !== true
-)
-  throw new Error("Unexpected LDraw account, assets or hostname.");
-for (const key of [
-  "main",
-  "d1_databases",
-  "r2_buckets",
-  "services",
-  "kv_namespaces",
-  "queues",
-  "triggers",
-])
-  if (config[key]) throw new Error(`LDraw cannot deploy ${key}.`);
+await readReleaseConfig();
 const qualification = JSON.parse(
   await readFile("output/qualification.json", "utf8"),
 );
