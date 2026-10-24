@@ -122,11 +122,12 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   if (event.request.method !== 'GET' || url.origin !== self.location.origin || !ASSETS.has(url.pathname)) return;
   event.respondWith((async () => {
-    const cache = await caches.open(CACHE);
-    const cached = await cache.match(event.request, { ignoreSearch: true });
+    let cache;
+    let cached;
+    try { cache = await caches.open(CACHE); cached = await cache.match(event.request, { ignoreSearch: true }); } catch { /* Online editing must survive optional cache failures. */ }
     if (cached) return cached;
     const response = await fetch(event.request);
-    if (response.ok) await cache.put(url.pathname, response.clone());
+    if (response.ok && cache) { try { await cache.put(url.pathname, response.clone()); } catch { /* Reduced offline availability must not break the network response. */ } }
     return response;
   })());
 });
