@@ -16,6 +16,14 @@ only font binaries, so distribution notices are retained separately under
 from that source tag, and the named fonts' official upstream license notices.
 The asset path is set before editor code loads. No font CDN is required.
 
+Excalidraw 0.18.1 additionally registers its built-in CDN fallback even with a
+working local asset path. Chromium reports those fallback registrations as CSP
+violations. `scripts/font-assets.mjs` changes only that fallback URL constant to
+the same-origin bundled font base during Vite packaging. It fails closed if the
+published dev/prod font-manager declaration changes; tests read the actual pinned
+modules. Editor behavior and the strict CSP stay intact. Vite copies the exact
+package fonts to ignored generated public assets for development and packaging.
+
 LDraw's initial diagram palettes are simple named configuration. Infrastructure,
 Game design and Music / FM are diagram topics, not claimed portfolio logos or
 approved product brand packages. Launch Kit owns identity asset packages.

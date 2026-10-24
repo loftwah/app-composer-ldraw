@@ -188,6 +188,8 @@ await withBrowser(
     assert.match(svg, /data:image\/png;base64/);
     assert.match(svg, /Human note stays editable/);
     assert.match(svg, /@font-face/);
+    assert.match(svg, /data:font\/woff2;base64/);
+    assert.ok(!svg.includes("esm.sh"));
     await writeFile(
       "output/qualification.excalidraw",
       JSON.stringify(result.scene, null, 2),

@@ -1,5 +1,5 @@
 import { build } from "vite";
-import { cp, mkdir, readFile, readdir, writeFile } from "node:fs/promises";
+import { readFile, readdir, writeFile } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { join } from "node:path";
@@ -21,12 +21,6 @@ await build({
   },
   define: { "process.env.IS_PREACT": "false" },
 });
-await mkdir("dist/excalidraw-assets", { recursive: true });
-await cp(
-  "node_modules/@excalidraw/excalidraw/dist/prod/fonts",
-  "dist/excalidraw-assets/fonts",
-  { recursive: true },
-);
 await writeFile(
   "dist/build.json",
   JSON.stringify(
