@@ -441,6 +441,11 @@ await withBrowser(
         ?.readScene()
         .scene.elements.some((e) => e.text === "Phone viewport edit"),
     );
+    await page.waitForFunction(
+      () =>
+        document.querySelector("[role=status]")?.textContent ===
+        "Saved on this browser",
+    );
     await context.setOffline(true);
     await page.reload({ waitUntil: "networkidle" });
     await page.waitForFunction(() =>
