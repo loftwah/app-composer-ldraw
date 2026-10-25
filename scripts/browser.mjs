@@ -16,6 +16,7 @@ const contentTypes = {
 };
 export async function withBrowser(action, options = {}) {
   const temporaryRoot = await mkdtemp(join(tmpdir(), "ldraw-owned-"));
+  const assetRoot = resolve(options.appRoot ?? process.cwd(), "dist");
   let context;
   const server = createServer(async (request, response) => {
     try {
@@ -24,13 +25,13 @@ export async function withBrowser(action, options = {}) {
       );
       if (["/_headers", "/_redirects"].includes(pathname))
         throw new Error("Cloudflare control file is not served");
-      const root = resolve("dist");
+      const root = assetRoot;
       const file = resolve(
         root,
         `.${pathname === "/" ? "/index.html" : pathname}`,
       );
       if (!file.startsWith(`${root}/`)) throw new Error("Outside asset root");
-      const headers = await readFile("dist/_headers", "utf8");
+      const headers = await readFile(join(root, "_headers"), "utf8");
       const csp = headers
         .split("\n")
         .find((line) => line.trim().startsWith("Content-Security-Policy:"))
