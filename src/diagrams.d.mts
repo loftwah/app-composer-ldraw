@@ -42,6 +42,25 @@ export const LIME: string;
 export const LIME_TINT: string;
 export const collections: DiagramCollection[];
 export const apps: DiagramApp[];
+export const brandStatus: Record<string, { status: string; note: string }>;
+export const unresolvedBrandIdentities: string[];
+export const projectBrand: Record<string, { status: string; note: string }>;
+export const projects: {
+  composer: { label: string; stroke: string; fill: string; topic: string };
+  infrastructure: {
+    label: string;
+    stroke: string;
+    fill: string;
+    topic: string;
+  };
+  game: { label: string; stroke: string; fill: string; topic: string };
+  music: { label: string; stroke: string; fill: string; topic: string };
+  general: { label: string; stroke: string; fill: string; topic: string };
+};
+export const presetCatalog: Record<
+  PresetName,
+  { label: string; notes: string }
+>;
 export const librarySpecs: DiagramLibraryItem[];
 export const presetBuilders: Record<PresetName, unknown>;
 export function appCard(

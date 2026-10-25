@@ -1,0 +1,92 @@
+{
+  "example": "app-composer-architecture",
+  "brand": {
+    "status": "approved-identity",
+    "identity": "App Composer",
+    "accent": "#FC5B05",
+    "note": "Canonical Composer orange and flat merging-block mark per docs/asset-provenance.md. No other brand is invented."
+  },
+  "authoring": {
+    "server": "ldraw",
+    "version": "1.0.0",
+    "scene": "source.excalidraw",
+    "template": {
+      "kind": "block",
+      "id": "composer-pipeline",
+      "collection": "composer",
+      "x": 80,
+      "y": 172
+    },
+    "elements": 44,
+    "added": [
+      "identity-apps-composer",
+      "identity-apps-composer-bar",
+      "identity-apps-composer-title",
+      "identity-apps-composer-subtitle",
+      "identity-apps-composer-tag",
+      "review-composer-review-agent",
+      "review-composer-review-agent-label",
+      "review-composer-review-owner",
+      "review-composer-review-owner-label",
+      "review-composer-review-deploy",
+      "review-composer-review-deploy-label",
+      "review-composer-review-arrow-1",
+      "review-composer-review-arrow-2",
+      "review-composer-review-note",
+      "trust-infra-trust-visitor",
+      "trust-infra-trust-visitor-title",
+      "trust-infra-trust-visitor-note",
+      "trust-infra-trust-owner",
+      "trust-infra-trust-owner-title",
+      "trust-infra-trust-owner-note",
+      "trust-infra-trust-agent",
+      "trust-infra-trust-agent-title",
+      "trust-infra-trust-agent-note",
+      "architecture-title",
+      "architecture-subtitle",
+      "section-journey",
+      "section-review",
+      "section-trust",
+      "architecture-footer"
+    ],
+    "updated": [],
+    "warnings": [],
+    "sourceRevision": "sha256:364722df450b3a88b07461ad06ce34d541034ce687da0e56de941d06ead82c0a"
+  },
+  "render": {
+    "renderer": "@excalidraw/excalidraw@0.18.1",
+    "app": "ldraw",
+    "builtFrom": "b85f56edc83eb950676e6d80cc8a30de9084aa7e",
+    "builtWorkingTreeClean": true,
+    "exportPadding": 24,
+    "background": true,
+    "svgEmbedsLocalFont": true,
+    "svgExternalReferences": 0,
+    "durationMs": 940,
+    "temporaryResources": "owned browser profile and download root removed on exit",
+    "humanReview": "not performed by this adapter; inspect PNG/SVG before publishing",
+    "finishedAt": "2026-10-25T06:31:37.022Z"
+  },
+  "outputs": [
+    {
+      "path": "examples/app-composer-architecture/rendered/drawing.excalidraw",
+      "bytes": 38153,
+      "revision": "sha256:598d22621c87129e46f5a6838f5f1ebe30cfdfa0dfcbc5c294795eb86fde50ae"
+    },
+    {
+      "path": "examples/app-composer-architecture/rendered/drawing.png",
+      "bytes": 297187,
+      "revision": "sha256:d15bf8cd13c5ffee3790682ad6890f7e178d6c9f74ebeefc338bce6c8e45a994"
+    },
+    {
+      "path": "examples/app-composer-architecture/rendered/drawing.svg",
+      "bytes": 56923,
+      "revision": "sha256:4a219322faf1f678e845a612074ebc9f6786b87c5512e934241affa271c0f59a"
+    }
+  ],
+  "review": {
+    "automated": "validateScene, element ID/image preservation and real PNG/SVG signatures",
+    "humanVisualReview": "not performed",
+    "publication": "not authorised by this record"
+  }
+}

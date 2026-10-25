@@ -15,15 +15,21 @@
     "format": "prettier --write src scripts tests *.json *.html",
     "scene": "node scripts/scene.mjs",
     "render": "node scripts/render.mjs",
+    "mcp": "node scripts/mcp-server.mjs",
+    "mcp:font-metrics": "node scripts/font-metrics.mjs",
     "qualify": "node scripts/qualify.mjs",
-    "deploy": "node scripts/deploy.mjs"
+    "deploy": "node scripts/deploy.mjs",
+    "mcp:demo": "node scripts/mcp-demo.mjs"
   },
   "dependencies": {
     "@excalidraw/excalidraw": "0.18.1",
+    "@modelcontextprotocol/server": "2.3.1",
     "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react-dom": "18.3.1",
+    "zod": "4.6.7"
   },
   "devDependencies": {
+    "@modelcontextprotocol/client": "2.3.1",
     "@types/react": "18.3.31",
     "@types/react-dom": "18.3.7",
     "playwright": "1.62.1",

@@ -1,0 +1,65 @@
+{
+  "example": "infrastructure-runtime",
+  "brand": {
+    "status": "diagram-topic",
+    "identity": null,
+    "accent": "#1E40AF",
+    "note": "The infrastructure palette is authored and documented as a diagram topic. It is not an approved project identity, so no second portfolio brand is claimed.",
+    "unresolvedProjectIdentity": true
+  },
+  "authoring": {
+    "server": "ldraw",
+    "version": "1.0.0",
+    "scene": "source.excalidraw",
+    "template": {
+      "kind": "preset",
+      "id": "architecture",
+      "project": "infrastructure",
+      "x": 0,
+      "y": 0
+    },
+    "elements": 25,
+    "added": [
+      "topic-note"
+    ],
+    "updated": [],
+    "warnings": [],
+    "sourceRevision": "sha256:b60a01dcdd415162427d5bf2f042a437ca2fefa34f04be744737a04b7db85547"
+  },
+  "render": {
+    "renderer": "@excalidraw/excalidraw@0.18.1",
+    "app": "ldraw",
+    "builtFrom": "b85f56edc83eb950676e6d80cc8a30de9084aa7e",
+    "builtWorkingTreeClean": true,
+    "exportPadding": 24,
+    "background": true,
+    "svgEmbedsLocalFont": true,
+    "svgExternalReferences": 0,
+    "durationMs": 856,
+    "temporaryResources": "owned browser profile and download root removed on exit",
+    "humanReview": "not performed by this adapter; inspect PNG/SVG before publishing",
+    "finishedAt": "2026-10-25T06:31:37.903Z"
+  },
+  "outputs": [
+    {
+      "path": "examples/infrastructure-runtime/rendered/drawing.excalidraw",
+      "bytes": 21568,
+      "revision": "sha256:6c11c8af06faee1433b60293f606338c1de66bc670cc837ef9dce9dc929810d0"
+    },
+    {
+      "path": "examples/infrastructure-runtime/rendered/drawing.png",
+      "bytes": 160989,
+      "revision": "sha256:09041e7e4ea00f58617fa7bef1dff6d0feb43b176a6521fe0c2597d98f4b908b"
+    },
+    {
+      "path": "examples/infrastructure-runtime/rendered/drawing.svg",
+      "bytes": 46931,
+      "revision": "sha256:c2e8a210385164603f6d1ab1152855bb4364569271ed0b4ab2164804aacb8a77"
+    }
+  ],
+  "review": {
+    "automated": "validateScene, element ID/image preservation and real PNG/SVG signatures",
+    "humanVisualReview": "not performed",
+    "publication": "not authorised by this record"
+  }
+}
