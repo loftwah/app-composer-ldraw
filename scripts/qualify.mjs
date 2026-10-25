@@ -57,6 +57,12 @@ await withBrowser(
     browserErrors,
     externalRequests,
   }) => {
+    assert.equal(
+      await page.evaluate(() => document.documentElement.dataset.theme),
+      "dark",
+      "A fresh visitor gets the dark editor before choosing an appearance.",
+    );
+    await page.locator(".excalidraw.theme--dark").waitFor();
     const initial = await page.evaluate(() => window.ldraw.readScene());
     await page.evaluate(() =>
       document.fonts.load("32px Excalifont", "Creator journey ·"),
@@ -155,13 +161,26 @@ await withBrowser(
       ),
       true,
     );
-    await page.keyboard.press("Alt+Shift+d");
-    await page.locator(".excalidraw.theme--dark").waitFor();
     await page.screenshot({ path: "output/desktop-dark-reduced-motion.png" });
-    await page.keyboard.press("Alt+Shift+d");
+    await page.getByLabel("Appearance").selectOption("light");
     await page.locator(".excalidraw:not(.theme--dark)").first().waitFor();
+    assert.equal(
+      await page.evaluate(() => document.documentElement.dataset.theme),
+      "light",
+    );
+    await page.getByLabel("Appearance").selectOption("system");
+    await page.emulateMedia({ colorScheme: "light", reducedMotion: "reduce" });
+    await page.waitForFunction(
+      () => document.documentElement.dataset.theme === "light",
+    );
+    await page.emulateMedia({ colorScheme: "dark", reducedMotion: "reduce" });
+    await page.waitForFunction(
+      () => document.documentElement.dataset.theme === "dark",
+    );
+    await page.locator(".excalidraw.theme--dark").waitFor();
+    await page.getByLabel("Appearance").selectOption("dark");
     checks.push(
-      "native keyboard undo/redo preserves text ID; desktop native dark/light canvases exercised with reduced motion; LDraw toolbar remains neutral light",
+      "native keyboard undo/redo preserves text ID; dark is the fresh default, light and system follow real preference changes, and reduced motion is respected",
     );
     const stale = await page.evaluate(async (old) => {
       try {
@@ -439,18 +458,39 @@ await withBrowser(
     await page.screenshot({ path: "output/phone-edit-import-export.png" });
     await page.getByRole("button", { name: "Close export preview" }).click();
     await page.mouse.click(280, 470);
-    await page.keyboard.press("Alt+Shift+d");
-    await page.locator(".excalidraw.theme--dark").waitFor();
-    await page.screenshot({ path: "output/phone-dark-reduced-motion.png" });
-    await page.keyboard.press("Alt+Shift+d");
+    await page.getByLabel("Appearance").selectOption("light");
     await page.locator(".excalidraw:not(.theme--dark)").first().waitFor();
+    await page.evaluate(() => {
+      const toolbar = document.querySelector(".toolbar");
+      if (toolbar) toolbar.scrollLeft = 0;
+    });
+    await page.screenshot({ path: "output/phone-light-reduced-motion.png" });
+    await page.getByLabel("Appearance").selectOption("dark");
+    await page.locator(".excalidraw.theme--dark").waitFor();
+    await page.evaluate(() => {
+      const toolbar = document.querySelector(".toolbar");
+      if (toolbar) toolbar.scrollLeft = 0;
+    });
+    await page.screenshot({ path: "output/phone-dark-reduced-motion.png" });
     assert.ok(
       await page
         .locator(".canvas")
         .evaluate((element) => element.getBoundingClientRect().height > 400),
     );
+    assert.ok(
+      await page
+        .locator(".toolbar")
+        .evaluate((element) => element.getBoundingClientRect().height < 90),
+      "The phone toolbar stays one compact, horizontally scrollable row.",
+    );
+    assert.ok(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= window.innerWidth + 1,
+      ),
+      "The compact toolbar must not create page-level horizontal overflow.",
+    );
     checks.push(
-      "390px browser rectangle drawing, text editing, native file roundtrip and SVG preview; physical touch remains unverified",
+      "390px browser rectangle drawing, text editing, native file roundtrip and SVG preview; compact scrollable toolbar keeps a usable canvas; physical touch remains unverified",
     );
 
     await page.waitForFunction(
@@ -537,6 +577,28 @@ await withBrowser(
     await context.setOffline(false);
     checks.push(
       "actual corrupted latest draft recovers previous snapshot; 390px offline relaunch/current-scene exports work after required assets loaded",
+    );
+
+    const beforeLibrary = await page.evaluate(
+      () => window.ldraw.readScene().scene.elements.length,
+    );
+    await page.getByTitle("Reusable, editable blocks").click();
+    const library = page.getByRole("dialog", { name: "LDraw library" });
+    await library.waitFor();
+    for (const name of ["App Composer", "LDraw", "Paperwork", "Linkarooie"])
+      await library.getByRole("button", { name: new RegExp(name) }).waitFor();
+    await library.getByRole("button", { name: /App Composer/ }).click();
+    await page.waitForFunction(
+      (before) => window.ldraw.readScene().scene.elements.length > before,
+      beforeLibrary,
+    );
+    assert.equal(
+      await page.getByRole("dialog", { name: "LDraw library" }).count(),
+      0,
+      "Inserting a block closes the library dialog.",
+    );
+    checks.push(
+      "fresh dark default, named portfolio block library, and a real editable block insertion",
     );
     assert.deepEqual(browserErrors, []);
     assert.deepEqual(externalRequests, []);

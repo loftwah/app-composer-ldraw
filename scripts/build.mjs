@@ -57,6 +57,7 @@ const manifest = JSON.parse(await readFile("dist/asset-manifest.json", "utf8"));
 const core = new Set([
   "index.html",
   "asset-path.js",
+  "theme-init.js",
   "build.json",
   "app.manifest.json",
   "brand/composer-mark.svg",

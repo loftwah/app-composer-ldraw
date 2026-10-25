@@ -1,6 +1,14 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import {
   CaptureUpdateAction,
+  convertToExcalidrawElements,
   Excalidraw,
   exportToBlob,
   exportToSvg,
@@ -9,6 +17,17 @@ import {
 } from "@excalidraw/excalidraw";
 import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
 import {
+  BLUE,
+  collections,
+  GREEN,
+  INK,
+  librarySpecs,
+  ORANGE,
+  VIOLET,
+  type DiagramLibraryItem,
+} from "./diagrams.mjs";
+import {
+  makeLibraryItems,
   makePreset,
   preparePresetFont,
   PRESET_FONT_ERROR,
@@ -19,6 +38,15 @@ import {
 } from "./presets";
 import { MAX_SCENE_BYTES, validateScene } from "./scene.mjs";
 import { readDraft, writeDraft } from "./storage";
+import {
+  applyTheme,
+  isDarkBackground,
+  readAppearance,
+  rememberAppearance,
+  resolveTheme,
+  type Appearance,
+  type ResolvedTheme,
+} from "./theme";
 
 type NativeScene = ReturnType<typeof validateScene>;
 type ExportKind = "png" | "svg";
@@ -50,6 +78,14 @@ const afterPaint = () =>
   new Promise<void>((resolve) =>
     requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
   );
+const collectionAccents: Record<string, string> = {
+  apps: ORANGE,
+  composer: ORANGE,
+  infrastructure: BLUE,
+  games: VIOLET,
+  music: GREEN,
+  general: INK,
+};
 const composerReturn = new URL("https://composer.loftwah.com/");
 for (const key of ["analytics", "qa"]) {
   const value = new URLSearchParams(window.location.search).get(key);
@@ -69,8 +105,18 @@ export function App() {
   const [preview, setPreview] = useState<Preview>();
   const [busy, setBusy] = useState(false);
   const [offline, setOffline] = useState(false);
+  const [appearance, setAppearance] = useState<Appearance>(() =>
+    readAppearance(),
+  );
+  const [prefersDark, setPrefersDark] = useState(
+    () => window.matchMedia("(prefers-color-scheme: dark)").matches,
+  );
+  const [libraryOpen, setLibraryOpen] = useState(false);
+  const [libraryReady, setLibraryReady] = useState(false);
+  const theme: ResolvedTheme = resolveTheme(appearance, prefersDark);
   const fileInput = useRef<HTMLInputElement>(null);
   const previewDialog = useRef<HTMLDialogElement>(null);
+  const libraryDialog = useRef<HTMLDialogElement>(null);
   const initialized = useRef(false);
   const enabled = useRef(false);
   const pending = useRef("");
@@ -83,8 +129,36 @@ export function App() {
   const queue = useRef(Promise.resolve());
   const backgroundRef = useRef(background);
   const scaleRef = useRef(scale);
+  const themeRef = useRef(theme);
   backgroundRef.current = background;
   scaleRef.current = scale;
+  themeRef.current = theme;
+
+  useEffect(() => {
+    applyTheme(appearance, theme);
+    rememberAppearance(appearance);
+  }, [appearance, theme]);
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const update = (event: MediaQueryListEvent) =>
+      setPrefersDark(event.matches);
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  const initialData = useMemo(
+    () => ({
+      appState: {
+        // Excalidraw's dark theme inverts the rendered canvas. A white scene
+        // background is therefore the readable dark canvas, and keeps the
+        // saved scene portable between both appearances.
+        viewBackgroundColor: "#ffffff",
+        theme: themeRef.current,
+      },
+    }),
+    [],
+  );
 
   const persist = useCallback(() => {
     queue.current = queue.current.then(async () => {
@@ -146,7 +220,7 @@ export function App() {
           api.addFiles(Object.values(restored.files ?? {}));
           api.updateScene({
             elements: restored.elements,
-            appState: restored.appState,
+            appState: { ...restored.appState, theme: themeRef.current },
             captureUpdate: CaptureUpdateAction.NEVER,
           });
           setStatus(
@@ -164,7 +238,7 @@ export function App() {
             await preparePresetFont();
             if (disposed) return;
             setFontError("");
-            generated = makePreset("journey", "composer");
+            generated = makePreset("journey", "composer", 0, INK);
           } catch (failure) {
             if (disposed) return;
             setFontError(
@@ -178,6 +252,35 @@ export function App() {
           });
         }
         enabled.current = true;
+        let libraryInstalled = false;
+        try {
+          libraryInstalled =
+            localStorage.getItem("ldraw:library:20261025") === "1";
+        } catch {
+          // Fall through and install for this session.
+        }
+        try {
+          if (!libraryInstalled) {
+            await api.updateLibrary({
+              libraryItems: makeLibraryItems(),
+              merge: true,
+              openLibraryMenu: false,
+            });
+            try {
+              localStorage.setItem("ldraw:library:20261025", "1");
+            } catch {
+              // The native panel is still usable for this session.
+            }
+          }
+          if (!disposed) setLibraryReady(true);
+        } catch (failure) {
+          if (!disposed)
+            setError(
+              failure instanceof Error
+                ? failure.message
+                : "The built-in library could not be opened. Your drawing is unchanged.",
+            );
+        }
       } catch (failure) {
         if (disposed) return;
         setError(
@@ -293,7 +396,7 @@ export function App() {
       api.addFiles(Object.values(restored.files ?? {}));
       api.updateScene({
         elements: restored.elements,
-        appState: restored.appState,
+        appState: { ...restored.appState, theme: themeRef.current },
         captureUpdate: CaptureUpdateAction.IMMEDIATELY,
       });
       api.scrollToContent(restored.elements, { fitToContent: true });
@@ -371,6 +474,12 @@ export function App() {
     if (preview && !previewDialog.current?.open)
       previewDialog.current?.showModal();
   }, [preview]);
+  useEffect(() => {
+    if (libraryOpen && !libraryDialog.current?.open)
+      libraryDialog.current?.showModal();
+    if (!libraryOpen && libraryDialog.current?.open)
+      libraryDialog.current.close();
+  }, [libraryOpen]);
 
   async function openFile(file: File) {
     setBusy(true);
@@ -433,10 +542,14 @@ export function App() {
         0,
         ...existing.filter((e) => !e.isDeleted).map((e) => e.y + e.height),
       );
+      const ink = isDarkBackground(api.getAppState().viewBackgroundColor)
+        ? "#F4F4F5"
+        : INK;
       const inserted = makePreset(
         preset,
         project,
         existing.length ? bottom + 70 : 0,
+        ink,
       );
       api.updateScene({
         elements: [...existing, ...inserted],
@@ -448,6 +561,40 @@ export function App() {
         failure instanceof Error
           ? failure.message
           : "The example could not be inserted. Your drawing is unchanged.",
+      );
+    } finally {
+      setBusy(false);
+    }
+  }
+  async function insertBlock(item: DiagramLibraryItem) {
+    if (!api || !ready || busy) return;
+    setBusy(true);
+    try {
+      // Read after the guard so a concurrent human edit remains in the scene.
+      const existing = api.getSceneElementsIncludingDeleted();
+      const bottom = Math.max(
+        0,
+        ...existing
+          .filter((element) => !element.isDeleted)
+          .map((element) => element.y + element.height),
+      );
+      const inserted = convertToExcalidrawElements(item.elements).map(
+        (element) => ({
+          ...element,
+          y: element.y + (existing.length ? bottom + 70 : 0),
+        }),
+      );
+      api.updateScene({
+        elements: [...existing, ...inserted],
+        captureUpdate: CaptureUpdateAction.IMMEDIATELY,
+      });
+      api.scrollToContent(inserted, { fitToContent: true });
+      setLibraryOpen(false);
+    } catch (failure) {
+      setError(
+        failure instanceof Error
+          ? failure.message
+          : "The block could not be inserted. Your drawing is unchanged.",
       );
     } finally {
       setBusy(false);
@@ -477,6 +624,20 @@ export function App() {
           <strong>LDraw</strong>
           <span>powered by Excalidraw</span>
         </div>
+        <label>
+          Appearance
+          <select
+            aria-label="Appearance"
+            value={appearance}
+            onChange={(event) =>
+              setAppearance(event.target.value as Appearance)
+            }
+          >
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+            <option value="system">System</option>
+          </select>
+        </label>
         <label>
           New content
           <select
@@ -508,6 +669,13 @@ export function App() {
           disabled={!ready || busy || Boolean(fontError)}
         >
           Insert example
+        </button>
+        <button
+          onClick={() => setLibraryOpen(true)}
+          disabled={!ready || busy || !libraryReady}
+          title="Reusable, editable blocks"
+        >
+          Library
         </button>
         <div className="file-actions">
           <button
@@ -614,6 +782,8 @@ export function App() {
       ) : null}
       <section className="canvas" aria-label="Drawing canvas">
         <Excalidraw
+          theme={theme}
+          initialData={initialData}
           viewModeEnabled={!ready}
           excalidrawAPI={setApi}
           onChange={(elements, appState, files) => {
@@ -625,11 +795,72 @@ export function App() {
               loadScene: false,
               export: false,
               saveAsImage: false,
+              toggleTheme: false,
             },
           }}
           validateEmbeddable={false}
         />
       </section>
+      {libraryOpen ? (
+        <dialog
+          ref={libraryDialog}
+          className="library-dialog"
+          aria-label="LDraw library"
+          onCancel={() => setLibraryOpen(false)}
+          onClose={() => setLibraryOpen(false)}
+          onClick={(event) => {
+            if (event.target === event.currentTarget) setLibraryOpen(false);
+          }}
+        >
+          <div className="library-shell">
+            <div className="library-head">
+              <div>
+                <h2>LDraw library</h2>
+                <p>
+                  Reusable, editable blocks for the portfolio. Inserting appends
+                  below your drawing and keeps your existing elements unchanged.
+                  Undo is available.
+                </p>
+              </div>
+              <button
+                onClick={() => setLibraryOpen(false)}
+                aria-label="Close library"
+              >
+                ×
+              </button>
+            </div>
+            <div className="library-groups">
+              {collections.map((collection) => (
+                <section className="library-group" key={collection.id}>
+                  <h3>{collection.label}</h3>
+                  <p>{collection.description}</p>
+                  <div className="library-items">
+                    {librarySpecs
+                      .filter((item) => item.collection === collection.id)
+                      .map((item) => (
+                        <button
+                          className="library-item"
+                          key={item.id}
+                          style={
+                            {
+                              "--item-accent":
+                                collectionAccents[collection.id] ?? ORANGE,
+                            } as CSSProperties
+                          }
+                          onClick={() => void insertBlock(item)}
+                          disabled={busy}
+                        >
+                          <strong>{item.name}</strong>
+                          <span>{item.description}</span>
+                        </button>
+                      ))}
+                  </div>
+                </section>
+              ))}
+            </div>
+          </div>
+        </dialog>
+      ) : null}
       {preview ? (
         <dialog
           ref={previewDialog}

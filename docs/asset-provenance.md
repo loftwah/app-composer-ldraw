@@ -28,6 +28,31 @@ LDraw's initial diagram palettes are simple named configuration. Infrastructure,
 Game design and Music / FM are diagram topics, not claimed portfolio logos or
 approved product brand packages. Launch Kit owns identity asset packages.
 
+## Built-in library and example provenance
+
+The block library in `src/diagrams.mjs` is authored vector data, not a
+generated raster asset set. It names the maintained apps whose roles are
+published in Composer's app library (App Composer, LDraw, Paperwork,
+Linkarooie, Guestbook, Showcase, Link Check and Launch Kit) and uses the
+approved Composer orange `#FC5B05`, the documented Linkarooie lime family and
+the existing diagram-topic palettes. Woodhouse, Protocol 11, Bubbles,
+SHOALSHOT, Fighter and LoftwahFM are not given invented logos or brand colours
+here; #290 says their identities are included only as approved assets are
+gathered. The generic project-card, browser, phone and checklist frames are
+neutral templates.
+
+No FAL, OpenAI or other image-generation request was used for this library.
+Raster images inside Excalidraw library items would need separate embedded file
+records and would not survive a library-only merge reliably; native vectors and
+text remain editable, searchable, offline-safe and portable through save,
+reload and PNG/SVG export. The library is inspected by `tests/library.test.mjs`
+for stable unique IDs, supported element types, readable filled cards, complete
+collections and editable starting examples.
+
+The appearance default is an interface decision, not a change to saved artwork.
+`public/theme-init.js` stores only the local appearance choice and sets the
+first-paint colours; it carries no drawing data, credential or remote request.
+
 Dependency overrides select patched nanoid, lodash-es, KaTeX, sharp and undici.
 The editor package itself remains the maintained published version. React 18.3.1
 matches the supported peer range of the package and its Radix dependencies.

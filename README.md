@@ -17,6 +17,21 @@ Editable examples append below existing content without changing its IDs.
 Infrastructure, game and music labels describe diagram topics; they do not
 substitute for approved portfolio identities.
 
+LDraw opens in dark appearance by default, because a blank white canvas is a
+poor first impression on a dark desktop. The toolbar appearance control offers
+Dark, Light and System; the choice is stored on this origin and applied by
+`public/theme-init.js` before the first stylesheet paint. Excalidraw's dark
+theme is an inverted canvas filter, so scenes keep a normal white scene
+background and portable light-mode element colours. Exports therefore stay
+readable when shared, without changing the saved drawing.
+
+The **Library** button opens named, editable blocks for the maintained apps,
+App Composer journeys, Cloudflare infrastructure, games, music and general
+wireframes. The same items are merged into Excalidraw's native Library panel
+with stable IDs, so the owner's own library items are preserved. A block is
+plain vectors and text: no remote image, generated raster asset, font or
+network request is needed to insert, save, reopen or export it.
+
 Drawings autosave in this origin's IndexedDB, with one previous snapshot for
 damaged-save recovery and an atomic revision check against concurrent tabs.
 Storage failure leaves the current canvas in memory and tells you to download
