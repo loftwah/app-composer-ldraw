@@ -4,6 +4,8 @@ import {
   buildPreset,
   INK,
   librarySpecs,
+  presetCatalog,
+  projects,
   type PresetName,
   type ProjectName,
 } from "./diagrams.mjs";
@@ -49,45 +51,11 @@ export function preparePresetFont(): Promise<void> {
   }));
 }
 
-export const projects = {
-  composer: { label: "Composer", stroke: "#FC5B05", fill: "#FFE8D9" },
-  infrastructure: {
-    label: "Infrastructure",
-    stroke: "#1E40AF",
-    fill: "#DBEAFE",
-  },
-  game: { label: "Game design", stroke: "#6D28D9", fill: "#EDE9FE" },
-  music: { label: "Music / FM", stroke: "#047857", fill: "#D1FAE5" },
-  general: { label: "General", stroke: "#1B1B1F", fill: "#F5F5F4" },
-} as const;
+/** Shared with the local MCP adapter so there is one project/preset source. */
+export { projects };
 export type Project = keyof typeof projects;
 
-export const presets = {
-  portfolio: {
-    label: "Portfolio map",
-    notes: "The maintained apps, their owner and audience.",
-  },
-  journey: {
-    label: "Creator journey",
-    notes: "One owner · independent apps · shared discovery",
-  },
-  architecture: {
-    label: "Service architecture",
-    notes: "Draw the trust boundaries, then connect the real services.",
-  },
-  game: {
-    label: "Game loop",
-    notes: "An editable loop: add the player choices and the stakes.",
-  },
-  release: {
-    label: "Music release",
-    notes: "Add the release details, artwork and distribution paths.",
-  },
-  beforeAfter: {
-    label: "Before / after",
-    notes: "Show the concrete problem and the resulting experience.",
-  },
-} as const;
+export const presets = presetCatalog;
 export type Preset = keyof typeof presets;
 
 /** Call preparePresetFont() before measuring newly generated scene elements. */

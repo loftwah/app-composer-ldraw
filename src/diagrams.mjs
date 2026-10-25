@@ -114,6 +114,79 @@ export const apps = [
   },
 ];
 
+/**
+ * Honest brand state. A colour in `apps` is starting diagram data, not an
+ * approved identity: only App Composer's flat orange mark, LDraw's typographic
+ * wordmark and Linkarooie's documented lime family have supporting notes in
+ * docs/asset-provenance.md. Everything else stays visibly unresolved so an
+ * agent cannot invent a rebrand.
+ */
+export const brandStatus = {
+  composer: {
+    status: "approved-identity",
+    note: "Canonical App Composer orange #FC5B05 and flat merging-block mark, per docs/asset-provenance.md.",
+  },
+  ldraw: {
+    status: "typographic",
+    note: "Typographic wordmark only; this app reuses Composer orange as a UI accent, not as a new logo.",
+  },
+  linkarooie: {
+    status: "documented-palette",
+    note: "Documented Linkarooie lime family; a full identity asset package is not included in this repository.",
+  },
+  paperwork: {
+    status: "starting-data",
+    note: "Diagram starting colour only. Not an approved Paperwork brand package.",
+  },
+  guestbook: {
+    status: "starting-data",
+    note: "Diagram starting colour only. Not an approved Guestbook brand package.",
+  },
+  showcase: {
+    status: "starting-data",
+    note: "Diagram starting colour only. Not an approved Showcase brand package.",
+  },
+  linkcheck: {
+    status: "starting-data",
+    note: "Diagram starting colour only. Not an approved Link Check brand package.",
+  },
+  launchkit: {
+    status: "unresolved",
+    note: "Launch Kit owns identity asset packages; none are included here.",
+  },
+};
+
+/** Named identities with no approved asset or palette data in this repository. */
+export const unresolvedBrandIdentities = [
+  "Woodhouse",
+  "Protocol 11",
+  "Bubbles",
+  "SHOALSHOT",
+  "Fighter",
+  "LoftwahFM",
+];
+
+/** Which project topic is a brand, and which is only diagram colour. */
+export const projectBrand = {
+  composer: brandStatus.composer,
+  infrastructure: {
+    status: "diagram-topic",
+    note: "Infrastructure palette describes a diagram topic. It is not a separate approved identity.",
+  },
+  game: {
+    status: "diagram-topic",
+    note: "Game design palette describes a diagram topic. It is not a separate approved identity.",
+  },
+  music: {
+    status: "diagram-topic",
+    note: "Music / FM palette describes a diagram topic. It is not a separate approved identity.",
+  },
+  general: {
+    status: "neutral",
+    note: "Neutral wireframe palette with no brand claim.",
+  },
+};
+
 function rectangle(id, x, y, width, height, options = {}) {
   return {
     id,
@@ -423,7 +496,7 @@ function storageStack(id, x, y, accent = BLUE) {
         size: 15,
         color: INK,
       }),
-      text(`${id}-${name}-note`, x + 62, top + 10, note, {
+      text(`${id}-${name}-note`, x + 76, top + 10, note, {
         size: 10,
         color: MUTED,
       }),
@@ -695,12 +768,76 @@ export const librarySpecs = [
   },
 ];
 
-const projectPalettes = {
-  composer: { accent: ORANGE, tint: ORANGE_TINT },
-  infrastructure: { accent: BLUE, tint: BLUE_TINT },
-  game: { accent: VIOLET, tint: VIOLET_TINT },
-  music: { accent: GREEN, tint: GREEN_TINT },
-  general: { accent: INK, tint: "#F5F5F4" },
+/**
+ * Project topics shown in "New content". These are diagram palettes, not
+ * claims about a separate product identity; brand state lives above.
+ */
+export const projects = {
+  composer: {
+    label: "Composer",
+    stroke: ORANGE,
+    fill: ORANGE_TINT,
+    topic: "App Composer",
+  },
+  infrastructure: {
+    label: "Infrastructure",
+    stroke: BLUE,
+    fill: BLUE_TINT,
+    topic: "Cloudflare runtime",
+  },
+  game: {
+    label: "Game design",
+    stroke: VIOLET,
+    fill: VIOLET_TINT,
+    topic: "Games",
+  },
+  music: {
+    label: "Music / FM",
+    stroke: GREEN,
+    fill: GREEN_TINT,
+    topic: "Music",
+  },
+  general: {
+    label: "General",
+    stroke: INK,
+    fill: "#F5F5F4",
+    topic: "Neutral wireframes",
+  },
+};
+
+const projectPalettes = Object.fromEntries(
+  Object.entries(projects).map(([key, value]) => [
+    key,
+    { accent: value.stroke, tint: value.fill },
+  ]),
+);
+
+/** Starting examples shared by the editor toolbar and the MCP adapter. */
+export const presetCatalog = {
+  portfolio: {
+    label: "Portfolio map",
+    notes: "The maintained apps, their owner and audience.",
+  },
+  journey: {
+    label: "Creator journey",
+    notes: "One owner · independent apps · shared discovery",
+  },
+  architecture: {
+    label: "Service architecture",
+    notes: "Draw the trust boundaries, then connect the real services.",
+  },
+  game: {
+    label: "Game loop",
+    notes: "An editable loop: add the player choices and the stakes.",
+  },
+  release: {
+    label: "Music release",
+    notes: "Add the release details, artwork and distribution paths.",
+  },
+  beforeAfter: {
+    label: "Before / after",
+    notes: "Show the concrete problem and the resulting experience.",
+  },
 };
 
 function portfolioMap(palette, ink) {
@@ -811,7 +948,7 @@ function architecture(palette, ink) {
       tint: palette.tint,
     }),
     ...storageStack("preset-storage", 740, 170, palette.accent),
-    arrow("preset-data-arrow", 588, 207, 40, 30, { stroke: palette.accent }),
+    arrow("preset-data-arrow", 666, 207, 74, 0, { stroke: palette.accent }),
     text(
       "preset-footer",
       80,
