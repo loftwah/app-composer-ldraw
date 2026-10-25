@@ -29,22 +29,22 @@
   "render": {
     "renderer": "@excalidraw/excalidraw@0.18.1",
     "app": "ldraw",
-    "builtFrom": "fa7a2ab6171cf53edc53c01630fbba2d5d4888aa",
-    "builtWorkingTreeClean": false,
+    "builtFrom": "b85f56edc83eb950676e6d80cc8a30de9084aa7e",
+    "builtWorkingTreeClean": true,
     "exportPadding": 24,
     "background": true,
     "svgEmbedsLocalFont": true,
     "svgExternalReferences": 0,
-    "durationMs": 860,
+    "durationMs": 856,
     "temporaryResources": "owned browser profile and download root removed on exit",
     "humanReview": "not performed by this adapter; inspect PNG/SVG before publishing",
-    "finishedAt": "2026-10-25T06:24:25.198Z"
+    "finishedAt": "2026-10-25T06:31:37.903Z"
   },
   "outputs": [
     {
       "path": "examples/infrastructure-runtime/rendered/drawing.excalidraw",
-      "bytes": 21571,
-      "revision": "sha256:6b3292fd0380e6d68cec6f6e15f1a6c89f611fc1998f7e0f7bd98c264f4750e5"
+      "bytes": 21568,
+      "revision": "sha256:6c11c8af06faee1433b60293f606338c1de66bc670cc837ef9dce9dc929810d0"
     },
     {
       "path": "examples/infrastructure-runtime/rendered/drawing.png",

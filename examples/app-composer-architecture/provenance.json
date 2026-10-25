@@ -56,22 +56,22 @@
   "render": {
     "renderer": "@excalidraw/excalidraw@0.18.1",
     "app": "ldraw",
-    "builtFrom": "fa7a2ab6171cf53edc53c01630fbba2d5d4888aa",
-    "builtWorkingTreeClean": false,
+    "builtFrom": "b85f56edc83eb950676e6d80cc8a30de9084aa7e",
+    "builtWorkingTreeClean": true,
     "exportPadding": 24,
     "background": true,
     "svgEmbedsLocalFont": true,
     "svgExternalReferences": 0,
-    "durationMs": 910,
+    "durationMs": 940,
     "temporaryResources": "owned browser profile and download root removed on exit",
     "humanReview": "not performed by this adapter; inspect PNG/SVG before publishing",
-    "finishedAt": "2026-10-25T06:24:24.311Z"
+    "finishedAt": "2026-10-25T06:31:37.022Z"
   },
   "outputs": [
     {
       "path": "examples/app-composer-architecture/rendered/drawing.excalidraw",
-      "bytes": 38155,
-      "revision": "sha256:c01a203fb3dbccae6e31bb636f93a70be7847a7de253d22ae9600ddfd57a6d05"
+      "bytes": 38153,
+      "revision": "sha256:598d22621c87129e46f5a6838f5f1ebe30cfdfa0dfcbc5c294795eb86fde50ae"
     },
     {
       "path": "examples/app-composer-architecture/rendered/drawing.png",

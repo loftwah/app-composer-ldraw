@@ -281,7 +281,10 @@ Regenerating both committed examples with `pnpm mcp:demo` took 2.13 s wall
   below.
 
 Both are regenerated only by the explicit `pnpm mcp:demo` command. It replaces
-those two directories and nothing else.
+those two directories and nothing else. PNG and SVG bytes are deterministic for
+the same scene; the renderer-restored `drawing.excalidraw` legitimately changes
+Excalidraw's own normalisation fields (`versionNonce`, `updated`, `index`) on
+each run, so compare content and IDs rather than raw JSON there.
 
 ## Unsupported clients and limits
 
