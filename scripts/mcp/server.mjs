@@ -28,6 +28,7 @@ import {
   applyOperations,
   buildSceneFromTemplate,
   SceneRefusal,
+  TextRefusal,
   summariseScene,
   templateNames,
 } from "./native.mjs";
@@ -46,7 +47,12 @@ export const SERVER_NAME = "ldraw";
 export const SERVER_VERSION = "1.0.0";
 const MAX_INLINE_ELEMENTS_BYTES = 2 * 1024 * 1024;
 
-const SAFE_ERRORS = [WorkspaceRefusal, SceneRefusal, RenderRefusal];
+const SAFE_ERRORS = [
+  WorkspaceRefusal,
+  SceneRefusal,
+  TextRefusal,
+  RenderRefusal,
+];
 const text = (value) => [{ type: "text", text: JSON.stringify(value) }];
 const result = (value) => ({ content: text(value), structuredContent: value });
 const refusal = (message) => ({
@@ -91,7 +97,13 @@ const operationSchema = z.discriminatedUnion("op", [
   z
     .object({
       op: z.literal("update_label"),
-      id: idSchema,
+      // Existing native IDs are not new authored slugs; presets and user scenes
+      // include uppercase/underscore IDs. Match them exactly without renaming.
+      id: z
+        .string()
+        .min(1)
+        .max(256)
+        .regex(/^[^\u0000-\u001f\u007f]+$/),
       text: z.string().min(1).max(600),
       fontSize: fontSize.optional(),
       tone: tone.optional(),
