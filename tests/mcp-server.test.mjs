@@ -505,3 +505,80 @@ test("the real stdio entrypoint serves MCP and refuses a bad launch safely", asy
   assert.match(denied.stderr, /absolute --workspace/);
   assert.doesNotMatch(denied.stderr, /Users|private\/var|\/tmp/);
 });
+
+test("unsupported label text gives actionable measured-font refusal and preserves scene", async (t) => {
+  const root = await workspace(t);
+  const { client, close } = await connect(root);
+  try {
+    const created = await client.callTool({
+      name: "ldraw_create_scene",
+      arguments: { path: "review.excalidraw", template: "composer-review" },
+    });
+    const before = await readFile(join(root, "review.excalidraw"), "utf8");
+    const response = await client.callTool({
+      name: "ldraw_modify_scene",
+      arguments: {
+        path: "review.excalidraw",
+        expectedRevision: created.structuredContent.revision,
+        operations: [
+          {
+            op: "add_label",
+            id: "unsupported-label",
+            text: "Review → release",
+            x: 0,
+            y: 100,
+          },
+        ],
+      },
+    });
+    assert.equal(response.isError, true);
+    assert.match(response.content[0].text, /U\+2192.*measured Latin set/);
+    assert.doesNotMatch(response.content[0].text, /Review|release|\/tmp\//);
+    assert.equal(
+      await readFile(join(root, "review.excalidraw"), "utf8"),
+      before,
+    );
+  } finally {
+    await close();
+  }
+});
+
+test("existing native preset label IDs retain their case during agent editing", async (t) => {
+  const root = await workspace(t);
+  const { client, close } = await connect(root);
+  try {
+    const made = await client.callTool({
+      name: "ldraw_create_scene",
+      arguments: { path: "native.excalidraw", template: "architecture" },
+    });
+    const original = JSON.parse(
+      await readFile(join(root, "native.excalidraw"), "utf8"),
+    );
+    const label = original.elements.find(
+      (element) => element.type === "text" && /[A-Z]/.test(element.id),
+    );
+    assert.ok(label);
+    const reply = await client.callTool({
+      name: "ldraw_modify_scene",
+      arguments: {
+        path: "native.excalidraw",
+        expectedRevision: made.structuredContent.revision,
+        operations: [{ op: "update_label", id: label.id, text: "Git" }],
+      },
+    });
+    assert.equal(reply.isError, undefined);
+    const updated = JSON.parse(
+      await readFile(join(root, "native.excalidraw"), "utf8"),
+    );
+    assert.deepEqual(
+      updated.elements.map((element) => element.id),
+      original.elements.map((element) => element.id),
+    );
+    assert.equal(
+      updated.elements.find((element) => element.id === label.id).text,
+      "Git",
+    );
+  } finally {
+    await close();
+  }
+});
