@@ -68,14 +68,45 @@ The strict CSP and the zero-external-request browser check stay intact. This
 app-local response policy follows [Cloudflare's documented control](https://developers.cloudflare.com/web-analytics/get-started/)
 and does not change analytics settings for other portfolio sites.
 
-Use the native `.excalidraw` version 2 file format; there is no second scene
-protocol or MCP service. Authorise browser access yourself. In this exact editor
-tab, `window.ldraw.readScene()` returns `{ revision, scene }` and
-`await window.ldraw.replaceScene(scene, { expectedRevision })` validates the
-native scene and rejects a stale revision, including human edits made while
-the import is being restored. `exportBlob('png'|'svg')` returns the real renderer
-output. This is a same-browser JavaScript interface, not a remote agent service.
-Drawing contents never appear in URLs or server logs.
+Drawings are native `.excalidraw` version 2 files; there is no second scene
+protocol. In this exact editor tab, `window.ldraw.readScene()` returns
+`{ revision, scene }` and `await window.ldraw.replaceScene(scene, { expectedRevision })`
+validates the native scene and rejects a stale revision, including human edits
+made while the import is being restored. `exportBlob('png'|'svg')` returns the
+real renderer output. This is a same-browser JavaScript interface, not a remote
+agent service. Drawing contents never appear in URLs or server logs.
+
+For agent authoring there is now a **local stdio MCP adapter** over the same
+scene, presets and renderer. The host picks one absolute drawings workspace at
+launch; tools then take relative paths only, and every edit needs the exact
+sha256 revision that was read:
+
+```sh
+pnpm build                                   # required before rendering
+pnpm mcp --workspace /absolute/path/drawings # local stdio server
+pnpm mcp --workspace /absolute/path/drawings --read-only
+```
+
+Codex (`~/.codex/config.toml`) or OpenCode V2 (`mcp.servers`) can launch
+`node /absolute/path/to/scripts/mcp-server.mjs --workspace /absolute/path/drawings`.
+The tools are `ldraw_list_templates`, `ldraw_read_scene`, `ldraw_create_scene`,
+`ldraw_modify_scene` and `ldraw_render_scene`. See [docs/mcp.md](docs/mcp.md) for
+exact versions, client configuration, the full security boundary, unsupported
+clients, measured cost and remaining gates, and
+[docs/agent-prompt.md](docs/agent-prompt.md) for a copyable agent prompt/skill.
+
+Two committed examples are produced by those tools, not by hand:
+`examples/app-composer-architecture/` (approved Composer orange) and
+`examples/infrastructure-runtime/` (existing infrastructure diagram-topic
+palette, explicitly not a second project brand). Regenerate them with
+`pnpm mcp:demo`; that command replaces only those two directories.
+
+The MCP server adds no remote URL, account, database or cloud dependency. It
+reads and writes only inside the selected workspace, refuses absolute paths,
+`..`, symlinks and non-`.excalidraw` files, never follows a symlink out of the
+root, writes atomically and refuses stale revisions without touching newer file
+bytes. Embedded image bytes are never returned in tool results, and scene text
+never appears in diagnostics. It is not a public drawing API.
 
 ```sh
 pnpm scene validate drawing.excalidraw
@@ -83,10 +114,11 @@ pnpm render drawing.excalidraw output/rendered
 ```
 
 Rendering requires a built app and the host's existing Playwright Chromium.
-It runs the editor on loopback, imports through the same validated API, checks
-IDs/image bytes and writes editable/PNG/SVG files. One owned temporary profile
-and download root is removed in `finally`; output is deliberately retained.
-Do not run browser/render/build jobs alongside other heavy host validation.
+The CLI and the MCP tool run the editor on loopback, import through the same
+validated API, check IDs/image bytes and write editable/PNG/SVG files. One owned
+temporary profile and download root is removed in `finally`; output is
+deliberately retained. Do not run browser/render/build jobs alongside other
+heavy host validation.
 
 ## Independent release
 
