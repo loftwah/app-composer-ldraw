@@ -414,11 +414,12 @@ await withBrowser(
           .readScene()
           .scene.elements.filter((e) => e.type === "rectangle").length,
     );
-    await page.mouse.click(100, 500);
+    await page.keyboard.press("Escape");
+    await page.mouse.click(300, 500);
     await page.keyboard.press("r");
-    await page.mouse.move(80, 500);
+    await page.mouse.move(260, 500);
     await page.mouse.down();
-    await page.mouse.move(190, 580, { steps: 8 });
+    await page.mouse.move(360, 580, { steps: 8 });
     await page.mouse.up();
     await page.waitForFunction(
       (before) =>
@@ -429,7 +430,7 @@ await withBrowser(
     );
     await page.keyboard.press("Escape");
     await page.keyboard.press("t");
-    await page.mouse.click(70, 630);
+    await page.mouse.click(260, 630);
     await page.keyboard.type("Phone viewport edit");
     await page.keyboard.press("Escape");
     await page.waitForFunction(() =>
