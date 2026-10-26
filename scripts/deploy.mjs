@@ -1,6 +1,7 @@
 import { execFileSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import { readReleaseConfig } from "./release-config.mjs";
+import { assertReleaseProvenance } from "./seo.mjs";
 import { verifySeo } from "./verify-seo.mjs";
 
 const git = (...args) => execFileSync("git", args, { encoding: "utf8" }).trim();

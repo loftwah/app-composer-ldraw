@@ -268,6 +268,22 @@ export function checkLocal(root = process.cwd()) {
   };
 }
 
+/**
+ * Release-only provenance check. A design draft may be rendered from a dirty
+ * tree, but the shipped card must come from a clean one. Re-render with
+ * `pnpm og` on clean main, commit the PNG and provenance, then deploy.
+ */
+export function assertReleaseProvenance(root = process.cwd()) {
+  const provenance = JSON.parse(
+    file(root, "public/og/ldraw-og-provenance.json").toString("utf8"),
+  );
+  if (provenance.workingTreeClean !== true)
+    throw new Error(
+      "The share card was rendered from a dirty tree. Re-render with `pnpm og` on clean main and commit the card and provenance before releasing.",
+    );
+  return { source: provenance.source, image: provenance.image };
+}
+
 const write = process.argv.slice(2).includes("--write");
 if (
   process.argv[1] &&
