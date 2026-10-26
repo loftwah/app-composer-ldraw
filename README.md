@@ -237,6 +237,7 @@ tablet editing are distinct evidence. A responsive screenshot proves layout.
 - [MCP adapter](docs/mcp.md) · [Agent prompt](docs/agent-prompt.md)
 - [Cross-project handoff](docs/cross-project-handoff.md)
 - [Presentation and export notes](docs/presentation.md)
+- [Release evidence and remaining gates, 26 October 2026](docs/release-20261026.md)
 - [Current delivery status](docs/STATUS.md) (where present) and the canonical
   release evidence index in Composer #11.
 
