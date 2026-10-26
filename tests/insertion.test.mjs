@@ -4,6 +4,7 @@ import {
   boundsOf,
   centerElements,
   fitSize,
+  isFullyVisible,
   maxArtworkSize,
   placeNearViewport,
   remapScene,
@@ -61,6 +62,9 @@ test("new artwork avoids the existing drawing instead of covering it", () => {
   const empty = placeNearViewport(artwork, appState, []);
   assert.equal(empty[0].x + empty[0].width / 2, 500);
   assert.equal(empty[0].y + empty[0].height / 2, 300);
+  assert.equal(isFullyVisible(empty, appState), true);
+  const offscreen = [{ id: "off", x: 1500, y: 0, width: 200, height: 200, isDeleted: false }];
+  assert.equal(isFullyVisible(offscreen, appState), false);
 });
 
 test("artwork sizes stay useful without gigantic inserts", () => {

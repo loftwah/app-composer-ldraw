@@ -26,6 +26,7 @@ export function placeNearViewport(
   appState: any,
   existing?: readonly any[],
 ): any[];
+export function isFullyVisible(elements: any[], appState: any): boolean;
 export function remapScene(scene: any, prefix: string): any;
 export function sceneElementsForAdd(
   scene: any,

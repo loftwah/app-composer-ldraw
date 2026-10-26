@@ -33,6 +33,7 @@ import { readDraft, writeDraft } from "./storage";
 import {
   centerElements,
   fitSize,
+  isFullyVisible,
   maxArtworkSize,
   placeNearViewport,
   sceneElementsForAdd,
@@ -652,15 +653,15 @@ export function App() {
     );
     const viewportWidth = state.width / zoom;
     const viewportHeight = state.height / zoom;
-    if (right - left > viewportWidth * 0.86 || bottom - top > viewportHeight * 0.86)
+    if (
+      !isFullyVisible(elements, state) ||
+      right - left > viewportWidth * 0.86 ||
+      bottom - top > viewportHeight * 0.86
+    )
       api.scrollToContent(elements, { fitToContent: true });
   }
 
-  function commitInserted(
-    inserted: any[],
-    label: string,
-    options: { fit?: boolean } = {},
-  ) {
+  function commitInserted(inserted: any[], label: string) {
     if (!api || !inserted.length) return;
     const existing = api.getSceneElementsIncludingDeleted();
     api.updateScene({
@@ -672,7 +673,7 @@ export function App() {
       },
       captureUpdate: CaptureUpdateAction.IMMEDIATELY,
     });
-    if (options.fit) fitIfNeeded(inserted);
+    fitIfNeeded(inserted);
     setNotice(`Inserted ${label}`);
     setLibraryOpen(false);
   }
@@ -686,7 +687,7 @@ export function App() {
         api.getAppState(),
         api.getSceneElementsIncludingDeleted(),
       );
-      commitInserted(inserted, item.name, { fit: true });
+      commitInserted(inserted, item.name);
     } catch (failure) {
       setError(
         failure instanceof Error
@@ -832,9 +833,7 @@ export function App() {
         api.getAppState(),
         api.getSceneElementsIncludingDeleted(),
       );
-      commitInserted(placed, item.title, {
-        fit: mode === "card" || item.category === "background",
-      });
+      commitInserted(placed, item.title);
     } catch (failure) {
       setError(
         failure instanceof Error
@@ -863,7 +862,7 @@ export function App() {
       );
       if (Object.keys(copy.files ?? {}).length)
         api.addFiles(Object.values(copy.files));
-      commitInserted(copy.elements, item.title, { fit: true });
+      commitInserted(copy.elements, item.title);
     } catch (failure) {
       setError(
         failure instanceof Error
@@ -925,7 +924,7 @@ export function App() {
       );
       if (Object.keys(copy.files ?? {}).length)
         api.addFiles(Object.values(copy.files));
-      commitInserted(copy.elements, entry.title, { fit: true });
+      commitInserted(copy.elements, entry.title);
     } catch (failure) {
       setError(
         failure instanceof Error

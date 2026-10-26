@@ -166,8 +166,34 @@ export function placeNearViewport(elements, appState, existing = []) {
     width: size.width,
     height: size.height,
   };
+  const viewportRight = viewport.left + viewport.width;
+  const viewportBottom = viewport.top + viewport.height;
   const candidates = [
     centered,
+    {
+      left: viewportRight - size.width - 24,
+      top: viewport.top + 24,
+      width: size.width,
+      height: size.height,
+    },
+    {
+      left: viewport.left + 24,
+      top: viewport.top + 24,
+      width: size.width,
+      height: size.height,
+    },
+    {
+      left: viewportRight - size.width - 24,
+      top: viewportBottom - size.height - 24,
+      width: size.width,
+      height: size.height,
+    },
+    {
+      left: viewport.left + 24,
+      top: viewportBottom - size.height - 24,
+      width: size.width,
+      height: size.height,
+    },
     {
       left: right + gap,
       top: center.y - size.height / 2,
@@ -189,12 +215,6 @@ export function placeNearViewport(elements, appState, existing = []) {
     {
       left: center.x - size.width / 2,
       top: existingBounds.top - gap - size.height,
-      width: size.width,
-      height: size.height,
-    },
-    {
-      left: viewport.left + viewport.width - size.width - 24,
-      top: center.y - size.height / 2,
       width: size.width,
       height: size.height,
     },
@@ -234,4 +254,20 @@ export function placeNearViewport(elements, appState, existing = []) {
       height: size.height,
     };
   return translateElements(elements, chosen.left - size.left, chosen.top - size.top);
+}
+
+/** Whether the whole group is currently inside the scene viewport. */
+export function isFullyVisible(elements, appState) {
+  const bounds = boundsOf(elements);
+  const zoom = appState?.zoom?.value || 1;
+  const left = -appState.scrollX;
+  const top = -appState.scrollY;
+  const right = left + appState.width / zoom;
+  const bottom = top + appState.height / zoom;
+  return (
+    bounds.left >= left &&
+    bounds.top >= top &&
+    bounds.left + bounds.width <= right &&
+    bounds.top + bounds.height <= bottom
+  );
 }
