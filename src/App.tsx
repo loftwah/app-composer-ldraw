@@ -1060,7 +1060,7 @@ export function App() {
         <dialog
           ref={libraryDialog}
           className="library-dialog"
-          aria-label="LDraw library"
+          aria-label="Portfolio library"
           onCancel={() => setLibraryOpen(false)}
           onClose={() => setLibraryOpen(false)}
           onClick={(event) => {

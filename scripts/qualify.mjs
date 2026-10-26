@@ -583,22 +583,52 @@ await withBrowser(
       () => window.ldraw.readScene().scene.elements.length,
     );
     await page.getByTitle("Reusable, editable blocks").click();
-    const library = page.getByRole("dialog", { name: "LDraw library" });
+    const library = page.getByRole("dialog", { name: "Portfolio library" });
     await library.waitFor();
+    await library.getByRole("tab", { name: "Editable blocks" }).click();
     for (const name of ["App Composer", "LDraw", "Paperwork", "Linkarooie"])
-      await library.getByRole("button", { name: new RegExp(name) }).waitFor();
-    await library.getByRole("button", { name: /App Composer/ }).click();
+      await library
+        .locator(".library-item")
+        .filter({ hasText: name })
+        .waitFor();
+    await library
+      .locator(".library-item")
+      .filter({ hasText: "App Composer" })
+      .click();
     await page.waitForFunction(
       (before) => window.ldraw.readScene().scene.elements.length > before,
       beforeLibrary,
     );
     assert.equal(
-      await page.getByRole("dialog", { name: "LDraw library" }).count(),
+      await page.getByRole("dialog", { name: "Portfolio library" }).count(),
       0,
       "Inserting a block closes the library dialog.",
     );
+    await page.getByRole("button", { name: "Library", exact: true }).click();
+    const artworkLibrary = page.getByRole("dialog", {
+      name: "Portfolio library",
+    });
+    await artworkLibrary.getByRole("tab", { name: "Portfolio artwork" }).click();
+    const beforeArtwork = await page.evaluate(
+      () => window.ldraw.readScene().scene.elements.length,
+    );
+    await artworkLibrary
+      .locator(".artwork-card")
+      .filter({ hasText: "Bubbles Coin-Op icon" })
+      .click();
+    await page.waitForFunction(
+      (before) => {
+        const scene = window.ldraw.readScene().scene;
+        return (
+          scene.elements.length > before &&
+          scene.elements.some((element) => element.type === "image") &&
+          Object.keys(scene.files ?? {}).length > 0
+        );
+      },
+      beforeArtwork,
+    );
     checks.push(
-      "fresh dark default, named portfolio block library, and a real editable block insertion",
+      "fresh dark default; portfolio block and real image-backed artwork both insert, with embedded file bytes",
     );
     assert.deepEqual(browserErrors, []);
     assert.deepEqual(externalRequests, []);
