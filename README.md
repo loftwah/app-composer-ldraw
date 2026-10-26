@@ -9,6 +9,7 @@ pnpm dev
 pnpm check
 pnpm audit --audit-level low
 pnpm build
+node scripts/library-check.mjs   # built app + local Playwright
 ```
 
 The canvas retains Excalidraw's drawing, text, arrows, images, selection,
@@ -25,12 +26,27 @@ theme is an inverted canvas filter, so scenes keep a normal white scene
 background and portable light-mode element colours. Exports therefore stay
 readable when shared, without changing the saved drawing.
 
-The **Library** button opens named, editable blocks for the maintained apps,
-App Composer journeys, Cloudflare infrastructure, games, music and general
-wireframes. The same items are merged into Excalidraw's native Library panel
-with stable IDs, so the owner's own library items are preserved. A block is
-plain vectors and text: no remote image, generated raster asset, font or
-network request is needed to insert, save, reopen or export it.
+The **Library** button opens one Portfolio library with two coherent paths.
+**Portfolio artwork** holds 22 real project images — approved App Composer and
+Bubbles identities, MP-confirmed LoftwahFM, MP-commissioned SHOALSHOT,
+MP-qualified Linkarooie, documented mini-app scenes, Woodhouse artwork and
+current Fighter/Protocol 11 material. Thumbnails are searchable by project and
+status; insertion embeds the local WebP bytes, an editable caption and scene
+provenance, then survives native save/reopen and PNG/SVG export. Status badges
+are deliberately honest: `approved`, `qualified`, `documented`,
+`agent-selected`, `current` and `sample` are not synonyms. See
+[docs/portfolio-artwork.md](docs/portfolio-artwork.md) for every source, hash,
+licence caveat and gap. Launch Kit’s only image is labelled a fictional sample;
+LDraw has no invented logo.
+
+**Editable blocks** covers the maintained apps, App Composer journeys,
+Cloudflare infrastructure, games, music and general wireframes with real
+composition previews. The same vector items are merged into Excalidraw’s native
+Library panel with stable IDs, so the owner’s own library items are preserved.
+Blocks remain plain vectors and text: no remote image, hidden font or network
+request is needed to insert, save, reopen or export them. The owner’s native
+library content is untouched; image-backed artwork lives only on the custom
+path because native library items cannot carry file bytes.
 
 Drawings autosave in this origin's IndexedDB, with one previous snapshot for
 damaged-save recovery and an atomic revision check against concurrent tabs.

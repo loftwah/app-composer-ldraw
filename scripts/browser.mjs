@@ -11,6 +11,8 @@ const contentTypes = {
   ".json": "application/json",
   ".svg": "image/svg+xml",
   ".png": "image/png",
+  ".webp": "image/webp",
+  ".avif": "image/avif",
   ".woff2": "font/woff2",
   ".wasm": "application/wasm",
 };
@@ -38,13 +40,14 @@ export async function withBrowser(action, options = {}) {
         ?.trim()
         .slice("Content-Security-Policy:".length)
         .trim();
+      const body = await readFile(file);
       response.writeHead(200, {
         "Content-Type":
           contentTypes[extname(file)] ?? "application/octet-stream",
         "Cache-Control": "no-store",
         ...(csp ? { "Content-Security-Policy": csp } : {}),
       });
-      response.end(await readFile(file));
+      response.end(body);
     } catch {
       response.writeHead(404);
       response.end("Not found");
@@ -62,6 +65,9 @@ export async function withBrowser(action, options = {}) {
       join(temporaryRoot, "profile"),
       {
         headless: true,
+        ...(process.env.PLAYWRIGHT_CHROMIUM
+          ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM }
+          : {}),
         viewport: { width: 1440, height: 1000 },
         downloadsPath: join(temporaryRoot, "downloads"),
         serviceWorkers: options.serviceWorkers ?? "allow",
