@@ -325,6 +325,35 @@ const result = await withBrowser(async ({ context, page, browserErrors, external
   assert.equal(metadata.og, "https://ldraw.loftwah.com/og/ldraw-og.png");
   checks.push("served SVG/PNG favicon, Apple icon, web manifest and 1200x630 social card match the document metadata");
 
+  const caches = await page.evaluate(() => caches.keys());
+  assert.ok(caches.length, "the offline workspace must be cached");
+  const cdp = await context.newCDPSession(page);
+  try {
+    await cdp.send("Network.clearBrowserCache");
+  } finally {
+    await cdp.detach();
+  }
+  await context.setOffline(true);
+  await page.reload({ waitUntil: "networkidle" });
+  await page.waitForFunction(() => Boolean(window.ldraw));
+  await page.getByRole("button", { name: "Portfolio", exact: true }).click();
+  const offlineLibrary = page.getByRole("dialog", { name: "LDraw portfolio library" });
+  await offlineLibrary.locator(".project-rail").getByRole("button", { name: /Bubbles/ }).click();
+  await offlineLibrary.locator(".library-search input").fill("Fizz mascot");
+  await page.waitForFunction(() => {
+    const image = document.querySelector(".asset-card img");
+    return image?.complete && image.naturalWidth > 0;
+  });
+  await offlineLibrary.locator(".asset-card").filter({ hasText: "Fizz mascot" }).locator(".asset-select").click();
+  await offlineLibrary.getByRole("button", { name: "Insert artwork", exact: true }).click();
+  await page.waitForFunction(
+    () => window.ldraw.readScene().scene.elements.some((element) => element.type === "image"),
+  );
+  const offline = await page.evaluate(() => window.ldraw.readScene());
+  assert.equal(Object.keys(offline.scene.files).length, 1);
+  await context.setOffline(false);
+  checks.push("reviewed thumbnails and artwork insert from the owned offline cache after a cold HTTP-cache clear");
+
   await page.setViewportSize({ width: 390, height: 844 });
   await page.getByRole("button", { name: "Portfolio", exact: true }).click();
   const phoneLibrary = page.getByRole("dialog", { name: "LDraw portfolio library" });
