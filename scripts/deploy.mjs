@@ -15,6 +15,7 @@ function guard() {
 }
 const sha = guard();
 await readReleaseConfig();
+assertReleaseProvenance();
 const qualification = JSON.parse(
   await readFile("output/qualification.json", "utf8"),
 );
