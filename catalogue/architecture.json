@@ -36,8 +36,8 @@
     "render": {
       "pngSha256": "09b72561cc34d34362b64afd0c760410ef02129e7d6bbad50c37909ccf43dc19",
       "svgSha256": "cc5d55b39520763dfebe75b16e63641cce4c8e777d05fb2904195222a5a1c3d3",
-      "builtFrom": "ef7c27e098c4948e9017642d4362c7dc3c1d672b",
-      "durationMs": 1651,
+      "builtFrom": "d83be4bf3da90d8dec765a5a5b32bcb3cefcdd9a",
+      "durationMs": 1491,
       "exportPadding": 24,
       "background": true,
       "svgExternalReferences": 0
@@ -51,7 +51,7 @@
     "summary": "A local portfolio editor with real artwork, editable architecture and a presentation view.",
     "coverage": "source-verified",
     "reviewedAt": "2026-10-26",
-    "sourceRevision": "ef7c27e098c4948e9017642d4362c7dc3c1d672b",
+    "sourceRevision": "6ef2de9ff0f10e8411d2770b28dafa3244390f19",
     "primarySourceRepo": "app-composer-ldraw",
     "sourceFiles": [
       "app-composer-ldraw/package.json",
@@ -90,8 +90,8 @@
     "render": {
       "pngSha256": "b6807b698180f04eb08c60bc348523f01593a709758037232a3a7ec858da6e1a",
       "svgSha256": "397e1eb783bf1f9a57f811683ab1c539f35dcf1124be349f72baf4406c9ccec0",
-      "builtFrom": "ef7c27e098c4948e9017642d4362c7dc3c1d672b",
-      "durationMs": 1463,
+      "builtFrom": "d83be4bf3da90d8dec765a5a5b32bcb3cefcdd9a",
+      "durationMs": 1384,
       "exportPadding": 24,
       "background": true,
       "svgExternalReferences": 0
@@ -135,8 +135,8 @@
     "render": {
       "pngSha256": "1ebfffd2d2b0c1b8d4b002360547595a3837e01768ea1d194c92e6f9a67feeb9",
       "svgSha256": "c0c75fc7997752c6a6c36a91f4672ea22542e349d5f6eef08e363c15f48ab96a",
-      "builtFrom": "ef7c27e098c4948e9017642d4362c7dc3c1d672b",
-      "durationMs": 1459,
+      "builtFrom": "d83be4bf3da90d8dec765a5a5b32bcb3cefcdd9a",
+      "durationMs": 1379,
       "exportPadding": 24,
       "background": true,
       "svgExternalReferences": 0
@@ -180,8 +180,8 @@
     "render": {
       "pngSha256": "9bd4ee88c1ff03c9e08c964aa58072061d64f1f733ef2f5b4d1e999d6e588985",
       "svgSha256": "c5ea5794d7375c1c9b5c22049fec6ee6792ba0c23b471375d8d28d8d69db5696",
-      "builtFrom": "ef7c27e098c4948e9017642d4362c7dc3c1d672b",
-      "durationMs": 1398,
+      "builtFrom": "d83be4bf3da90d8dec765a5a5b32bcb3cefcdd9a",
+      "durationMs": 1437,
       "exportPadding": 24,
       "background": true,
       "svgExternalReferences": 0
@@ -225,8 +225,8 @@
     "render": {
       "pngSha256": "ad1384e5ce3c1338f60e50ddf55d1ab72b8c54c2dcd292aeecdbfb1a27729f07",
       "svgSha256": "71f619b4edb9756a6d07b79b2e8e7e90b9e91b930f5060d3033b87a4765d0aca",
-      "builtFrom": "ef7c27e098c4948e9017642d4362c7dc3c1d672b",
-      "durationMs": 1447,
+      "builtFrom": "d83be4bf3da90d8dec765a5a5b32bcb3cefcdd9a",
+      "durationMs": 1371,
       "exportPadding": 24,
       "background": true,
       "svgExternalReferences": 0
@@ -270,8 +270,8 @@
     "render": {
       "pngSha256": "f03958ef27c26f62d105d772a150fc8c300240b486358e57c724636b17140f90",
       "svgSha256": "f0b6a536c3022ed7b08d305cece5714d8c98d59ad04f1af42f5e809b70950a76",
-      "builtFrom": "ef7c27e098c4948e9017642d4362c7dc3c1d672b",
-      "durationMs": 1400,
+      "builtFrom": "d83be4bf3da90d8dec765a5a5b32bcb3cefcdd9a",
+      "durationMs": 1404,
       "exportPadding": 24,
       "background": true,
       "svgExternalReferences": 0
@@ -315,7 +315,7 @@
     "render": {
       "pngSha256": "b04f6bdd75b1e5811eaced0cc9a79ef0a445ca2b142e305c8138fe7d99fe0ada",
       "svgSha256": "ec6bf6b0cfd1d6b02f1bd4fb3ce035cadb6a729a748a28c2d5c2cce71e1bfb10",
-      "builtFrom": "ef7c27e098c4948e9017642d4362c7dc3c1d672b",
+      "builtFrom": "d83be4bf3da90d8dec765a5a5b32bcb3cefcdd9a",
       "durationMs": 1423,
       "exportPadding": 24,
       "background": true,
@@ -360,8 +360,8 @@
     "render": {
       "pngSha256": "f0a71e8fd9b73b941395d8537ce1a31fea242c8d365474254210d6e355619ced",
       "svgSha256": "767c14576eb0d92ab5dbe9eb77710335e4a00f89e0ce225d266550b8bbdfece5",
-      "builtFrom": "ef7c27e098c4948e9017642d4362c7dc3c1d672b",
-      "durationMs": 1428,
+      "builtFrom": "d83be4bf3da90d8dec765a5a5b32bcb3cefcdd9a",
+      "durationMs": 1456,
       "exportPadding": 24,
       "background": true,
       "svgExternalReferences": 0
@@ -405,8 +405,8 @@
     "render": {
       "pngSha256": "30447370bb284dc7fa839e1513a753d5d8f613291591b8600b73a3f6c245a25f",
       "svgSha256": "ddd96b870f08e7c2ef2fb6333813fe6b6c641dafedbda0ca98f8246eb626fa86",
-      "builtFrom": "ef7c27e098c4948e9017642d4362c7dc3c1d672b",
-      "durationMs": 1456,
+      "builtFrom": "d83be4bf3da90d8dec765a5a5b32bcb3cefcdd9a",
+      "durationMs": 1376,
       "exportPadding": 24,
       "background": true,
       "svgExternalReferences": 0
@@ -450,8 +450,8 @@
     "render": {
       "pngSha256": "387743e03e5521150d76a6f33ff5bbd700531e66f3c827be36e6df9d51449282",
       "svgSha256": "24ccdfae906194ca89d99c0eb7cf1965c42361476ec6a02827965a6e60632085",
-      "builtFrom": "ef7c27e098c4948e9017642d4362c7dc3c1d672b",
-      "durationMs": 1418,
+      "builtFrom": "d83be4bf3da90d8dec765a5a5b32bcb3cefcdd9a",
+      "durationMs": 1425,
       "exportPadding": 24,
       "background": true,
       "svgExternalReferences": 0
@@ -495,8 +495,8 @@
     "render": {
       "pngSha256": "da098b204ce071865f5c9fcef989beaef5f0a33337bbf4bb5788b56347183478",
       "svgSha256": "e7d7df3431244b9033c647e81475560c464ff657f044dfc76a9158507a49bfea",
-      "builtFrom": "ef7c27e098c4948e9017642d4362c7dc3c1d672b",
-      "durationMs": 1420,
+      "builtFrom": "d83be4bf3da90d8dec765a5a5b32bcb3cefcdd9a",
+      "durationMs": 1402,
       "exportPadding": 24,
       "background": true,
       "svgExternalReferences": 0
@@ -542,8 +542,8 @@
     "render": {
       "pngSha256": "d7ec23bee28f513aa186a6059bc3b7935bb4c92f9a2d6a10c515b7039d33adef",
       "svgSha256": "4f3ee1387f78f7066d7a9c52289fd8368e9b775e26280108b2c9aa79a903715f",
-      "builtFrom": "ef7c27e098c4948e9017642d4362c7dc3c1d672b",
-      "durationMs": 1462,
+      "builtFrom": "d83be4bf3da90d8dec765a5a5b32bcb3cefcdd9a",
+      "durationMs": 1418,
       "exportPadding": 24,
       "background": true,
       "svgExternalReferences": 0
@@ -591,8 +591,8 @@
     "render": {
       "pngSha256": "572e933a537b4704c6af8171676f7a6b8e06b24c281f2556ac1632a3d03d1a35",
       "svgSha256": "84c3e58b7ada302b3e510da84b3f87023e6c9af5d8b327d1ba276d7c0a6a202e",
-      "builtFrom": "ef7c27e098c4948e9017642d4362c7dc3c1d672b",
-      "durationMs": 1412,
+      "builtFrom": "d83be4bf3da90d8dec765a5a5b32bcb3cefcdd9a",
+      "durationMs": 1389,
       "exportPadding": 24,
       "background": true,
       "svgExternalReferences": 0
@@ -638,8 +638,8 @@
     "render": {
       "pngSha256": "6a318f1dab38a982ea4b64d97ac1db204c0029fd76c16ccd7acc51517d7c1d25",
       "svgSha256": "90428d041942964089cd4df5be419777fe5f2da3ba53da58fc37ee7dead825d3",
-      "builtFrom": "ef7c27e098c4948e9017642d4362c7dc3c1d672b",
-      "durationMs": 1420,
+      "builtFrom": "d83be4bf3da90d8dec765a5a5b32bcb3cefcdd9a",
+      "durationMs": 1442,
       "exportPadding": 24,
       "background": true,
       "svgExternalReferences": 0
@@ -685,8 +685,8 @@
     "render": {
       "pngSha256": "08a8d4f1af80df4938babf3ee2236bb22039050caf21a78c8a9a6c1484eb20d9",
       "svgSha256": "c7b2a98f0f6b13d5dd2b95a6b6d1aaaec3fedc27586c5332ad3b7bd84d305b93",
-      "builtFrom": "ef7c27e098c4948e9017642d4362c7dc3c1d672b",
-      "durationMs": 1407,
+      "builtFrom": "d83be4bf3da90d8dec765a5a5b32bcb3cefcdd9a",
+      "durationMs": 1391,
       "exportPadding": 24,
       "background": true,
       "svgExternalReferences": 0
@@ -732,8 +732,8 @@
     "render": {
       "pngSha256": "605fe2e6ba52a8837695ced6c567f6ca41b6ac251f3efc868547b51d57c40619",
       "svgSha256": "eec4fe972fbef34743a2556dfd36224abaaac88e0226b59d3a05ab8e329f4f0d",
-      "builtFrom": "ef7c27e098c4948e9017642d4362c7dc3c1d672b",
-      "durationMs": 1415,
+      "builtFrom": "d83be4bf3da90d8dec765a5a5b32bcb3cefcdd9a",
+      "durationMs": 1384,
       "exportPadding": 24,
       "background": true,
       "svgExternalReferences": 0
@@ -779,8 +779,8 @@
     "render": {
       "pngSha256": "4e519bb0858c7425656edc8477507c218209d4829bee2a926138970d87a6d23d",
       "svgSha256": "041c05bcbcb922e636b29e007c3fea5080f821e68d602d8aa7840cab5a1deccd",
-      "builtFrom": "ef7c27e098c4948e9017642d4362c7dc3c1d672b",
-      "durationMs": 1386,
+      "builtFrom": "d83be4bf3da90d8dec765a5a5b32bcb3cefcdd9a",
+      "durationMs": 1419,
       "exportPadding": 24,
       "background": true,
       "svgExternalReferences": 0
@@ -826,8 +826,8 @@
     "render": {
       "pngSha256": "e6c0112856a702201594de376e483650874047bb6ecb7c665f22435ce50c147e",
       "svgSha256": "e943d333c2f838e2fefbbefe6a9dda8d20223841baa535a44f9ed5744ee3c736",
-      "builtFrom": "ef7c27e098c4948e9017642d4362c7dc3c1d672b",
-      "durationMs": 1450,
+      "builtFrom": "d83be4bf3da90d8dec765a5a5b32bcb3cefcdd9a",
+      "durationMs": 1390,
       "exportPadding": 24,
       "background": true,
       "svgExternalReferences": 0

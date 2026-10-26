@@ -9,7 +9,7 @@ The diagrams are authored from the source files named below, then rendered by LD
 | Project | Scene | Reviewed | Native scene | Preview | Source revision |
 | --- | --- | --- | --- | --- | --- |
 | App Composer | App Composer — Owner intent, agent proposal and independent delivery stay separate. | 2026-10-26 | `/architecture/composer/overview.excalidraw` | `/architecture/composer/preview.webp` | `00d0a6cd55021a8f635db60a101ae2e25abd7da3` |
-| LDraw | LDraw — A local portfolio editor with real artwork, editable architecture and a presentation view. | 2026-10-26 | `/architecture/ldraw/overview.excalidraw` | `/architecture/ldraw/preview.webp` | `ef7c27e098c4948e9017642d4362c7dc3c1d672b` |
+| LDraw | LDraw — A local portfolio editor with real artwork, editable architecture and a presentation view. | 2026-10-26 | `/architecture/ldraw/overview.excalidraw` | `/architecture/ldraw/preview.webp` | `6ef2de9ff0f10e8411d2770b28dafa3244390f19` |
 | Paperwork | Paperwork — PDF fields, ink, signatures and printing never leave the browser. | 2026-10-26 | `/architecture/paperwork/overview.excalidraw` | `/architecture/paperwork/preview.webp` | `d01603eb5cd78d5431a8504a5a79011abe7d6b9f` |
 | Here / there | Here / there — Visitor photographs and postcards pass an explicit owner review. | 2026-10-26 | `/architecture/herethere/overview.excalidraw` | `/architecture/herethere/preview.webp` | `376129c8b48d29d26e982777084aa241966569c7` |
 | Linkarooie | Linkarooie — One public profile, app-owned records and approved Guestbook media. | 2026-10-26 | `/architecture/linkarooie/overview.excalidraw` | `/architecture/linkarooie/preview.webp` | `2f9280d3ae754076174b5527ab15224c918b8580` |
@@ -52,7 +52,7 @@ The diagrams are authored from the source files named below, then rendered by LD
 - Coverage: source-verified
 - Scene: `/architecture/ldraw/overview.excalidraw` (61 elements), SHA-256 `5467d41d656d661aca35f6e3227da1bba7b9c971abefbc43af8cebc823ba623d`
 - Preview: `/architecture/ldraw/preview.webp` (1000×598), SHA-256 `d6ef5968452cbe9978e84ab69ac0e102cf4192b54d652aff92e26bf7a5461353`
-- Owning revision: `ef7c27e098c4948e9017642d4362c7dc3c1d672b`
+- Owning revision: `6ef2de9ff0f10e8411d2770b28dafa3244390f19`
 - Source files: `app-composer-ldraw/package.json`, `app-composer-ldraw/vite.config.mjs`, `app-composer-ldraw/src/App.tsx`, `app-composer-ldraw/src/LibraryDialog.tsx`, `app-composer-ldraw/src/architecture.mjs`, `app-composer-ldraw/src/compositions.mjs`, `app-composer-ldraw/scripts/architecture-build.mjs`, `app-composer-ldraw/scripts/mcp`
 - Facts:
   - React 18 and Vite 8 host the pinned Excalidraw 0.18.1 engine.

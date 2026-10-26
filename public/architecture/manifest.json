@@ -33,7 +33,7 @@
       "summary": "A local portfolio editor with real artwork, editable architecture and a presentation view.",
       "coverage": "source-verified",
       "reviewedAt": "2026-10-26",
-      "sourceRevision": "ef7c27e098c4948e9017642d4362c7dc3c1d672b",
+      "sourceRevision": "6ef2de9ff0f10e8411d2770b28dafa3244390f19",
       "primarySourceRepo": "app-composer-ldraw",
       "sourceFiles": [
         "app-composer-ldraw/package.json",
