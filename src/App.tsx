@@ -37,6 +37,7 @@ import {
   type Project,
 } from "./presets";
 import { MAX_SCENE_BYTES, validateScene } from "./scene.mjs";
+import { artworkProjects, portfolioArtwork } from "./portfolio.mjs";
 import { readDraft, writeDraft } from "./storage";
 import {
   applyTheme,
@@ -92,6 +93,94 @@ for (const key of ["analytics", "qa"]) {
   if (value !== null) composerReturn.searchParams.set(key, value);
 }
 
+function readDataUrl(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(new Error("The local artwork could not be read."));
+    reader.readAsDataURL(blob);
+  });
+}
+
+function BlockPreview({ item }: { item: DiagramLibraryItem }) {
+  const elements = item.elements as Array<Record<string, any>>;
+  return (
+    <svg
+      className="block-preview"
+      viewBox={`0 0 ${item.width ?? 400} ${item.height ?? 220}`}
+      preserveAspectRatio="xMidYMid meet"
+      aria-hidden="true"
+    >
+      {elements.slice(0, 80).map((element, index) => {
+        const key = String(element.id ?? index);
+        if (element.type === "rectangle")
+          return (
+            <g key={key}>
+              <rect
+                x={element.x}
+                y={element.y}
+                width={element.width}
+                height={element.height}
+                rx={6}
+                fill={
+                  element.backgroundColor === "transparent"
+                    ? "none"
+                    : element.backgroundColor ?? "none"
+                }
+                stroke={element.strokeColor ?? INK}
+                strokeWidth={element.strokeWidth ?? 1}
+              />
+              {element.label ? (
+                <text
+                  x={element.x + element.width / 2}
+                  y={element.y + element.height / 2 + (element.label.fontSize ?? 14) / 3}
+                  textAnchor="middle"
+                  fill={element.label.strokeColor ?? INK}
+                  fontSize={element.label.fontSize ?? 14}
+                  fontWeight="600"
+                >
+                  {element.label.text}
+                </text>
+              ) : null}
+            </g>
+          );
+        if (element.type === "text")
+          return (
+            <text
+              key={key}
+              x={element.x}
+              y={element.y + (element.fontSize ?? 16)}
+              fill={element.strokeColor ?? INK}
+              fontSize={element.fontSize ?? 16}
+              fontWeight={element.fontSize > 19 ? 600 : 400}
+            >
+              {element.text}
+            </text>
+          );
+        if (
+          (element.type === "line" || element.type === "arrow") &&
+          Array.isArray(element.points)
+        ) {
+          const [start, end = [element.width, element.height]] = element.points;
+          return (
+            <line
+              key={key}
+              x1={element.x + start[0]}
+              y1={element.y + start[1]}
+              x2={element.x + end[0]}
+              y2={element.y + end[1]}
+              stroke={element.strokeColor ?? ORANGE}
+              strokeWidth={element.strokeWidth ?? 2}
+              strokeLinecap="round"
+            />
+          );
+        }
+        return null;
+      })}
+    </svg>
+  );
+}
+
 export function App() {
   const [api, setApi] = useState<ExcalidrawImperativeAPI>();
   const [ready, setReady] = useState(false);
@@ -113,6 +202,10 @@ export function App() {
   );
   const [libraryOpen, setLibraryOpen] = useState(false);
   const [libraryReady, setLibraryReady] = useState(false);
+  const [libraryTab, setLibraryTab] = useState<"artwork" | "blocks">("artwork");
+  const [libraryQuery, setLibraryQuery] = useState("");
+  const [libraryProject, setLibraryProject] = useState("all");
+  const [libraryCollection, setLibraryCollection] = useState("all");
   const theme: ResolvedTheme = resolveTheme(appearance, prefersDark);
   const fileInput = useRef<HTMLInputElement>(null);
   const previewDialog = useRef<HTMLDialogElement>(null);
@@ -600,6 +693,129 @@ export function App() {
       setBusy(false);
     }
   }
+  async function insertArtwork(item: (typeof portfolioArtwork)[number]) {
+    if (!api || !ready || busy) return;
+    setBusy(true);
+    try {
+      const response = await fetch(item.file);
+      if (!response.ok)
+        throw new Error("The local artwork is unavailable. Your drawing is unchanged.");
+      const blob = await response.blob();
+      const dataURL = await readDataUrl(blob);
+      const fileId = crypto.randomUUID();
+      api.addFiles([
+        {
+          id: fileId as any,
+          dataURL,
+          mimeType: blob.type || "image/webp",
+          created: Date.now(),
+          lastRetrieved: Date.now(),
+          version: 1,
+        } as any,
+      ]);
+      const existing = api.getSceneElementsIncludingDeleted();
+      const bottom = Math.max(
+        0,
+        ...existing
+          .filter((element) => !element.isDeleted)
+          .map((element) => element.y + element.height),
+      );
+      const y = existing.length ? bottom + 70 : 0;
+      let imageWidth = Math.min(360, item.width);
+      let imageHeight = imageWidth * (item.height / item.width);
+      if (imageHeight > 260) {
+        imageHeight = 260;
+        imageWidth = imageHeight * (item.width / item.height);
+      }
+      const width = Math.max(300, imageWidth + 48);
+      const height = imageHeight + 108;
+      const groupId = crypto.randomUUID();
+      const skeletons: any[] = [
+        {
+          type: "rectangle",
+          x: 0,
+          y: 0,
+          width,
+          height,
+          strokeColor: item.accent,
+          backgroundColor: item.tint,
+          fillStyle: "solid",
+          strokeWidth: 2,
+          roundness: { type: 3 },
+          roughness: 0,
+          groupIds: [groupId],
+        },
+        {
+          type: "image",
+          x: 24,
+          y: 24,
+          width: imageWidth,
+          height: imageHeight,
+          fileId,
+          status: "saved",
+          scale: [1, 1],
+          crop: null,
+          groupIds: [groupId],
+          customData: {
+            ldrawArtworkId: item.id,
+            ldrawProject: item.project,
+            ldrawStatus: item.status,
+            ldrawSource: item.source,
+            ldrawSourceSha256: item.sourceSha,
+            ldrawDerivativeSha256: item.derivativeSha,
+          },
+        },
+        {
+          type: "text",
+          x: 24,
+          y: imageHeight + 38,
+          text: item.title,
+          fontSize: 22,
+          fontFamily: 5,
+          strokeColor: INK,
+          groupIds: [groupId],
+        },
+        {
+          type: "text",
+          x: 24,
+          y: imageHeight + 68,
+          text: item.subtitle,
+          fontSize: 13,
+          fontFamily: 5,
+          strokeColor: "#6B645C",
+          groupIds: [groupId],
+        },
+        {
+          type: "text",
+          x: 24,
+          y: height - 26,
+          text: `${item.projectLabel} · ${item.statusLabel}`,
+          fontSize: 9,
+          fontFamily: 5,
+          strokeColor: item.accent,
+          groupIds: [groupId],
+        },
+      ];
+      const inserted = convertToExcalidrawElements(skeletons).map(
+        (element) => ({ ...element, y: element.y + y }),
+      );
+      api.updateScene({
+        elements: [...existing, ...inserted],
+        captureUpdate: CaptureUpdateAction.IMMEDIATELY,
+      });
+      api.scrollToContent(inserted, { fitToContent: true });
+      setLibraryOpen(false);
+    } catch (failure) {
+      setError(
+        failure instanceof Error
+          ? failure.message
+          : "The artwork could not be inserted. Your drawing is unchanged.",
+      );
+    } finally {
+      setBusy(false);
+    }
+  }
+
   function selectProject(value: Project) {
     setProject(value);
     api?.updateScene({
@@ -610,6 +826,45 @@ export function App() {
       captureUpdate: CaptureUpdateAction.NEVER,
     });
   }
+  const query = libraryQuery.trim().toLowerCase();
+  const matches = (...values: string[]) =>
+    !query || values.join(" ").toLowerCase().includes(query);
+  const visibleArtwork = portfolioArtwork.filter(
+    (item) =>
+      (libraryProject === "all" || item.project === libraryProject) &&
+      matches(
+        item.title,
+        item.subtitle,
+        item.projectLabel,
+        item.statusLabel,
+        item.credit,
+        item.note,
+      ),
+  );
+  const visibleCollections = collections
+    .filter(
+      (collection) =>
+        libraryCollection === "all" || collection.id === libraryCollection,
+    )
+    .map((collection) => ({
+      ...collection,
+      items: librarySpecs
+        .filter(
+          (item) =>
+            item.collection === collection.id &&
+            matches(item.name, item.description, collection.label),
+        )
+        .map((item) => ({ ...item, collection: collection.id })),
+    }))
+    .filter((collection) => collection.items.length);
+  const libraryCount =
+    libraryTab === "artwork"
+      ? visibleArtwork.length
+      : visibleCollections.reduce(
+          (total, collection) => total + collection.items.length,
+          0,
+        );
+
   return (
     <main className="workspace">
       <header className="toolbar" aria-label="LDraw drawing actions">
@@ -815,11 +1070,12 @@ export function App() {
           <div className="library-shell">
             <div className="library-head">
               <div>
-                <h2>LDraw library</h2>
+                <h2>Portfolio library</h2>
                 <p>
-                  Reusable, editable blocks for the portfolio. Inserting appends
-                  below your drawing and keeps your existing elements unchanged.
-                  Undo is available.
+                  Real project artwork and editable building blocks. Insertion
+                  appends below your drawing, keeps existing elements unchanged
+                  and is one undo step. Images are embedded locally, not fetched
+                  from a remote service.
                 </p>
               </div>
               <button
@@ -829,35 +1085,171 @@ export function App() {
                 ×
               </button>
             </div>
-            <div className="library-groups">
-              {collections.map((collection) => (
-                <section className="library-group" key={collection.id}>
-                  <h3>{collection.label}</h3>
-                  <p>{collection.description}</p>
-                  <div className="library-items">
-                    {librarySpecs
-                      .filter((item) => item.collection === collection.id)
-                      .map((item) => (
-                        <button
-                          className="library-item"
-                          key={item.id}
-                          style={
-                            {
-                              "--item-accent":
-                                collectionAccents[collection.id] ?? ORANGE,
-                            } as CSSProperties
-                          }
-                          onClick={() => void insertBlock(item)}
-                          disabled={busy}
-                        >
-                          <strong>{item.name}</strong>
-                          <span>{item.description}</span>
-                        </button>
-                      ))}
-                  </div>
-                </section>
-              ))}
+            <div className="library-controls">
+              <label className="library-search">
+                Find
+                <input
+                  type="search"
+                  value={libraryQuery}
+                  onChange={(event) => setLibraryQuery(event.target.value)}
+                  placeholder="Search artwork, blocks, projects…"
+                  autoFocus
+                />
+              </label>
+              <div className="library-tabs" role="tablist" aria-label="Library type">
+                <button
+                  role="tab"
+                  aria-selected={libraryTab === "artwork"}
+                  className={libraryTab === "artwork" ? "active" : ""}
+                  onClick={() => setLibraryTab("artwork")}
+                >
+                  Portfolio artwork
+                </button>
+                <button
+                  role="tab"
+                  aria-selected={libraryTab === "blocks"}
+                  className={libraryTab === "blocks" ? "active" : ""}
+                  onClick={() => setLibraryTab("blocks")}
+                >
+                  Editable blocks
+                </button>
+              </div>
+              <span className="library-count" role="status">
+                {libraryCount} {libraryCount === 1 ? "item" : "items"}
+              </span>
             </div>
+            {libraryTab === "artwork" ? (
+              <>
+                <div className="library-chips" aria-label="Filter artwork by project">
+                  <button
+                    className={libraryProject === "all" ? "active" : ""}
+                    aria-pressed={libraryProject === "all"}
+                    onClick={() => setLibraryProject("all")}
+                  >
+                    All projects
+                  </button>
+                  {artworkProjects.map((project) => (
+                    <button
+                      key={project.key}
+                      className={libraryProject === project.key ? "active" : ""}
+                      aria-pressed={libraryProject === project.key}
+                      onClick={() => setLibraryProject(project.key)}
+                    >
+                      {project.label}
+                    </button>
+                  ))}
+                </div>
+                {visibleArtwork.length ? (
+                  <div className="artwork-grid">
+                    {visibleArtwork.map((item) => (
+                      <button
+                        className="artwork-card"
+                        key={item.id}
+                        onClick={() => void insertArtwork(item)}
+                        disabled={busy}
+                        title={`${item.credit}. ${item.note}`}
+                        style={
+                          {
+                            "--item-accent": item.accent,
+                            "--item-tint": item.tint,
+                          } as CSSProperties
+                        }
+                      >
+                        <span className="artwork-thumb">
+                          <img
+                            src={item.file}
+                            alt=""
+                            loading="lazy"
+                            width={item.width}
+                            height={item.height}
+                          />
+                        </span>
+                        <span className="artwork-copy">
+                          <strong>{item.title}</strong>
+                          <span>{item.projectLabel} · {item.subtitle}</span>
+                          <em data-status={item.status}>{item.statusLabel}</em>
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="library-empty">
+                    No artwork matches “{libraryQuery}”. Try another project or
+                    search term.
+                  </p>
+                )}
+                <p className="library-note">
+                  Every card embeds a local WebP copy. Provenance, source hash
+                  and the strongest documented approval state travel with the
+                  image metadata. “Current”, “documented”, “qualified” and
+                  “agent-selected” are deliberately not the same as owner
+                  approval. The native Excalidraw library and your own items are
+                  unchanged.
+                </p>
+              </>
+            ) : (
+              <>
+                <div className="library-chips" aria-label="Filter blocks by collection">
+                  <button
+                    className={libraryCollection === "all" ? "active" : ""}
+                    aria-pressed={libraryCollection === "all"}
+                    onClick={() => setLibraryCollection("all")}
+                  >
+                    All categories
+                  </button>
+                  {collections.map((collection) => (
+                    <button
+                      key={collection.id}
+                      className={libraryCollection === collection.id ? "active" : ""}
+                      aria-pressed={libraryCollection === collection.id}
+                      onClick={() => setLibraryCollection(collection.id)}
+                    >
+                      {collection.label}
+                    </button>
+                  ))}
+                </div>
+                {visibleCollections.length ? (
+                  <div className="library-groups">
+                    {visibleCollections.map((collection) => (
+                      <section className="library-group" key={collection.id}>
+                        <h3>{collection.label}</h3>
+                        <p>{collection.description}</p>
+                        <div className="library-items">
+                          {collection.items.map((item) => (
+                            <button
+                              className="library-item"
+                              key={item.id}
+                              style={
+                                {
+                                  "--item-accent":
+                                    collectionAccents[item.collection] ?? ORANGE,
+                                } as CSSProperties
+                              }
+                              onClick={() => void insertBlock(item)}
+                              disabled={busy}
+                            >
+                              <BlockPreview item={item} />
+                              <strong>{item.name}</strong>
+                              <span>{item.description}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </section>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="library-empty">
+                    No blocks match “{libraryQuery}”. Try another category or
+                    search term.
+                  </p>
+                )}
+                <p className="library-note">
+                  These blocks are plain vectors and text, so they stay editable
+                  through save, reopen and PNG/SVG export. Your Excalidraw
+                  library remains available from the native Library control.
+                </p>
+              </>
+            )}
           </div>
         </dialog>
       ) : null}

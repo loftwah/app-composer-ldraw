@@ -90,6 +90,10 @@ if (bootstrapHelpers.length !== 7)
   );
 for (const file of files)
   if (/^excalidraw-assets\/fonts\/Excalifont\//.test(file)) core.add(file);
+// Portfolio artwork is embedded into scenes from these local bytes. Cache the
+// whole reviewed set so offline insertion does not silently lose an image.
+for (const file of files)
+  if (/^portfolio\/[^/]+\.webp$/.test(file)) core.add(file);
 // Cloudflare consumes control files without serving them as assets.
 const available = files.filter(
   (file) => !["_headers", "_redirects"].includes(file),

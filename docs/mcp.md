@@ -296,17 +296,20 @@ each run, so compare content and IDs rather than raw JSON there.
 - Text is limited to the measured Latin set; emoji, CJK and arrow glyphs are
   refused instead of falling back to a host font.
 - The adapter preserves embedded images but does not create, fetch or edit
-  them.
+  them. The browser Portfolio library can insert real local artwork; a
+  subsequent MCP read/modify/render cycle keeps those bytes (see
+  [portfolio-artwork.md](portfolio-artwork.md)).
 - Rendering needs the built app and Playwright; a missing build or browser
   fails with an actionable message and writes nothing.
 
 ## Remaining gates (not claimed)
 
-- Human visual review of both examples and any publication decision.
-- A second genuinely approved portfolio identity/palette. This repository only
-  approves the App Composer orange identity; Linkarooie has a documented lime
-  family but no asset package here, and Woodhouse, Protocol 11, Bubbles,
-  SHOALSHOT, Fighter and LoftwahFM remain unresolved.
+- Human visual review of both examples, the new artwork placements and any
+  publication decision. Agent tests prove bytes and geometry, not taste.
+- Owner/licence confirmation before publishing an artwork-only asset outside
+  the portfolio. The image records distinguish approved, qualified,
+  documented, agent-selected, current and sample; several game/FM projects have
+  no repository redistribution licence.
 - An actual model-driven MCP session in the owner's client, and any editor
   round-trip on a physical device.
 - Deployment, hostname, DNS and live-site verification (owned by the existing

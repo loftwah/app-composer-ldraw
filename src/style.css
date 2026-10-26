@@ -268,8 +268,150 @@ input:focus-visible {
   font-size: 12px;
   line-height: 1.45;
 }
+.library-controls {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.library-search {
+  display: grid;
+  gap: 4px;
+  flex: 1 1 240px;
+  font-size: 10px;
+  color: var(--muted);
+}
+.library-search input {
+  min-height: 36px;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--field);
+  color: var(--text);
+}
+.library-tabs {
+  display: flex;
+  gap: 4px;
+}
+.library-tabs button,
+.library-chips button {
+  min-height: 34px;
+  padding: 5px 10px;
+  font-size: 11px;
+}
+.library-tabs button.active,
+.library-chips button.active {
+  border-color: #fc5b05;
+  background: #fc5b05;
+  color: #fff;
+}
+.library-count {
+  font-size: 11px;
+  color: var(--muted);
+  padding-bottom: 10px;
+}
+.library-chips {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  padding: 10px 20px 0;
+}
+.artwork-grid {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 12px 20px 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-auto-rows: max-content;
+  gap: 10px;
+  align-content: start;
+  align-items: start;
+}
+.artwork-card {
+  display: grid;
+  grid-template-rows: 150px auto;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+  text-align: left;
+  border: 1px solid var(--border);
+  border-top: 4px solid var(--item-accent, #fc5b05);
+  border-radius: 9px;
+  background: var(--field);
+}
+.artwork-card:hover {
+  border-color: var(--muted);
+  transform: translateY(-1px);
+}
+.artwork-thumb {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding: 10px;
+  background:
+    linear-gradient(45deg, #0002 25%, transparent 25%),
+    linear-gradient(-45deg, #0002 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #0002 75%),
+    linear-gradient(-45deg, transparent 75%, #0002 75%);
+  background-size: 16px 16px;
+  background-position:
+    0 0,
+    0 8px,
+    8px -8px,
+    -8px 0;
+  background-color: var(--item-tint, #f4f0e8);
+}
+.artwork-thumb img {
+  display: block;
+  width: 100%;
+  height: 130px;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 8px #0002);
+}
+.artwork-copy {
+  display: grid;
+  gap: 3px;
+  padding: 9px 11px 11px;
+}
+.artwork-copy strong {
+  font-size: 13px;
+}
+.artwork-copy span {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.35;
+}
+.artwork-copy em {
+  margin-top: 3px;
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--item-accent, #fc5b05);
+}
+.artwork-copy em[data-status="sample"],
+.artwork-copy em[data-status="current"] {
+  color: #a16207;
+}
+.library-empty {
+  padding: 30px 20px;
+  color: var(--muted);
+}
+.library-note {
+  margin: 0;
+  padding: 0 20px 18px;
+  font-size: 10px;
+  line-height: 1.45;
+  color: var(--muted);
+  max-width: 100ch;
+}
 .library-groups {
   overflow: auto;
+  flex: 1;
+  min-height: 0;
   padding: 16px 20px 22px;
   display: grid;
   gap: 18px;
@@ -295,12 +437,20 @@ input:focus-visible {
   display: grid;
   gap: 3px;
   text-align: left;
-  padding: 10px 12px;
+  padding: 7px 8px 10px;
   min-height: 62px;
   border: 1px solid var(--border);
   border-left: 4px solid var(--item-accent, #fc5b05);
   border-radius: 8px;
   background: var(--field);
+}
+.block-preview {
+  width: 100%;
+  height: 102px;
+  border-radius: 5px;
+  background: #f4f0e8;
+  border: 1px solid var(--border);
+  margin-bottom: 3px;
 }
 .library-item strong {
   font-size: 13px;
@@ -376,6 +526,29 @@ input:focus-visible {
   }
   .library-head {
     padding: 14px;
+  }
+  .library-controls,
+  .library-chips,
+  .artwork-grid {
+    padding-inline: 14px;
+  }
+  .artwork-grid {
+    grid-template-columns: 1fr;
+  }
+  .artwork-card {
+    grid-template-rows: 120px auto;
+  }
+  .artwork-thumb img {
+    height: 100px;
+  }
+  .library-tabs {
+    flex: 1 1 100%;
+  }
+  .library-tabs button {
+    flex: 1;
+  }
+  .library-note {
+    display: none;
   }
 }
 @media (prefers-reduced-motion: reduce) {

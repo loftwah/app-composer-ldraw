@@ -49,6 +49,38 @@ reload and PNG/SVG export. The library is inspected by `tests/library.test.mjs`
 for stable unique IDs, supported element types, readable filled cards, complete
 collections and editable starting examples.
 
+## Portfolio artwork (real project assets)
+
+The **Portfolio artwork** tab is a separate, deliberate image path in the
+custom Portfolio library. It does not change the native `.excalidrawlib`
+contents. The source index is `src/portfolio.mjs`; the human-readable record,
+status key, source paths and full SHA-256 values are in
+[portfolio-artwork.md](portfolio-artwork.md). All 22 images are local WebP
+derivatives under `public/portfolio/` and are precached for offline insertion.
+The editor fetches the local file, calls `api.addFiles`, then inserts native
+image elements with editable caption and provenance metadata. Save, reopen and
+PNG/SVG export preserve the embedded bytes.
+
+This batch copies real artwork from the owning public project repositories; it
+does not redraw logos, invent a universal portfolio colour or generate new
+replacement art. App Composer orange remains Composer-only. Each record states
+the strongest documented claim — `approved`, `qualified`, `documented`,
+`agent-selected`, `current` or `sample`. In particular:
+
+- Paperwork press art is documented but agent-selected, not separately approved.
+- Linkarooie is MP-qualified 8/10, not blanket approval of every crop.
+- Bubbles/LoftwahFM/SHOALSHOT/Fighter/Protocol 11 images are included for
+  internal portfolio diagrams from the owner's public repositories; most have no
+  repository redistribution licence, so the standalone asset must not be
+  republished without the owning project's permission.
+- Launch Kit's Night Signal art is a fictional sample, not a Launch Kit logo.
+- Real-person Fighter roster art and unverified Protocol 11 artpacks are excluded.
+- LDraw has no approved identity mark and keeps its typographic wordmark.
+
+`tests/portfolio.test.mjs` verifies every record, local file, WebP dimensions,
+derivative SHA-256, status value and named project coverage. Browser evidence
+is produced by `node scripts/library-check.mjs` against the built app.
+
 ## Local MCP adapter and measured text
 
 `scripts/mcp/font-metrics.json` is a measured advance/kerning table for the
