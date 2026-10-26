@@ -232,6 +232,10 @@ if (mode === "check") {
     const revisions = await sourceRevisions(model);
     for (const source of revisions) {
       if (!source.available) continue;
+      // LDraw's own model is rendered and committed in this repository. Its
+      // recorded source is the clean parent commit at render time, so a later
+      // documentation or generated-scene commit is expected, not source drift.
+      if (source.repo === "app-composer-ldraw") continue;
       if (source.revision !== entry.sourceRevision)
         drift.push(
           `${entry.id}: ${source.repo} moved from ${entry.sourceRevision} to ${source.revision}`,
@@ -245,7 +249,7 @@ if (mode === "check") {
         entries: manifest.length,
         failures,
         sourceDrift: drift,
-        note: "Source drift is a review signal, not an automatic re-render. Use --strict-sources to fail on it.",
+        note: "Source drift is a review signal, not an automatic re-render. LDraw's own model records its clean parent commit. Use --strict-sources to fail on other owning repositories.",
       },
       null,
       2,
