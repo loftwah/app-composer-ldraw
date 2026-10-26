@@ -139,7 +139,9 @@ Playwright, with local Space Grotesk and the authored mark. Its source revision,
 canvas hash and image hash are recorded in
 [`public/og/ldraw-og-provenance.json`](public/og/ldraw-og-provenance.json).
 Metadata, canonical URL, structured data, robots and sitemap are checked by
-`scripts/seo.mjs`.
+`scripts/seo.mjs`. The release refuses a card rendered from a dirty tree:
+re-render with `pnpm og` after the last card-affecting change, commit the PNG and
+provenance, then deploy.
 
 ## Local agent use
 
