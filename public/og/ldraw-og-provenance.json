@@ -10,14 +10,14 @@
   "renderer": "scripts/og.mjs",
   "rendererSha256": "88cc3d0e615d94421f8afa8fd0b4a4cd3520415cd7cb5e792f3eb7f65cdcd60a",
   "capturedAt": "2026-10-26",
-  "source": "bf2fcb8c6ecae2f45cf1ad24633a26b0112e4fa5",
-  "sourceTree": "b49cefaabd25cc6ee7b4978c5b4fbd02cab9d203",
-  "workingTreeClean": false,
+  "source": "d7137f38d2d8e60ed508bc41dc22d98bca176b8c",
+  "sourceTree": "bec7dc363b22e250bbad314845559debfa39b5ed",
+  "workingTreeClean": true,
   "browser": "Playwright Chromium, 1200×630 viewport, device scale 1",
   "canvas": {
     "width": 1042,
     "height": 317,
-    "sha256": "d05f4f0258b37da7ae995002816ef5913e22723454b62fc5d7f60fa77f654a27",
+    "sha256": "f42bab937ebfbe9c045d3ba04b09d8d054b32661a5b18a47c4f484c4abc657db",
     "trimmedGap": [
       318,
       373
@@ -26,8 +26,8 @@
   "image": {
     "width": 1200,
     "height": 630,
-    "bytes": 61916,
-    "sha256": "6323596ca95c477c4976cc1377e73725338b550fb6011451c84b6a6f174fe96a"
+    "bytes": 62193,
+    "sha256": "68ce5b7bcd0cfd9522f1e1e0832a528107b3e302e6af1ece0164a3fb78727dd8"
   },
   "fonts": [
     {
