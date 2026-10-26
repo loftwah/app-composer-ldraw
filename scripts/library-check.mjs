@@ -160,12 +160,16 @@ const result = await withBrowser(async ({ context, page, browserErrors, external
   await page.getByLabel("PNG scale").selectOption("1");
   const compositionExport = await sceneAndExports(page);
   const compositionPng = Buffer.from(compositionExport.png, "base64");
+  await writeFile(`${output}/composition-1920x1080.png`, compositionPng);
+  await writeFile(`${output}/composition-1920x1080.svg`, Buffer.from(compositionExport.svg, "base64"));
   const compositionSize = pngSize(compositionPng);
   assert.equal(compositionSize.width, 1920, "16:9 width");
   assert.equal(compositionSize.height, 1080, "16:9 height");
   await page.getByLabel("PNG scale").selectOption("2");
   const fourK = await sceneAndExports(page);
-  const fourKSize = pngSize(Buffer.from(fourK.png, "base64"));
+  const fourKpng = Buffer.from(fourK.png, "base64");
+  await writeFile(`${output}/composition-3840x2160.png`, fourKpng);
+  const fourKSize = pngSize(fourKpng);
   assert.equal(fourKSize.width, 3840, "4K width");
   assert.equal(fourKSize.height, 2160, "4K height");
   await page.getByLabel("PNG scale").selectOption("1");
@@ -236,6 +240,8 @@ const result = await withBrowser(async ({ context, page, browserErrors, external
   for (const id of openedIds) assert(annotated.scene.elements.some((element) => element.id === id));
   const annotatedExport = await sceneAndExports(page);
   const annotatedPng = Buffer.from(annotatedExport.png, "base64");
+  await writeFile(`${output}/protocol11-annotated.png`, annotatedPng);
+  await writeFile(`${output}/protocol11-annotated.svg`, Buffer.from(annotatedExport.svg, "base64"));
   assert.ok(pngSize(annotatedPng).width > 1000);
   await page.screenshot({ path: `${output}/protocol11-architecture.png` });
   checks.push("Protocol 11 architecture opens as a native editable scene, keeps every ID, accepts a human annotation and exports legibly");
