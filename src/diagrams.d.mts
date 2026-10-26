@@ -19,6 +19,9 @@ export type DiagramLibraryItem = {
   collection: string;
   width: number;
   height: number;
+  native?: boolean;
+  composition?: boolean;
+  project?: string;
   elements: ExcalidrawElementSkeleton[];
 };
 export type PresetName =

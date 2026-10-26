@@ -1,0 +1,127 @@
+{
+  "app-composer": {
+    "include": [
+      "public/brand",
+      "public/paperwork",
+      "public/launch-kit",
+      "docs/images"
+    ],
+    "ignore": [
+      "node_modules/",
+      "^dist/",
+      "^output/",
+      "\\.private",
+      "capture-.*\\.json$",
+      "/favicon-[0-9]+\\.png$",
+      "/icon-[0-9]+\\.png$"
+    ]
+  },
+  "app-composer-ldraw": {
+    "include": ["public/brand", "public/portfolio", "public/og"],
+    "ignore": ["node_modules/", "^dist/", "^output/", "^public/portfolio/(?!thumbs/)"]
+  },
+  "app-composer-paperwork": {
+    "include": ["public/artwork", "public/social", "public/icons"],
+    "ignore": ["node_modules/", "^dist/", "^output/"]
+  },
+  "app-composer-guestbook": {
+    "include": ["public/brand"],
+    "ignore": ["node_modules/", "^dist/", "^output/"]
+  },
+  "app-composer-showcase": {
+    "include": ["public/brand"],
+    "ignore": ["node_modules/", "^dist/", "^output/"]
+  },
+  "app-composer-linkcheck": {
+    "include": ["public/brand"],
+    "ignore": ["node_modules/", "^dist/", "^output/"]
+  },
+  "app-composer-state": {
+    "include": ["public/brand"],
+    "ignore": ["node_modules/", "^dist/", "^output/"]
+  },
+  "app-composer-hello": {
+    "include": ["public/brand"],
+    "ignore": ["node_modules/", "^dist/", "^output/"]
+  },
+  "app-composer-launch-kit": {
+    "include": ["public/brand", "public/social"],
+    "ignore": ["node_modules/", "^dist/", "^output/"]
+  },
+  "bubbles": {
+    "include": [
+      "public/assets/mascots",
+      "public/assets/cast",
+      "public/assets/fizz-mascot",
+      "public/assets/backgrounds",
+      "public/assets/help",
+      "public/assets/achievements"
+    ],
+    "ignore": ["node_modules/", "^dist/", "^output/", "^evidence/", "directions", "poses"]
+  },
+  "shoalshot-release": {
+    "include": [
+      "assets/ui/brand",
+      "assets/ui/art/specimens",
+      "assets/ui/art/achievement-cards",
+      "assets/backgrounds/tide_pool"
+    ],
+    "ignore": [
+      "node_modules/",
+      "^dist/",
+      "^output/",
+      "specimens-topdown",
+      "-mobile",
+      "\\.meta\\.json$"
+    ]
+  },
+  "phase-11": {
+    "include": [
+      "public/artpacks/late-night-party/cards",
+      "public/artpacks/late-night-party/modes",
+      "public/artpacks/late-night-party/avatars",
+      "public/press"
+    ],
+    "ignore": ["node_modules/", "^dist/", "^output/", "artpacks/(?!late-night-party)"]
+  },
+  "fighter": {
+    "include": [
+      "public/icons",
+      "public/assets/generated/promotional",
+      "public/assets/generated/battle-compact-v1/characters"
+    ],
+    "ignore": [
+      "node_modules/",
+      "^dist/",
+      "^output/",
+      "expanded-roster",
+      "battle-tokens",
+      "actor-battle"
+    ]
+  },
+  "loftwahfm": {
+    "include": ["public/og", "public/radio/artwork"],
+    "ignore": ["node_modules/", "^dist/", "^output/", "-320", "-640"]
+  },
+  "woodhouse-new": {
+    "include": [
+      "public/signature",
+      "public/og",
+      "public/images/diagrams",
+      "public/images/factory"
+    ],
+    "ignore": ["node_modules/", "^dist/", "^output/", "-mobile", "\\.svg\\.map$"]
+  },
+  "asset-hunter": {
+    "include": ["public/gallery"],
+    "ignore": ["node_modules/", "^dist/", "^output/"]
+  },
+  "max": {
+    "include": ["apps/web/src/assets", "apps/web/public/brand", "apps/web/public/og"],
+    "ignore": ["node_modules/", "^dist/", "^output/", "favicon", "-16", "-32", "-180", "-192"]
+  },
+  "pirates": {
+    "include": ["public/assets"],
+    "ignore": ["node_modules/", "^dist/", "^output/"]
+  }
+}

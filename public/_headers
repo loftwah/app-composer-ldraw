@@ -10,3 +10,25 @@
   Cache-Control: no-store, no-transform
 /index.html
   Cache-Control: public, no-cache, no-transform
+/favicon.svg
+  Cache-Control: public, max-age=86400, no-transform
+/favicon.ico
+  Cache-Control: public, max-age=86400, no-transform
+/favicon-16.png
+  Cache-Control: public, max-age=86400, no-transform
+/favicon-32.png
+  Cache-Control: public, max-age=86400, no-transform
+/favicon-48.png
+  Cache-Control: public, max-age=86400, no-transform
+/apple-touch-icon.png
+  Cache-Control: public, max-age=86400, no-transform
+/icon-192.png
+  Cache-Control: public, max-age=86400, no-transform
+/icon-512.png
+  Cache-Control: public, max-age=86400, no-transform
+/icon-maskable-512.png
+  Cache-Control: public, max-age=86400, no-transform
+/site.webmanifest
+  Cache-Control: public, max-age=3600, no-transform
+/og/ldraw-og.png
+  Cache-Control: public, max-age=86400, no-transform

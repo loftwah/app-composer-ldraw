@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="LDraw">
+  <title>LDraw</title>
+  <rect width="64" height="64" rx="14" fill="#141416"/>
+  <path d="M17 12h12v29h22v11H17z" fill="#FC5B05"/>
+  <path d="M39 12h10v10L39 32z" fill="#F6F1E8"/>
+  <path d="M17 52h32" stroke="#F6F1E8" stroke-width="2" opacity=".55"/>
+</svg>

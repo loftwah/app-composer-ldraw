@@ -7,6 +7,12 @@
  * block remains readable on a dark or light canvas.
  */
 
+import {
+  architectureBlock,
+  architectureModels,
+} from "./architecture.mjs";
+import { compositionSpecs } from "./compositions.mjs";
+
 export const INK = "#1D2330";
 export const MUTED = "#6B645C";
 export const PAPER = "#F4F0E8";
@@ -52,6 +58,12 @@ export const collections = [
     id: "general",
     label: "General",
     description: "Wireframes, comparisons and launch checks.",
+  },
+  {
+    id: "architecture",
+    label: "Architecture",
+    description:
+      "Source-verified project system models, editable as native diagrams.",
   },
 ];
 
@@ -112,6 +124,69 @@ export const apps = [
     accent: "#9A3412",
     tint: "#FFEDD5",
   },
+  {
+    key: "woodhouse",
+    title: "Woodhouse",
+    subtitle: "The evidence-led observatory",
+    accent: LIME,
+    tint: LIME_TINT,
+  },
+  {
+    key: "protocol11",
+    title: "Protocol 11",
+    subtitle: "Cards, bots and a late table",
+    accent: "#B91C1C",
+    tint: "#FEE2E2",
+  },
+  {
+    key: "bubbles",
+    title: "Bubbles",
+    subtitle: "Coin-Op bubbles, one more round",
+    accent: "#2563EB",
+    tint: "#DBEAFE",
+  },
+  {
+    key: "shoalshot",
+    title: "SHOALSHOT",
+    subtitle: "Read the tide, place the shot",
+    accent: "#B45309",
+    tint: "#FEF3C7",
+  },
+  {
+    key: "fighter",
+    title: "LOFTWAH FIGHTER",
+    subtitle: "Charge strips and squad battles",
+    accent: "#4338CA",
+    tint: "#E0E7FF",
+  },
+  {
+    key: "loftwahfm",
+    title: "LoftwahFM",
+    subtitle: "Music, radio, original shows",
+    accent: "#DB2777",
+    tint: "#FCE7F3",
+  },
+  {
+    key: "assethunter",
+    title: "Asset Hunter",
+    subtitle: "Rights-aware visual research",
+    accent: "#EA580C",
+    tint: "#FFEDD5",
+  },
+  {
+    key: "max",
+    title: "MAX",
+    subtitle: "A companion for your walker",
+    accent: "#111827",
+    tint: "#E5E7EB",
+  },
+  {
+    key: "pirates",
+    title: "Pirates",
+    subtitle: "Source-first reconstruction",
+    accent: "#7C2D12",
+    tint: "#FFEDD5",
+  },
 ];
 
 /**
@@ -151,20 +226,49 @@ export const brandStatus = {
     note: "Diagram starting colour only. Not an approved Link Check brand package.",
   },
   launchkit: {
-    status: "unresolved",
-    note: "Launch Kit owns identity asset packages; none are included here.",
+    status: "sample-only",
+    note: "Launch Kit has no approved brand mark. The Night Signal artwork is a clearly labelled fictional sample.",
+  },
+  woodhouse: {
+    status: "documented",
+    note: "Authored Woodhouse signature, dossier and favicon assets are documented; no separate owner approval of a logo package is recorded.",
+  },
+  protocol11: {
+    status: "current",
+    note: "Current authored table mark and registered artpack assets. MP subjective art acceptance of the OG card remains unclaimed.",
+  },
+  bubbles: {
+    status: "approved",
+    note: "Owner-approved Coin-Op icon family and Fizz mascot roster. Fizz is presentation-only, never a gameplay bubble.",
+  },
+  shoalshot: {
+    status: "qualified",
+    note: "MP-commissioned AI-generated replacement identity. No repository licence is recorded.",
+  },
+  fighter: {
+    status: "current",
+    note: "Current authored charge-strip identity and active generated promotional art. Active is not documented owner acceptance.",
+  },
+  loftwahfm: {
+    status: "approved",
+    note: "MP-confirmed original wordmark and brand-burst composition. No repository licence is recorded.",
+  },
+  assethunter: {
+    status: "documented",
+    note: "Generated one-source-of-truth aperture mark verified by brand checks; MIT. No owner taste approval claimed.",
+  },
+  max: {
+    status: "current",
+    note: "Current MAX raster mark and public site artwork. No prompt/model provenance file or owner taste approval was found.",
+  },
+  pirates: {
+    status: "reference-only",
+    note: "The reconstruction depends on third-party source art. No Pirates artwork is bundled; use the architecture diagram only.",
   },
 };
 
-/** Named identities with no approved asset or palette data in this repository. */
-export const unresolvedBrandIdentities = [
-  "Woodhouse",
-  "Protocol 11",
-  "Bubbles",
-  "SHOALSHOT",
-  "Fighter",
-  "LoftwahFM",
-];
+/** Named identities with no cleared artwork or approved palette in this repository. */
+export const unresolvedBrandIdentities = ["Pirates"];
 
 /** Which project topic is a brand, and which is only diagram colour. */
 export const projectBrand = {
@@ -766,6 +870,21 @@ export const librarySpecs = [
     height: 250,
     elements: checklist("general-launch", 0, 0),
   },
+  ...compositionSpecs,
+  ...architectureModels.map((entry) => {
+    const block = architectureBlock(entry);
+    return {
+      id: block.id,
+      name: `${entry.title} architecture`,
+      description: entry.subtitle,
+      collection: "architecture",
+      project: entry.key,
+      width: block.width,
+      height: block.height,
+      native: false,
+      elements: block.elements,
+    };
+  }),
 ];
 
 /**

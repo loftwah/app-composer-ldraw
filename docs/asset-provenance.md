@@ -1,109 +1,113 @@
 # Local assets and package provenance
 
-Composer return mark: `public/brand/composer-mark.svg`, byte copy of
-`app-composer/public/brand/composer-icon-20261022b.svg`, SHA-256
-`f9c66b8c38f38e1c7771ffc9ab5d54274667ccd0f6363ade320653dadd08552a`.
-Space Grotesk subset: `public/brand/space.woff2`, copied from Composer's
-`space-latin-20261018.woff2`, SHA-256
-`61d00a1c57fcd7d4826c7a69cd85b61d15d133d5471d3c9c4731d70193d9f71f`.
-The mark is the approved flat Composer identity, used for the return link.
+Reviewed 26 October 2026.
+
+## Engine and fonts
 
 The drawing engine is the npm published `@excalidraw/excalidraw@0.18.1`, MIT.
 The lockfile pins integrity. Build copies the package's entire `dist/prod/fonts`
 tree to this app's own `excalidraw-assets/fonts`. The published package contains
-only font binaries, so distribution notices are retained separately under
-`public/licenses`: the exact Excalidraw v0.18.1 MIT notice, font metadata comments
-from that source tag, and the named fonts' official upstream license notices.
-The asset path is set before editor code loads. No font CDN is required.
+only font binaries, so distribution notices are retained under `public/licenses`:
+the exact Excalidraw v0.18.1 MIT notice, font metadata comments from that source
+tag, and the named fonts' official upstream license notices. The asset path is set
+before editor code loads. No font CDN is required.
 
-Excalidraw 0.18.1 additionally registers its built-in CDN fallback even with a
-working local asset path. Chromium reports those fallback registrations as CSP
-violations. `scripts/font-assets.mjs` changes only that fallback URL constant to
-the same-origin bundled font base during Vite packaging. It fails closed if the
-published dev/prod font-manager declaration changes; tests read the actual pinned
-modules. Editor behavior and the strict CSP stay intact. Vite copies the exact
-package fonts to ignored generated public assets for development and packaging.
+Excalidraw 0.18.1 registers its built-in CDN fallback even with a working local
+asset path. Chromium reports those fallback registrations as CSP violations.
+`scripts/font-assets.mjs` changes only that fallback URL constant to the same-origin
+bundled font base during Vite packaging. It fails closed if the published
+dev/prod font-manager declaration changes; tests read the actual pinned modules.
 
-LDraw's initial diagram palettes are simple named configuration. Infrastructure,
-Game design and Music / FM are diagram topics, not claimed portfolio logos or
-approved product brand packages. Launch Kit owns identity asset packages.
+## LDraw identity
 
-## Built-in library and example provenance
+`public/brand/ldraw-mark.svg` is an original authored mark: charcoal rounded
+tile, orange drafting **L**, ivory folded corner and a thin baseline. It is not
+the Death Note logo, a copied character, a generic AI mark or an Excalidraw logo.
+The larger install icon is `public/brand/ldraw-icon.svg`.
 
-The block library in `src/diagrams.mjs` is authored vector data, not a
-generated raster asset set. It names the maintained apps whose roles are
-published in Composer's app library (App Composer, LDraw, Paperwork,
-Linkarooie, Guestbook, Showcase, Link Check and Launch Kit) and uses the
-approved Composer orange `#FC5B05`, the documented Linkarooie lime family and
-the existing diagram-topic palettes. Woodhouse, Protocol 11, Bubbles,
-SHOALSHOT, Fighter and LoftwahFM are not given invented logos or brand colours
-here; #290 says their identities are included only as approved assets are
-gathered. The generic project-card, browser, phone and checklist frames are
-neutral templates.
+Generated consumer assets:
 
-No FAL, OpenAI or other image-generation request was used for this library.
-Raster images inside Excalidraw library items would need separate embedded file
-records and would not survive a library-only merge reliably; native vectors and
-text remain editable, searchable, offline-safe and portable through save,
-reload and PNG/SVG export. The library is inspected by `tests/library.test.mjs`
-for stable unique IDs, supported element types, readable filled cards, complete
-collections and editable starting examples.
+- `/favicon.svg` — the authored mark;
+- `/favicon-16.png`, `-32`, `-48`, `/favicon.ico`;
+- `/apple-touch-icon.png` (180), `/icon-192.png`, `/icon-512.png`,
+  `/icon-maskable-512.png`;
+- `/site.webmanifest` with name, theme and install icons;
+- `/og/ldraw-og.png` — 1200 × 630 real-app social card, with
+  `/og/ldraw-og-provenance.json` recording the source revision, canvas hash and
+  image hash.
 
-## Portfolio artwork (real project assets)
+`scripts/brand-assets.mjs` generates/checks the icons and manifest.
+`scripts/og.mjs` renders the social card from the built app through Playwright,
+with local Space Grotesk and the authored mark. `scripts/seo.mjs` checks the head,
+canonical URL, structured data, robots, sitemap, manifest and exact PNG bytes.
+The owner's taste approval of the final mark/card is **not** separately recorded;
+the catalogue calls the mark `current`, not `approved`.
 
-The **Portfolio artwork** tab is a separate, deliberate image path in the
-custom Portfolio library. It does not change the native `.excalidrawlib`
-contents. The source index is `src/portfolio.mjs`; the human-readable record,
-status key, source paths and full SHA-256 values are in
-[portfolio-artwork.md](portfolio-artwork.md). All 22 images are local WebP
-derivatives under `public/portfolio/` and are precached for offline insertion.
-The editor fetches the local file, calls `api.addFiles`, then inserts native
-image elements with editable caption and provenance metadata. Save, reopen and
-PNG/SVG export preserve the embedded bytes.
+## Portfolio artwork
 
-This batch copies real artwork from the owning public project repositories; it
-does not redraw logos, invent a universal portfolio colour or generate new
-replacement art. App Composer orange remains Composer-only. Each record states
-the strongest documented claim — `approved`, `qualified`, `documented`,
-`agent-selected`, `current` or `sample`. In particular:
+The full record is generated into [portfolio-artwork.md](portfolio-artwork.md)
+from `catalogue/assets.json`; the runtime catalogue is the generated
+`src/portfolio.mjs`. Every image is a local WebP under `public/portfolio/` with a
+420 px thumbnail, source path, source SHA-256, derivative SHA-256, dimensions,
+intended use, tags and the strongest documented approval state.
 
-- Paperwork press art is documented but agent-selected, not separately approved.
-- Linkarooie is MP-qualified 8/10, not blanket approval of every crop.
-- Bubbles/LoftwahFM/SHOALSHOT/Fighter/Protocol 11 images are included for
-  internal portfolio diagrams from the owner's public repositories; most have no
-  repository redistribution licence, so the standalone asset must not be
-  republished without the owning project's permission.
-- Launch Kit's Night Signal art is a fictional sample, not a Launch Kit logo.
-- Real-person Fighter roster art and unverified Protocol 11 artpacks are excluded.
-- LDraw has no approved identity mark and keeps its typographic wordmark.
+The records cover 18 maintained projects and 95 real artwork/illustration assets.
+Pirates has no cleared third-party art and is represented by architecture only.
+Launch Kit's Night Signal artwork is a fictional sample, not a brand. Game/FM
+assets largely have no repository-wide redistribution licence; they are included
+for internal portfolio diagrams from the owner's public project repositories,
+which is not a redistribution licence.
 
-`tests/portfolio.test.mjs` verifies every record, local file, WebP dimensions,
-derivative SHA-256, status value and named project coverage. Browser evidence
-is produced by `node scripts/library-check.mjs` against the built app.
+`scripts/harvest-assets.mjs` is the only supported writer for these derivatives.
+It uses an existing local ImageMagick or cwebp install, makes no network request,
+never edits an owning repository and preserves all approval/label/note/tag data.
+`--discover` is read-only; `--check` verifies derivative and available source
+hashes.
 
-## Local MCP adapter and measured text
+## Generated art
+
+**No new fal.ai, OpenAI or other image-generation raster was added in this pass.**
+The authorised network was unavailable during the run, so no generation request
+was attempted and no charge was incurred. Real project art and authored native
+compositions covered the library gaps. This is a recorded gap, not a claim that
+generation was exercised. Any future generated asset must remain a labelled
+`candidate` until the owner reviews it.
+
+The 16:9 presentation compositions are authored native vectors and text, not
+generated raster art and not a pretend replacement for a character/logo. They
+carry a `customData.ldrawPresentation` marker for true 16:9 export.
+
+## Architecture
+
+`src/architecture.mjs` contains the authored three-column system models.
+`scripts/architecture-build.mjs` creates each scene through the local MCP
+adapter, renders through the existing Excalidraw renderer, and writes
+`catalogue/architecture.json`, the native scenes and previews. The public handoff
+manifest is `public/architecture/manifest.json`. Source revisions and files are
+recorded per scene; `--check` verifies bytes and reports source drift. The
+diagrams are not a second format or renderer.
+
+## MCP examples
 
 `scripts/mcp/font-metrics.json` is a measured advance/kerning table for the
-bundled Excalifont (106 characters and 499 non-zero pairs among them). It is
-generated by `scripts/font-metrics.mjs` from the pinned
-`@excalidraw/excalidraw@0.18.1` font in the built app using the same
+bundled Excalifont (106 characters and 499 non-zero pairs). It is generated by
+`scripts/font-metrics.mjs` from the pinned font in the built app using the same
 `CanvasRenderingContext2D.measureText` call the renderer uses, with no network
-request. The adapter uses it to write exact native text bounds so agent-authored
-scenes are not clipped on export; characters the bundled fonts do not cover are
-refused instead of silently using a host font. Regenerate it only when the
-pinned engine or font changes, and keep the measured-exactness test opt-in.
+request. Characters outside the measured set are refused rather than silently
+using a host font.
 
-The adapter adds no artwork, logo, palette or third-party asset. Its example
-scenes reuse the authored blocks above: `examples/app-composer-architecture/`
-uses the approved Composer orange and existing Composer blocks;
-`examples/infrastructure-runtime/` uses the existing infrastructure
-diagram-topic palette and records that it is not a second approved project
-identity. Both are generated by `pnpm mcp:demo` through the real renderer, with
-`provenance.json` recording the template, revisions, engine and renderer.
+The committed examples `examples/app-composer-architecture/` and
+`examples/infrastructure-runtime/` are generated by `pnpm mcp:demo` through the
+real MCP tools and renderer. They are separate from the 18 portfolio architecture
+scenes.
+
+## Appearance and release policy
 
 The appearance default is an interface decision, not a change to saved artwork.
 `public/theme-init.js` stores only the local appearance choice and sets the
 first-paint colours; it carries no drawing data, credential or remote request.
+Presentation mode displays scenes with the light Excalidraw theme while keeping
+the saved scene bytes unchanged.
 
 Dependency overrides select patched nanoid, lodash-es, KaTeX, sharp and undici.
 The editor package itself remains the maintained published version. React 18.3.1

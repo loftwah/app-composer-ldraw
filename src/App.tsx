@@ -13,19 +13,11 @@ import {
   exportToBlob,
   exportToSvg,
   loadFromBlob,
+  mergeLibraryItems,
   serializeAsJSON,
 } from "@excalidraw/excalidraw";
 import type { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
-import {
-  BLUE,
-  collections,
-  GREEN,
-  INK,
-  librarySpecs,
-  ORANGE,
-  VIOLET,
-  type DiagramLibraryItem,
-} from "./diagrams.mjs";
+import { INK, librarySpecs } from "./diagrams.mjs";
 import {
   makeLibraryItems,
   makePreset,
@@ -37,8 +29,15 @@ import {
   type Project,
 } from "./presets";
 import { MAX_SCENE_BYTES, validateScene } from "./scene.mjs";
-import { artworkProjects, portfolioArtwork } from "./portfolio.mjs";
 import { readDraft, writeDraft } from "./storage";
+import {
+  centerElements,
+  fitSize,
+  maxArtworkSize,
+  placeNearViewport,
+  sceneElementsForAdd,
+} from "./insertion.mjs";
+import { LibraryDialog } from "./LibraryDialog";
 import {
   applyTheme,
   isDarkBackground,
@@ -51,9 +50,16 @@ import {
 
 type NativeScene = ReturnType<typeof validateScene>;
 type ExportKind = "png" | "svg";
-type Preview = { url: string; blob: Blob; kind: ExportKind };
+type Preview = { url: string; blob: Blob; kind: ExportKind; padding: number };
 export type LocalAPI = {
   readScene: () => { revision: string; scene: NativeScene };
+  readViewport: () => {
+    scrollX: number;
+    scrollY: number;
+    zoom: number;
+    width: number;
+    height: number;
+  };
   replaceScene: (
     scene: unknown,
     options: { expectedRevision: string },
@@ -79,14 +85,22 @@ const afterPaint = () =>
   new Promise<void>((resolve) =>
     requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
   );
-const collectionAccents: Record<string, string> = {
-  apps: ORANGE,
-  composer: ORANGE,
-  infrastructure: BLUE,
-  games: VIOLET,
-  music: GREEN,
-  general: INK,
-};
+const PERSONAL_LIBRARY_KEY = "ldraw:personal-library:v1";
+function readPersonalLibrary(): any[] | null {
+  try {
+    const value = JSON.parse(localStorage.getItem(PERSONAL_LIBRARY_KEY) ?? "null");
+    return Array.isArray(value) ? value : null;
+  } catch {
+    return null;
+  }
+}
+function rememberPersonalLibrary(items: readonly any[]) {
+  try {
+    localStorage.setItem(PERSONAL_LIBRARY_KEY, JSON.stringify(items));
+  } catch {
+    // A full quota must not break drawing or the native library in this tab.
+  }
+}
 const composerReturn = new URL("https://composer.loftwah.com/");
 for (const key of ["analytics", "qa"]) {
   const value = new URLSearchParams(window.location.search).get(key);
@@ -100,85 +114,6 @@ function readDataUrl(blob: Blob): Promise<string> {
     reader.onerror = () => reject(new Error("The local artwork could not be read."));
     reader.readAsDataURL(blob);
   });
-}
-
-function BlockPreview({ item }: { item: DiagramLibraryItem }) {
-  const elements = item.elements as Array<Record<string, any>>;
-  return (
-    <svg
-      className="block-preview"
-      viewBox={`0 0 ${item.width ?? 400} ${item.height ?? 220}`}
-      preserveAspectRatio="xMidYMid meet"
-      aria-hidden="true"
-    >
-      {elements.slice(0, 80).map((element, index) => {
-        const key = String(element.id ?? index);
-        if (element.type === "rectangle")
-          return (
-            <g key={key}>
-              <rect
-                x={element.x}
-                y={element.y}
-                width={element.width}
-                height={element.height}
-                rx={6}
-                fill={
-                  element.backgroundColor === "transparent"
-                    ? "none"
-                    : element.backgroundColor ?? "none"
-                }
-                stroke={element.strokeColor ?? INK}
-                strokeWidth={element.strokeWidth ?? 1}
-              />
-              {element.label ? (
-                <text
-                  x={element.x + element.width / 2}
-                  y={element.y + element.height / 2 + (element.label.fontSize ?? 14) / 3}
-                  textAnchor="middle"
-                  fill={element.label.strokeColor ?? INK}
-                  fontSize={element.label.fontSize ?? 14}
-                  fontWeight="600"
-                >
-                  {element.label.text}
-                </text>
-              ) : null}
-            </g>
-          );
-        if (element.type === "text")
-          return (
-            <text
-              key={key}
-              x={element.x}
-              y={element.y + (element.fontSize ?? 16)}
-              fill={element.strokeColor ?? INK}
-              fontSize={element.fontSize ?? 16}
-              fontWeight={element.fontSize > 19 ? 600 : 400}
-            >
-              {element.text}
-            </text>
-          );
-        if (
-          (element.type === "line" || element.type === "arrow") &&
-          Array.isArray(element.points)
-        ) {
-          const [start, end = [element.width, element.height]] = element.points;
-          return (
-            <line
-              key={key}
-              x1={element.x + start[0]}
-              y1={element.y + start[1]}
-              x2={element.x + end[0]}
-              y2={element.y + end[1]}
-              stroke={element.strokeColor ?? ORANGE}
-              strokeWidth={element.strokeWidth ?? 2}
-              strokeLinecap="round"
-            />
-          );
-        }
-        return null;
-      })}
-    </svg>
-  );
 }
 
 export function App() {
@@ -201,15 +136,12 @@ export function App() {
     () => window.matchMedia("(prefers-color-scheme: dark)").matches,
   );
   const [libraryOpen, setLibraryOpen] = useState(false);
-  const [libraryReady, setLibraryReady] = useState(false);
-  const [libraryTab, setLibraryTab] = useState<"artwork" | "blocks">("artwork");
-  const [libraryQuery, setLibraryQuery] = useState("");
-  const [libraryProject, setLibraryProject] = useState("all");
-  const [libraryCollection, setLibraryCollection] = useState("all");
+  const [notice, setNotice] = useState("");
+  const [presenting, setPresenting] = useState(false);
   const theme: ResolvedTheme = resolveTheme(appearance, prefersDark);
   const fileInput = useRef<HTMLInputElement>(null);
   const previewDialog = useRef<HTMLDialogElement>(null);
-  const libraryDialog = useRef<HTMLDialogElement>(null);
+  const workspace = useRef<HTMLElement>(null);
   const initialized = useRef(false);
   const enabled = useRef(false);
   const pending = useRef("");
@@ -233,6 +165,12 @@ export function App() {
   }, [appearance, theme]);
 
   useEffect(() => {
+    if (!notice) return;
+    const timer = setTimeout(() => setNotice(""), 4200);
+    return () => clearTimeout(timer);
+  }, [notice]);
+
+  useEffect(() => {
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     const update = (event: MediaQueryListEvent) =>
       setPrefersDark(event.matches);
@@ -240,8 +178,10 @@ export function App() {
     return () => media.removeEventListener("change", update);
   }, []);
 
-  const initialData = useMemo(
-    () => ({
+  const initialData = useMemo(() => {
+    const builtIns = makeLibraryItems();
+    const stored = readPersonalLibrary();
+    return {
       appState: {
         // Excalidraw's dark theme inverts the rendered canvas. A white scene
         // background is therefore the readable dark canvas, and keeps the
@@ -249,9 +189,11 @@ export function App() {
         viewBackgroundColor: "#ffffff",
         theme: themeRef.current,
       },
-    }),
-    [],
-  );
+      // Loading items through initialData avoids the startup race where a
+      // later empty storage read can overwrite an earlier updateLibrary merge.
+      libraryItems: stored ? mergeLibraryItems(stored, builtIns) : builtIns,
+    };
+  }, []);
 
   const persist = useCallback(() => {
     queue.current = queue.current.then(async () => {
@@ -345,35 +287,6 @@ export function App() {
           });
         }
         enabled.current = true;
-        let libraryInstalled = false;
-        try {
-          libraryInstalled =
-            localStorage.getItem("ldraw:library:20261025") === "1";
-        } catch {
-          // Fall through and install for this session.
-        }
-        try {
-          if (!libraryInstalled) {
-            await api.updateLibrary({
-              libraryItems: makeLibraryItems(),
-              merge: true,
-              openLibraryMenu: false,
-            });
-            try {
-              localStorage.setItem("ldraw:library:20261025", "1");
-            } catch {
-              // The native panel is still usable for this session.
-            }
-          }
-          if (!disposed) setLibraryReady(true);
-        } catch (failure) {
-          if (!disposed)
-            setError(
-              failure instanceof Error
-                ? failure.message
-                : "The built-in library could not be opened. Your drawing is unchanged.",
-            );
-        }
       } catch (failure) {
         if (disposed) return;
         setError(
@@ -507,6 +420,10 @@ export function App() {
         .filter((element) => !element.isDeleted);
       if (!elements.length)
         throw new Error("Add something to the drawing before exporting.");
+      const presentation = elements.some(
+        (element) => (element.customData as any)?.ldrawPresentation === true,
+      );
+      const padding = presentation ? 0 : 24;
       const options = {
         elements,
         files: api.getFiles(),
@@ -515,7 +432,7 @@ export function App() {
           exportBackground: backgroundRef.current,
           exportEmbedScene: false,
         },
-        exportPadding: 24,
+        exportPadding: padding,
       };
       if (kind === "svg") {
         const svg = await exportToSvg(options);
@@ -545,9 +462,19 @@ export function App() {
   );
 
   useEffect(() => {
-    if (!ready) return;
+    if (!ready || !api) return;
     const local: LocalAPI = {
       readScene: capture,
+      readViewport: () => {
+        const state = api.getAppState();
+        return {
+          scrollX: state.scrollX,
+          scrollY: state.scrollY,
+          zoom: state.zoom.value,
+          width: state.width,
+          height: state.height,
+        };
+      },
       replaceScene: (scene, options) =>
         replace(scene, options.expectedRevision),
       exportBlob,
@@ -568,11 +495,51 @@ export function App() {
       previewDialog.current?.showModal();
   }, [preview]);
   useEffect(() => {
-    if (libraryOpen && !libraryDialog.current?.open)
-      libraryDialog.current?.showModal();
-    if (!libraryOpen && libraryDialog.current?.open)
-      libraryDialog.current.close();
-  }, [libraryOpen]);
+    document.body.classList.toggle("presenting", presenting);
+    if (presenting) {
+      const timer = setTimeout(
+        () => api?.scrollToContent(undefined, { fitToContent: true }),
+        120,
+      );
+      return () => clearTimeout(timer);
+    }
+    if (document.fullscreenElement)
+      void document.exitFullscreen().catch(() => {});
+    document.body.classList.remove("presenting");
+  }, [presenting, api]);
+
+  useEffect(() => {
+    const fullscreen = () => {
+      if (!document.fullscreenElement) setPresenting(false);
+    };
+    const shortcut = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (
+        target?.closest("input, textarea, select, [contenteditable=true]") &&
+        !(event.metaKey || event.ctrlKey)
+      )
+        return;
+      if (event.shiftKey && event.key.toLowerCase() === "l") {
+        event.preventDefault();
+        setLibraryOpen(true);
+      }
+      if (event.shiftKey && event.key.toLowerCase() === "p") {
+        event.preventDefault();
+        setPresenting((current) => !current);
+      }
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "s") {
+        event.preventDefault();
+        saveEditable();
+      }
+      if (event.key === "Escape") setPresenting(false);
+    };
+    document.addEventListener("fullscreenchange", fullscreen);
+    document.addEventListener("keydown", shortcut);
+    return () => {
+      document.removeEventListener("fullscreenchange", fullscreen);
+      document.removeEventListener("keydown", shortcut);
+    };
+  }, [presenting, api, ready]);
 
   async function openFile(file: File) {
     setBusy(true);
@@ -604,7 +571,17 @@ export function App() {
     setBusy(true);
     try {
       const blob = await exportBlob(kind);
-      setPreview({ blob, kind, url: URL.createObjectURL(blob) });
+      const presentation = api
+        ?.getSceneElements()
+        .some(
+          (element) => (element.customData as any)?.ldrawPresentation === true,
+        );
+      setPreview({
+        blob,
+        kind,
+        padding: presentation ? 0 : 24,
+        url: URL.createObjectURL(blob),
+      });
       setError("");
     } catch (failure) {
       setError(
@@ -631,24 +608,25 @@ export function App() {
       }
       // Read after the wait so concurrent human edits remain in the scene.
       const existing = api.getSceneElementsIncludingDeleted();
-      const bottom = Math.max(
-        0,
-        ...existing.filter((e) => !e.isDeleted).map((e) => e.y + e.height),
-      );
       const ink = isDarkBackground(api.getAppState().viewBackgroundColor)
         ? "#F4F4F5"
         : INK;
-      const inserted = makePreset(
-        preset,
-        project,
-        existing.length ? bottom + 70 : 0,
-        ink,
+      const inserted = placeNearViewport(
+        makePreset(preset, project, 0, ink),
+        api.getAppState(),
+        existing,
       );
       api.updateScene({
         elements: [...existing, ...inserted],
+        appState: {
+          selectedElementIds: Object.fromEntries(
+            inserted.map((element: any) => [element.id, true]),
+          ),
+        },
         captureUpdate: CaptureUpdateAction.IMMEDIATELY,
       });
-      api.scrollToContent(inserted, { fitToContent: true });
+      fitIfNeeded(inserted);
+      setNotice(`Inserted the ${presets[preset].label} example`);
     } catch (failure) {
       setError(
         failure instanceof Error
@@ -659,30 +637,56 @@ export function App() {
       setBusy(false);
     }
   }
-  async function insertBlock(item: DiagramLibraryItem) {
+
+  function fitIfNeeded(elements: any[]) {
+    if (!api || !elements.length) return;
+    const state = api.getAppState();
+    const zoom = state.zoom.value || 1;
+    const left = Math.min(...elements.map((element) => element.x));
+    const top = Math.min(...elements.map((element) => element.y));
+    const right = Math.max(
+      ...elements.map((element) => element.x + element.width),
+    );
+    const bottom = Math.max(
+      ...elements.map((element) => element.y + element.height),
+    );
+    const viewportWidth = state.width / zoom;
+    const viewportHeight = state.height / zoom;
+    if (right - left > viewportWidth * 0.86 || bottom - top > viewportHeight * 0.86)
+      api.scrollToContent(elements, { fitToContent: true });
+  }
+
+  function commitInserted(
+    inserted: any[],
+    label: string,
+    options: { fit?: boolean } = {},
+  ) {
+    if (!api || !inserted.length) return;
+    const existing = api.getSceneElementsIncludingDeleted();
+    api.updateScene({
+      elements: [...existing, ...inserted],
+      appState: {
+        selectedElementIds: Object.fromEntries(
+          inserted.map((element: any) => [element.id, true]),
+        ),
+      },
+      captureUpdate: CaptureUpdateAction.IMMEDIATELY,
+    });
+    if (options.fit) fitIfNeeded(inserted);
+    setNotice(`Inserted ${label}`);
+    setLibraryOpen(false);
+  }
+
+  async function insertBlock(item: any) {
     if (!api || !ready || busy) return;
     setBusy(true);
     try {
-      // Read after the guard so a concurrent human edit remains in the scene.
-      const existing = api.getSceneElementsIncludingDeleted();
-      const bottom = Math.max(
-        0,
-        ...existing
-          .filter((element) => !element.isDeleted)
-          .map((element) => element.y + element.height),
+      const inserted = placeNearViewport(
+        convertToExcalidrawElements(item.elements),
+        api.getAppState(),
+        api.getSceneElementsIncludingDeleted(),
       );
-      const inserted = convertToExcalidrawElements(item.elements).map(
-        (element) => ({
-          ...element,
-          y: element.y + (existing.length ? bottom + 70 : 0),
-        }),
-      );
-      api.updateScene({
-        elements: [...existing, ...inserted],
-        captureUpdate: CaptureUpdateAction.IMMEDIATELY,
-      });
-      api.scrollToContent(inserted, { fitToContent: true });
-      setLibraryOpen(false);
+      commitInserted(inserted, item.name, { fit: true });
     } catch (failure) {
       setError(
         failure instanceof Error
@@ -693,13 +697,33 @@ export function App() {
       setBusy(false);
     }
   }
-  async function insertArtwork(item: (typeof portfolioArtwork)[number]) {
+
+  function artworkCustomData(item: any) {
+    return {
+      ldrawArtworkId: item.id,
+      ldrawProject: item.project,
+      ldrawCategory: item.category,
+      ldrawStatus: item.status,
+      ldrawStatusLabel: item.statusLabel,
+      ldrawSource: item.source,
+      ldrawSourceSha256: item.sourceSha,
+      ldrawDerivativeSha256: item.derivativeSha,
+      ldrawUse: item.use,
+    };
+  }
+
+  async function insertArtwork(
+    item: any,
+    mode: "artwork" | "card" = "artwork",
+  ) {
     if (!api || !ready || busy) return;
     setBusy(true);
     try {
       const response = await fetch(item.file);
       if (!response.ok)
-        throw new Error("The local artwork is unavailable. Your drawing is unchanged.");
+        throw new Error(
+          "The local artwork is unavailable. Your drawing is unchanged.",
+        );
       const blob = await response.blob();
       const dataURL = await readDataUrl(blob);
       const fileId = crypto.randomUUID();
@@ -713,98 +737,104 @@ export function App() {
           version: 1,
         } as any,
       ]);
-      const existing = api.getSceneElementsIncludingDeleted();
-      const bottom = Math.max(
-        0,
-        ...existing
-          .filter((element) => !element.isDeleted)
-          .map((element) => element.y + element.height),
+      const limits = maxArtworkSize(item.category);
+      const image = fitSize(
+        item.width,
+        item.height,
+        limits.width,
+        limits.height,
       );
-      const y = existing.length ? bottom + 70 : 0;
-      let imageWidth = Math.min(360, item.width);
-      let imageHeight = imageWidth * (item.height / item.width);
-      if (imageHeight > 260) {
-        imageHeight = 260;
-        imageWidth = imageHeight * (item.width / item.height);
-      }
-      const width = Math.max(300, imageWidth + 48);
-      const height = imageHeight + 108;
-      const groupId = crypto.randomUUID();
-      const skeletons: any[] = [
-        {
-          type: "rectangle",
-          x: 0,
-          y: 0,
-          width,
-          height,
-          strokeColor: item.accent,
-          backgroundColor: item.tint,
-          fillStyle: "solid",
-          strokeWidth: 2,
-          roundness: { type: 3 },
-          roughness: 0,
-          groupIds: [groupId],
-        },
-        {
-          type: "image",
-          x: 24,
-          y: 24,
-          width: imageWidth,
-          height: imageHeight,
-          fileId,
-          status: "saved",
-          scale: [1, 1],
-          crop: null,
-          groupIds: [groupId],
-          customData: {
-            ldrawArtworkId: item.id,
-            ldrawProject: item.project,
-            ldrawStatus: item.status,
-            ldrawSource: item.source,
-            ldrawSourceSha256: item.sourceSha,
-            ldrawDerivativeSha256: item.derivativeSha,
+      let inserted: any[];
+      if (mode === "card") {
+        const groupId = crypto.randomUUID();
+        const imageWidth = Math.min(image.width, 380);
+        const imageHeight = imageWidth * (item.height / item.width);
+        const width = Math.max(320, imageWidth + 48);
+        const height = imageHeight + 122;
+        inserted = convertToExcalidrawElements([
+          {
+            type: "rectangle",
+            x: 0,
+            y: 0,
+            width,
+            height,
+            strokeColor: item.accent,
+            backgroundColor: item.tint,
+            fillStyle: "solid",
+            strokeWidth: 2,
+            roundness: { type: 3 },
+            roughness: 0,
+            groupIds: [groupId],
+            customData: artworkCustomData(item),
           },
-        },
-        {
-          type: "text",
-          x: 24,
-          y: imageHeight + 38,
-          text: item.title,
-          fontSize: 22,
-          fontFamily: 5,
-          strokeColor: INK,
-          groupIds: [groupId],
-        },
-        {
-          type: "text",
-          x: 24,
-          y: imageHeight + 68,
-          text: item.subtitle,
-          fontSize: 13,
-          fontFamily: 5,
-          strokeColor: "#6B645C",
-          groupIds: [groupId],
-        },
-        {
-          type: "text",
-          x: 24,
-          y: height - 26,
-          text: `${item.projectLabel} · ${item.statusLabel}`,
-          fontSize: 9,
-          fontFamily: 5,
-          strokeColor: item.accent,
-          groupIds: [groupId],
-        },
-      ];
-      const inserted = convertToExcalidrawElements(skeletons).map(
-        (element) => ({ ...element, y: element.y + y }),
+          {
+            type: "image",
+            x: 24,
+            y: 24,
+            width: imageWidth,
+            height: imageHeight,
+            fileId: fileId as any,
+            status: "saved",
+            scale: [1, 1],
+            crop: null,
+            groupIds: [groupId],
+            customData: artworkCustomData(item),
+          },
+          {
+            type: "text",
+            x: 24,
+            y: imageHeight + 40,
+            text: item.title,
+            fontSize: 20,
+            fontFamily: 5,
+            strokeColor: INK,
+            groupIds: [groupId],
+          },
+          {
+            type: "text",
+            x: 24,
+            y: imageHeight + 68,
+            text: item.subtitle,
+            fontSize: 12,
+            fontFamily: 5,
+            strokeColor: "#6B645C",
+            groupIds: [groupId],
+          },
+          {
+            type: "text",
+            x: 24,
+            y: height - 24,
+            text: `${item.projectLabel} · ${item.statusLabel}`,
+            fontSize: 9,
+            fontFamily: 5,
+            strokeColor: item.accent,
+            groupIds: [groupId],
+          },
+        ]);
+      } else {
+        inserted = convertToExcalidrawElements([
+          {
+            type: "image",
+            x: 0,
+            y: 0,
+            width: image.width,
+            height: image.height,
+            fileId: fileId as any,
+            status: "saved",
+            scale: [1, 1],
+            crop: null,
+            customData: artworkCustomData(item),
+          },
+        ]);
+      }
+      const placed = placeNearViewport(
+        inserted,
+        api.getAppState(),
+        api.getSceneElementsIncludingDeleted(),
       );
-      api.updateScene({
-        elements: [...existing, ...inserted],
-        captureUpdate: CaptureUpdateAction.IMMEDIATELY,
+      commitInserted(placed, item.title, {
+        fit: mode === "card" || item.category === "background",
       });
-      api.scrollToContent(inserted, { fitToContent: true });
-      setLibraryOpen(false);
     } catch (failure) {
       setError(
         failure instanceof Error
@@ -814,6 +844,176 @@ export function App() {
     } finally {
       setBusy(false);
     }
+  }
+
+  async function insertComposition(item: any) {
+    if (!api || !ready || busy) return;
+    setBusy(true);
+    try {
+      const response = await fetch(item.scene);
+      if (!response.ok)
+        throw new Error(
+          "The local composition is unavailable. Your drawing is unchanged.",
+        );
+      const scene = validateScene(await response.text());
+      const copy = sceneElementsForAdd(
+        scene,
+        api.getAppState(),
+        `composition-${crypto.randomUUID().slice(0, 8)}-`,
+      );
+      if (Object.keys(copy.files ?? {}).length)
+        api.addFiles(Object.values(copy.files));
+      commitInserted(copy.elements, item.title, { fit: true });
+    } catch (failure) {
+      setError(
+        failure instanceof Error
+          ? failure.message
+          : "The composition could not be inserted. Your drawing is unchanged.",
+      );
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function openDiagram(entry: any) {
+    if (!api || !ready || busy) return;
+    setBusy(true);
+    try {
+      const current = api.getSceneElements().filter((element) => !element.isDeleted);
+      if (
+        current.length &&
+        !window.confirm(
+          "Open this architecture diagram in place of the current drawing? Download an editable copy first if you want to keep both.",
+        )
+      )
+        return;
+      const response = await fetch(entry.scene);
+      if (!response.ok)
+        throw new Error(
+          "The local diagram is unavailable. Your drawing is unchanged.",
+        );
+      const scene = validateScene(await response.text());
+      await replace(scene, capture().revision);
+      setError("");
+      setNotice(`Opened ${entry.title} architecture`);
+      setLibraryOpen(false);
+    } catch (failure) {
+      setError(
+        failure instanceof Error
+          ? failure.message
+          : "The diagram could not be opened. Your drawing is unchanged.",
+      );
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function addDiagram(entry: any) {
+    if (!api || !ready || busy) return;
+    setBusy(true);
+    try {
+      const response = await fetch(entry.scene);
+      if (!response.ok)
+        throw new Error(
+          "The local diagram is unavailable. Your drawing is unchanged.",
+        );
+      const scene = validateScene(await response.text());
+      const copy = sceneElementsForAdd(
+        scene,
+        api.getAppState(),
+        `diagram-${crypto.randomUUID().slice(0, 8)}-`,
+      );
+      if (Object.keys(copy.files ?? {}).length)
+        api.addFiles(Object.values(copy.files));
+      commitInserted(copy.elements, entry.title, { fit: true });
+    } catch (failure) {
+      setError(
+        failure instanceof Error
+          ? failure.message
+          : "The diagram could not be added. Your drawing is unchanged.",
+      );
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function saveEditable() {
+    try {
+      if (!api) throw new Error("The editor is still opening.");
+      download(
+        new Blob(
+          [
+            serializeAsJSON(
+              api.getSceneElementsIncludingDeleted(),
+              api.getAppState(),
+              api.getFiles(),
+              "local",
+            ),
+          ],
+          { type: "application/json" },
+        ),
+        "drawing.excalidraw",
+      );
+      setNotice("Saved an editable .excalidraw download");
+    } catch (failure) {
+      setError(String(failure));
+    }
+  }
+
+  async function newDrawing() {
+    if (!api || !ready) return;
+    if (
+      !window.confirm(
+        "Start a new drawing? Download an editable copy first if you want to keep this one.",
+      )
+    )
+      return;
+    setBusy(true);
+    try {
+      await replace(
+        {
+          type: "excalidraw",
+          version: 2,
+          source: "local",
+          elements: [],
+          appState: { viewBackgroundColor: "#ffffff" },
+          files: {},
+        },
+        capture().revision,
+      );
+      api.history.clear();
+      setError("");
+      setNotice("Started a new local drawing");
+    } catch (failure) {
+      setError(
+        failure instanceof Error
+          ? failure.message
+          : "The new drawing could not be started.",
+      );
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function present() {
+    if (!ready) return;
+    setPresenting((current) => {
+      const next = !current;
+      if (next)
+        void workspace.current?.requestFullscreen?.().catch(() => {
+          // Presentation still works in-page when fullscreen is refused.
+        });
+      return next;
+    });
+  }
+
+  function fitView() {
+    api?.scrollToContent(undefined, { fitToContent: true });
+  }
+
+  function openPersonalLibrary() {
+    setLibraryOpen(false);
+    setTimeout(() => api?.toggleSidebar({ name: "default", tab: "library", force: true }), 80);
   }
 
   function selectProject(value: Project) {
@@ -826,113 +1026,50 @@ export function App() {
       captureUpdate: CaptureUpdateAction.NEVER,
     });
   }
-  const query = libraryQuery.trim().toLowerCase();
-  const matches = (...values: string[]) =>
-    !query || values.join(" ").toLowerCase().includes(query);
-  const visibleArtwork = portfolioArtwork.filter(
-    (item) =>
-      (libraryProject === "all" || item.project === libraryProject) &&
-      matches(
-        item.title,
-        item.subtitle,
-        item.projectLabel,
-        item.statusLabel,
-        item.credit,
-        item.note,
-      ),
-  );
-  const visibleCollections = collections
-    .filter(
-      (collection) =>
-        libraryCollection === "all" || collection.id === libraryCollection,
-    )
-    .map((collection) => ({
-      ...collection,
-      items: librarySpecs
-        .filter(
-          (item) =>
-            item.collection === collection.id &&
-            matches(item.name, item.description, collection.label),
-        )
-        .map((item) => ({ ...item, collection: collection.id })),
-    }))
-    .filter((collection) => collection.items.length);
-  const libraryCount =
-    libraryTab === "artwork"
-      ? visibleArtwork.length
-      : visibleCollections.reduce(
-          (total, collection) => total + collection.items.length,
-          0,
-        );
-
   return (
-    <main className="workspace">
+    <main className={`workspace ${presenting ? "presenting" : ""}`} ref={workspace}>
       <header className="toolbar" aria-label="LDraw drawing actions">
-        <a
-          className="composer-return"
-          href={composerReturn.href}
-          aria-label="Return to App Composer"
-        >
-          <img src="/brand/composer-mark.svg" alt="" width="28" height="28" />
-        </a>
-        <div className="identity">
-          <strong>LDraw</strong>
-          <span>powered by Excalidraw</span>
+        <div className="toolbar-identity">
+          <a
+            className="composer-return"
+            href={composerReturn.href}
+            aria-label="Return to App Composer"
+            title="Return to App Composer"
+          >
+            <img src="/brand/composer-mark.svg" alt="" width="28" height="28" />
+          </a>
+          <div className="identity">
+            <strong>
+              <img src="/brand/ldraw-mark.svg" alt="" width="24" height="24" />
+              LDraw
+            </strong>
+            <span>portfolio workspace</span>
+          </div>
         </div>
-        <label>
-          Appearance
-          <select
-            aria-label="Appearance"
-            value={appearance}
-            onChange={(event) =>
-              setAppearance(event.target.value as Appearance)
-            }
+        <div className="toolbar-group primary-actions">
+          <button
+            className="primary"
+            onClick={() => setLibraryOpen(true)}
+            disabled={!ready || busy}
+            title="Portfolio artwork, architecture and blocks (Shift+L)"
+            aria-haspopup="dialog"
+            aria-keyshortcuts="Shift+L"
           >
-            <option value="dark">Dark</option>
-            <option value="light">Light</option>
-            <option value="system">System</option>
-          </select>
-        </label>
-        <label>
-          New content
-          <select
-            value={project}
-            onChange={(event) => selectProject(event.target.value as Project)}
+            Portfolio
+          </button>
+          <button
+            onClick={present}
+            disabled={!ready}
+            title="Clean presentation view (Shift+P)"
+            aria-keyshortcuts="Shift+P"
           >
-            {Object.entries(projects).map(([key, value]) => (
-              <option key={key} value={key}>
-                {value.label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Example
-          <select
-            value={preset}
-            onChange={(event) => setPreset(event.target.value as Preset)}
-          >
-            {Object.entries(presets).map(([key, value]) => (
-              <option key={key} value={key}>
-                {value.label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <button
-          onClick={insertPreset}
-          disabled={!ready || busy || Boolean(fontError)}
-        >
-          Insert example
-        </button>
-        <button
-          onClick={() => setLibraryOpen(true)}
-          disabled={!ready || busy || !libraryReady}
-          title="Reusable, editable blocks"
-        >
-          Library
-        </button>
-        <div className="file-actions">
+            {presenting ? "Exit present" : "Present"}
+          </button>
+        </div>
+        <div className="toolbar-group file-actions">
+          <button onClick={() => void newDrawing()} disabled={!ready || busy}>
+            New
+          </button>
           <button
             onClick={() => fileInput.current?.click()}
             disabled={!ready || busy}
@@ -940,44 +1077,60 @@ export function App() {
             Open
           </button>
           <button
-            onClick={() => {
-              try {
-                download(
-                  new Blob(
-                    [
-                      serializeAsJSON(
-                        api!.getSceneElementsIncludingDeleted(),
-                        api!.getAppState(),
-                        api!.getFiles(),
-                        "local",
-                      ),
-                    ],
-                    {
-                      type: "application/json",
-                    },
-                  ),
-                  "drawing.excalidraw",
-                );
-              } catch (failure) {
-                setError(String(failure));
-              }
-            }}
+            onClick={saveEditable}
             disabled={!ready}
+            title="Download an editable .excalidraw file (Cmd/Ctrl+S)"
+            aria-keyshortcuts="Meta+S Control+S"
           >
             Save editable
           </button>
+          <input
+            ref={fileInput}
+            type="file"
+            accept=".excalidraw,application/json"
+            hidden
+            onChange={(event) => {
+              const file = event.target.files?.[0];
+              if (file) void openFile(file);
+            }}
+          />
         </div>
-        <input
-          ref={fileInput}
-          type="file"
-          accept=".excalidraw,application/json"
-          hidden
-          onChange={(event) => {
-            const file = event.target.files?.[0];
-            if (file) void openFile(file);
-          }}
-        />
-        <div className="export-actions">
+        <div className="toolbar-group start-actions">
+          <label>
+            Colour
+            <select
+              aria-label="New content"
+              value={project}
+              onChange={(event) => selectProject(event.target.value as Project)}
+            >
+              {Object.entries(projects).map(([key, value]) => (
+                <option key={key} value={key}>
+                  {value.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Example
+            <select
+              value={preset}
+              onChange={(event) => setPreset(event.target.value as Preset)}
+            >
+              {Object.entries(presets).map(([key, value]) => (
+                <option key={key} value={key}>
+                  {value.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <button
+            onClick={insertPreset}
+            disabled={!ready || busy || Boolean(fontError)}
+          >
+            Insert example
+          </button>
+        </div>
+        <div className="toolbar-group export-actions">
           <label className="checkbox">
             <input
               type="checkbox"
@@ -987,28 +1140,45 @@ export function App() {
             Background
           </label>
           <label>
-            PNG scale
+            PNG
             <select
+              aria-label="PNG scale"
               value={scale}
               onChange={(event) => setScale(Number(event.target.value))}
             >
-              <option value={1}>1×</option>
-              <option value={2}>2×</option>
-              <option value={3}>3×</option>
+              <option value={1}>1× · 1080p</option>
+              <option value={2}>2× · retina</option>
+              <option value={3}>3× · print</option>
             </select>
           </label>
           <button
             onClick={() => void previewExport("png")}
             disabled={!ready || busy}
           >
-            PNG
+            Export PNG
           </button>
           <button
             onClick={() => void previewExport("svg")}
             disabled={!ready || busy}
           >
-            SVG
+            Export SVG
           </button>
+        </div>
+        <div className="toolbar-group appearance-actions">
+          <label>
+            Appearance
+            <select
+              aria-label="Appearance"
+              value={appearance}
+              onChange={(event) =>
+                setAppearance(event.target.value as Appearance)
+              }
+            >
+              <option value="dark">Dark</option>
+              <option value="light">Light</option>
+              <option value="system">System</option>
+            </select>
+          </label>
         </div>
       </header>
       <div className="save-status">
@@ -1035,16 +1205,26 @@ export function App() {
           </button>
         </div>
       ) : null}
+      {notice ? (
+        <div className="notice" role="status">
+          {notice}
+          <button onClick={() => setNotice("")} aria-label="Dismiss notice">
+            ×
+          </button>
+        </div>
+      ) : null}
       <section className="canvas" aria-label="Drawing canvas">
         <Excalidraw
-          theme={theme}
+          theme={presenting ? "light" : theme}
           initialData={initialData}
-          viewModeEnabled={!ready}
+          viewModeEnabled={presenting || !ready}
+          zenModeEnabled={presenting}
           excalidrawAPI={setApi}
           onChange={(elements, appState, files) => {
             if (initialized.current && ready)
               observe(serializeAsJSON(elements, appState, files, "local"));
           }}
+          onLibraryChange={rememberPersonalLibrary}
           UIOptions={{
             canvasActions: {
               loadScene: false,
@@ -1055,204 +1235,33 @@ export function App() {
           }}
           validateEmbeddable={false}
         />
-      </section>
-      {libraryOpen ? (
-        <dialog
-          ref={libraryDialog}
-          className="library-dialog"
-          aria-label="Portfolio library"
-          onCancel={() => setLibraryOpen(false)}
-          onClose={() => setLibraryOpen(false)}
-          onClick={(event) => {
-            if (event.target === event.currentTarget) setLibraryOpen(false);
-          }}
-        >
-          <div className="library-shell">
-            <div className="library-head">
-              <div>
-                <h2>Portfolio library</h2>
-                <p>
-                  Real project artwork and editable building blocks. Insertion
-                  appends below your drawing, keeps existing elements unchanged
-                  and is one undo step. Images are embedded locally, not fetched
-                  from a remote service.
-                </p>
-              </div>
-              <button
-                onClick={() => setLibraryOpen(false)}
-                aria-label="Close library"
-              >
-                ×
-              </button>
+        {presenting ? (
+          <div className="present-hud" role="status">
+            <span>
+              <b>LDraw</b> · present
+            </span>
+            <span className="present-hint">
+              Scroll to pan · pinch or Ctrl/⌘ scroll to zoom
+            </span>
+            <div>
+              <button onClick={fitView}>Fit</button>
+              <button onClick={present}>Exit present</button>
             </div>
-            <div className="library-controls">
-              <label className="library-search">
-                Find
-                <input
-                  type="search"
-                  value={libraryQuery}
-                  onChange={(event) => setLibraryQuery(event.target.value)}
-                  placeholder="Search artwork, blocks, projects…"
-                  autoFocus
-                />
-              </label>
-              <div className="library-tabs" role="tablist" aria-label="Library type">
-                <button
-                  role="tab"
-                  aria-selected={libraryTab === "artwork"}
-                  className={libraryTab === "artwork" ? "active" : ""}
-                  onClick={() => setLibraryTab("artwork")}
-                >
-                  Portfolio artwork
-                </button>
-                <button
-                  role="tab"
-                  aria-selected={libraryTab === "blocks"}
-                  className={libraryTab === "blocks" ? "active" : ""}
-                  onClick={() => setLibraryTab("blocks")}
-                >
-                  Editable blocks
-                </button>
-              </div>
-              <span className="library-count" role="status">
-                {libraryCount} {libraryCount === 1 ? "item" : "items"}
-              </span>
-            </div>
-            {libraryTab === "artwork" ? (
-              <>
-                <div className="library-chips" aria-label="Filter artwork by project">
-                  <button
-                    className={libraryProject === "all" ? "active" : ""}
-                    aria-pressed={libraryProject === "all"}
-                    onClick={() => setLibraryProject("all")}
-                  >
-                    All projects
-                  </button>
-                  {artworkProjects.map((project) => (
-                    <button
-                      key={project.key}
-                      className={libraryProject === project.key ? "active" : ""}
-                      aria-pressed={libraryProject === project.key}
-                      onClick={() => setLibraryProject(project.key)}
-                    >
-                      {project.label}
-                    </button>
-                  ))}
-                </div>
-                {visibleArtwork.length ? (
-                  <div className="artwork-grid">
-                    {visibleArtwork.map((item) => (
-                      <button
-                        className="artwork-card"
-                        key={item.id}
-                        onClick={() => void insertArtwork(item)}
-                        disabled={busy}
-                        title={`${item.credit}. ${item.note}`}
-                        style={
-                          {
-                            "--item-accent": item.accent,
-                            "--item-tint": item.tint,
-                          } as CSSProperties
-                        }
-                      >
-                        <span className="artwork-thumb">
-                          <img
-                            src={item.file}
-                            alt=""
-                            loading="lazy"
-                            width={item.width}
-                            height={item.height}
-                          />
-                        </span>
-                        <span className="artwork-copy">
-                          <strong>{item.title}</strong>
-                          <span>{item.projectLabel} · {item.subtitle}</span>
-                          <em data-status={item.status}>{item.statusLabel}</em>
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="library-empty">
-                    No artwork matches “{libraryQuery}”. Try another project or
-                    search term.
-                  </p>
-                )}
-                <p className="library-note">
-                  Every card embeds a local WebP copy. Provenance, source hash
-                  and the strongest documented approval state travel with the
-                  image metadata. “Current”, “documented”, “qualified” and
-                  “agent-selected” are deliberately not the same as owner
-                  approval. The native Excalidraw library and your own items are
-                  unchanged.
-                </p>
-              </>
-            ) : (
-              <>
-                <div className="library-chips" aria-label="Filter blocks by collection">
-                  <button
-                    className={libraryCollection === "all" ? "active" : ""}
-                    aria-pressed={libraryCollection === "all"}
-                    onClick={() => setLibraryCollection("all")}
-                  >
-                    All categories
-                  </button>
-                  {collections.map((collection) => (
-                    <button
-                      key={collection.id}
-                      className={libraryCollection === collection.id ? "active" : ""}
-                      aria-pressed={libraryCollection === collection.id}
-                      onClick={() => setLibraryCollection(collection.id)}
-                    >
-                      {collection.label}
-                    </button>
-                  ))}
-                </div>
-                {visibleCollections.length ? (
-                  <div className="library-groups">
-                    {visibleCollections.map((collection) => (
-                      <section className="library-group" key={collection.id}>
-                        <h3>{collection.label}</h3>
-                        <p>{collection.description}</p>
-                        <div className="library-items">
-                          {collection.items.map((item) => (
-                            <button
-                              className="library-item"
-                              key={item.id}
-                              style={
-                                {
-                                  "--item-accent":
-                                    collectionAccents[item.collection] ?? ORANGE,
-                                } as CSSProperties
-                              }
-                              onClick={() => void insertBlock(item)}
-                              disabled={busy}
-                            >
-                              <BlockPreview item={item} />
-                              <strong>{item.name}</strong>
-                              <span>{item.description}</span>
-                            </button>
-                          ))}
-                        </div>
-                      </section>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="library-empty">
-                    No blocks match “{libraryQuery}”. Try another category or
-                    search term.
-                  </p>
-                )}
-                <p className="library-note">
-                  These blocks are plain vectors and text, so they stay editable
-                  through save, reopen and PNG/SVG export. Your Excalidraw
-                  library remains available from the native Library control.
-                </p>
-              </>
-            )}
           </div>
-        </dialog>
-      ) : null}
+        ) : null}
+      </section>
+      <LibraryDialog
+        open={libraryOpen}
+        onClose={() => setLibraryOpen(false)}
+        busy={busy}
+        blocks={librarySpecs.filter((item: any) => item.native !== false && !item.composition)}
+        onInsertArtwork={insertArtwork}
+        onInsertComposition={insertComposition}
+        onOpenDiagram={openDiagram}
+        onAddDiagram={addDiagram}
+        onInsertBlock={insertBlock}
+        onOpenPersonalLibrary={openPersonalLibrary}
+      />
       {preview ? (
         <dialog
           ref={previewDialog}
@@ -1270,7 +1279,7 @@ export function App() {
             </button>
           </div>
           <p>
-            24 px padding ·{" "}
+            {preview.padding} px padding ·{" "}
             {background ? "drawing background" : "transparent background"}
             {preview.kind === "png"
               ? ` · ${scale}× resolution`

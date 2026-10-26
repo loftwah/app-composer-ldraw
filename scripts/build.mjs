@@ -3,6 +3,11 @@ import { readFile, readdir, writeFile } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { join } from "node:path";
+import {
+  architectureCatalogue,
+  portfolioArtwork,
+  portfolioCompositions,
+} from "../src/portfolio.mjs";
 
 const sha = execFileSync("git", ["rev-parse", "HEAD"], {
   encoding: "utf8",
@@ -60,8 +65,21 @@ const core = new Set([
   "theme-init.js",
   "build.json",
   "app.manifest.json",
+  "site.webmanifest",
+  "favicon.svg",
+  "favicon-16.png",
+  "favicon-32.png",
+  "favicon-48.png",
+  "favicon.ico",
+  "apple-touch-icon.png",
+  "icon-192.png",
+  "icon-512.png",
+  "icon-maskable-512.png",
   "brand/composer-mark.svg",
+  "brand/ldraw-mark.svg",
+  "brand/ldraw-icon.svg",
   "brand/space.woff2",
+  "architecture/manifest.json",
 ]);
 const visited = new Set();
 function collect(key) {
@@ -90,10 +108,21 @@ if (bootstrapHelpers.length !== 7)
   );
 for (const file of files)
   if (/^excalidraw-assets\/fonts\/Excalifont\//.test(file)) core.add(file);
-// Portfolio artwork is embedded into scenes from these local bytes. Cache the
-// whole reviewed set so offline insertion does not silently lose an image.
-for (const file of files)
-  if (/^portfolio\/[^/]+\.webp$/.test(file)) core.add(file);
+// The exact reviewed library is embedded into scenes from these local bytes.
+// Cache both the insertion originals and the browse thumbnails so the library
+// does not silently lose an image or a preview when offline.
+for (const asset of portfolioArtwork) {
+  core.add(asset.file.replace(/^\//, ""));
+  core.add(asset.thumb.replace(/^\//, ""));
+}
+for (const composition of portfolioCompositions) {
+  core.add(composition.scene.replace(/^\//, ""));
+  core.add(composition.preview.replace(/^\//, ""));
+}
+for (const entry of architectureCatalogue) {
+  core.add(entry.scene.replace(/^\//, ""));
+  core.add(entry.preview.replace(/^\//, ""));
+}
 // Cloudflare consumes control files without serving them as assets.
 const available = files.filter(
   (file) => !["_headers", "_redirects"].includes(file),

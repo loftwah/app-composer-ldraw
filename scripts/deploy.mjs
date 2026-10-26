@@ -1,6 +1,7 @@
 import { execFileSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import { readReleaseConfig } from "./release-config.mjs";
+import { verifySeo } from "./verify-seo.mjs";
 
 const git = (...args) => execFileSync("git", args, { encoding: "utf8" }).trim();
 function guard() {
@@ -34,6 +35,27 @@ const response = await fetch(
 );
 if (!response.ok || (await response.json()).source !== sha)
   throw new Error("Live source identity does not match the release.");
+const seo = await verifySeo({
+  origin: "https://ldraw.loftwah.com",
+  imageBytes: await readFile("public/og/ldraw-og.png"),
+});
+console.log(
+  JSON.stringify(
+    {
+      seo: {
+        image: seo.image,
+        imageSha256: seo.imageSha256,
+        crawlers: seo.records.length,
+        robots: seo.robots,
+        sitemap: seo.sitemap,
+        real404: seo.real404,
+        providerCacheRenderingVerified: false,
+      },
+    },
+    null,
+    2,
+  ),
+);
 console.log(
   `Deployed exact source ${sha}; fresh live interaction and hostname evidence remains required.`,
 );

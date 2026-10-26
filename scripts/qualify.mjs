@@ -288,7 +288,7 @@ await withBrowser(
       Buffer.from(result.png, "base64"),
     );
     await writeFile("output/qualification.svg", svg);
-    await page.getByRole("button", { name: "PNG", exact: true }).click();
+    await page.getByRole("button", { name: "Export PNG", exact: true }).click();
     await page.getByRole("dialog", { name: "PNG export preview" }).waitFor();
     await page.waitForFunction(() => {
       const image = document.querySelector(".preview img");
@@ -363,7 +363,7 @@ await withBrowser(
         { expectedRevision: current.revision },
       );
     });
-    await page.getByRole("button", { name: "PNG", exact: true }).click();
+    await page.getByRole("button", { name: "Export PNG", exact: true }).click();
     await page
       .getByRole("alert")
       .filter({ hasText: "Add something to the drawing" })
@@ -449,7 +449,7 @@ await withBrowser(
         .readScene()
         .scene.elements.some((e) => e.text === "Phone viewport edit"),
     );
-    await page.getByRole("button", { name: "SVG", exact: true }).click();
+    await page.getByRole("button", { name: "Export SVG", exact: true }).click();
     await page.getByRole("dialog", { name: "SVG export preview" }).waitFor();
     await page.waitForFunction(() => {
       const image = document.querySelector(".preview img");
@@ -582,39 +582,53 @@ await withBrowser(
     const beforeLibrary = await page.evaluate(
       () => window.ldraw.readScene().scene.elements.length,
     );
-    await page.getByTitle("Reusable, editable blocks").click();
-    const library = page.getByRole("dialog", { name: "Portfolio library" });
+    await page.getByRole("button", { name: "Portfolio", exact: true }).click();
+    const library = page.getByRole("dialog", {
+      name: "LDraw portfolio library",
+    });
     await library.waitFor();
-    await library.getByRole("tab", { name: "Editable blocks" }).click();
+    await library.getByRole("tab", { name: /Blocks/ }).click();
     for (const name of ["App Composer", "LDraw", "Paperwork", "Linkarooie"])
       await library
-        .locator(".library-item")
+        .locator(".block-card")
         .filter({ hasText: name })
+        .first()
         .waitFor();
     await library
-      .locator(".library-item")
+      .locator(".block-card")
       .filter({ hasText: "App Composer" })
+      .first()
+      .locator(".asset-select")
+      .click();
+    await library
+      .getByRole("button", { name: "Insert block", exact: true })
       .click();
     await page.waitForFunction(
       (before) => window.ldraw.readScene().scene.elements.length > before,
       beforeLibrary,
     );
     assert.equal(
-      await page.getByRole("dialog", { name: "Portfolio library" }).count(),
+      await page
+        .getByRole("dialog", { name: "LDraw portfolio library" })
+        .count(),
       0,
       "Inserting a block closes the library dialog.",
     );
-    await page.getByRole("button", { name: "Library", exact: true }).click();
+    await page.getByRole("button", { name: "Portfolio", exact: true }).click();
     const artworkLibrary = page.getByRole("dialog", {
-      name: "Portfolio library",
+      name: "LDraw portfolio library",
     });
-    await artworkLibrary.getByRole("tab", { name: "Portfolio artwork" }).click();
+    await artworkLibrary.getByRole("tab", { name: /Artwork/ }).click();
     const beforeArtwork = await page.evaluate(
       () => window.ldraw.readScene().scene.elements.length,
     );
     await artworkLibrary
-      .locator(".artwork-card")
+      .locator(".asset-card")
       .filter({ hasText: "Bubbles Coin-Op icon" })
+      .locator(".asset-select")
+      .click();
+    await artworkLibrary
+      .getByRole("button", { name: "Insert artwork", exact: true })
       .click();
     await page.waitForFunction(
       (before) => {

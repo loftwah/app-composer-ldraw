@@ -1,0 +1,44 @@
+{
+  "app": "ldraw",
+  "kind": "social-card",
+  "path": "/og/ldraw-og.png",
+  "width": 1200,
+  "height": 630,
+  "alt": "LDraw: the orange L mark and the words “Draw it out. Keep it editable.” above a diagram drawn in the charcoal Excalidraw workspace.",
+  "headline": "Draw it out. Keep it editable.",
+  "method": "Playwright Chromium loads the built app, hides native Excalidraw chrome, captures the real dark canvas and trims the example title at the measured background gap. The card is then composed in local HTML with Space Grotesk and the authored LDraw mark.",
+  "renderer": "scripts/og.mjs",
+  "rendererSha256": "88cc3d0e615d94421f8afa8fd0b4a4cd3520415cd7cb5e792f3eb7f65cdcd60a",
+  "capturedAt": "2026-10-26",
+  "source": "bf2fcb8c6ecae2f45cf1ad24633a26b0112e4fa5",
+  "sourceTree": "b49cefaabd25cc6ee7b4978c5b4fbd02cab9d203",
+  "workingTreeClean": false,
+  "browser": "Playwright Chromium, 1200×630 viewport, device scale 1",
+  "canvas": {
+    "width": 1042,
+    "height": 317,
+    "sha256": "d05f4f0258b37da7ae995002816ef5913e22723454b62fc5d7f60fa77f654a27",
+    "trimmedGap": [
+      318,
+      373
+    ]
+  },
+  "image": {
+    "width": 1200,
+    "height": 630,
+    "bytes": 61916,
+    "sha256": "6323596ca95c477c4976cc1377e73725338b550fb6011451c84b6a6f174fe96a"
+  },
+  "fonts": [
+    {
+      "family": "Space Grotesk",
+      "file": "public/brand/space.woff2",
+      "sha256": "61d00a1c57fcd7d4826c7a69cd85b61d15d133d5471d3c9c4731d70193d9f71f"
+    }
+  ],
+  "mark": {
+    "file": "public/brand/ldraw-mark.svg",
+    "sha256": "d1cc04890d2801bd06231c3eaa788d29f20d97b0bd84b2972ca01653fa7e249d"
+  },
+  "ownerReview": "not recorded"
+}

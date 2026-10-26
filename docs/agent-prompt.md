@@ -18,9 +18,12 @@ never call an image service, and never invent a logo or palette.
   not a retry with a guessed value.
 - Preserve IDs, labels, images and human edits. Change only what the request
   needs.
-- Brand status is data. Only App Composer (`#FC5B05`) is an approved identity
-  here. `starting-data`, `diagram-topic` and unresolved names must not be
-  presented as a brand; say so instead.
+- Brand status is data. App Composer's flat orange/white identity and the
+  documented Bubbles/LoftwahFM identities are approved; most other material is
+  `qualified`, `documented`, `current` or `sample`. Read the catalogue rather
+  than inferring a brand. Composer orange is not a universal portfolio accent.
+  Pirates source art is reference-only and must not be bundled as a reusable
+  asset.
 - Text must use the measured Latin set. No emoji, CJK or arrow glyphs; rewording
   is the fix.
 - Rendering is local and needs `pnpm build`. A missing build is a clear blocker,
@@ -32,12 +35,13 @@ never call an image service, and never invent a logo or palette.
 ## Workflow
 
 1. **Catalogue.** Call `ldraw_list_templates`. Note the presets, blocks,
+   project architecture models (`arch-*`), 16:9 stages (`composition-*`),
    collection ids, project topics, brand status and unresolved identities.
 2. **Choose one purpose.** Decide the diagram's claim, audience and the labels
    that make it true. Prefer one readable idea over a dense wall of boxes.
-3. **Create.** Call `ldraw_create_scene` with a preset or block, the most
-   suitable existing `project` palette, and an `x`/`y` origin. Give the file a
-   stable, descriptive relative path.
+3. **Create.** Call `ldraw_create_scene` with a preset, block, architecture
+   model or composition, the most suitable existing `project` palette, and an
+   `x`/`y` origin. Give the file a stable, descriptive relative path.
 4. **Read.** Call `ldraw_read_scene` and keep the returned revision.
 5. **Compose.** Call `ldraw_modify_scene` with bounded operations:
    `insert_block` for existing blocks (unique `idPrefix`), `add_label` for new

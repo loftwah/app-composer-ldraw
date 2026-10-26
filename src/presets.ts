@@ -75,13 +75,15 @@ export function makePreset(
 
 /** Stable ids keep the built-in library merged with, never duplicated over, the owner's own items. */
 export function makeLibraryItems(): LibraryItem[] {
-  return librarySpecs.map((item) => ({
-    id: `ldraw-${item.id}`,
-    status: "published" as const,
-    name: item.name,
-    created: 1_761_350_400_000,
-    elements: convertToExcalidrawElements(item.elements, {
-      regenerateIds: false,
-    }),
-  }));
+  return librarySpecs
+    .filter((item) => item.native !== false)
+    .map((item) => ({
+      id: `ldraw-${item.id}`,
+      status: "published" as const,
+      name: item.name,
+      created: 1_761_350_400_000,
+      elements: convertToExcalidrawElements(item.elements, {
+        regenerateIds: false,
+      }),
+    }));
 }

@@ -20,11 +20,15 @@ test("the public contract publishes appearance, library and example features", a
   const manifest = JSON.parse(
     await readFile("public/app.manifest.json", "utf8"),
   );
-  assert.equal(manifest.version, "1.1.0");
+  assert.equal(manifest.version, "1.3.0");
   for (const feature of [
     "dark-default-appearance",
     "named-block-library",
     "finished-examples",
+    "portfolio-artwork-library",
+    "source-verified-architecture",
+    "presentation-mode",
+    "favicons-and-manifest",
   ])
     assert.ok(manifest.ldraw.features.includes(feature), feature);
 });

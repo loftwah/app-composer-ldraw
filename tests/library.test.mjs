@@ -60,13 +60,22 @@ test("library carries the maintained app identities and a generic template surfa
     "Showcase",
     "Link Check",
     "Launch Kit",
+    "Woodhouse",
+    "Protocol 11",
+    "Bubbles",
+    "SHOALSHOT",
+    "LOFTWAH FIGHTER",
+    "LoftwahFM",
+    "Asset Hunter",
+    "MAX",
+    "Pirates",
     "Browser frame",
     "Phone frame",
     "Before / after",
     "Launch checklist",
   ])
     assert.ok(names.includes(name), name);
-  assert.equal(apps.length, 8);
+  assert.equal(apps.length, 17);
   for (const app of apps) {
     const item = librarySpecs.find((entry) => entry.name === app.title);
     assert.ok(item, app.title);

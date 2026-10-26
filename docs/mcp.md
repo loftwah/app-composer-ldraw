@@ -11,6 +11,8 @@ editor, renderer or brand library:
 - scenes are the native Excalidraw **version 2** `.excalidraw` contract validated
   by [`src/scene.mjs`](../src/scene.mjs);
 - templates and blocks come from [`src/diagrams.mjs`](../src/diagrams.mjs);
+- project architecture models come from [`src/architecture.mjs`](../src/architecture.mjs);
+- 16:9 presentation stages come from [`src/compositions.mjs`](../src/compositions.mjs);
 - PNG and SVG come from the same local Excalidraw renderer that
   `pnpm render` uses ([`scripts/browser.mjs`](../scripts/browser.mjs));
 - viewing and rendering never need the MCP server or any remote service.
@@ -121,7 +123,7 @@ Any other MCP stdio client works if it can launch a command with arguments:
 
 | Tool | Mode | Purpose |
 | --- | --- | --- |
-| `ldraw_list_templates` | read-only | Presets, reusable blocks, project topics, app cards, honest brand status, measured font set, rules. |
+| `ldraw_list_templates` | read-only | Presets, reusable blocks, 18 project architecture models, three 16:9 compositions, project topics, app cards, honest brand status, measured font set and rules. |
 | `ldraw_read_scene` | read-only | Validate one `.excalidraw` scene, return its sha256 revision and a bounded element summary. |
 | `ldraw_create_scene` | editing | Create one scene from a preset or block with stable IDs and measured text bounds. Refuses to replace an existing file. |
 | `ldraw_modify_scene` | editing | Apply 1–40 bounded operations with an exact revision check and one atomic replacement. |
@@ -143,10 +145,13 @@ Any other MCP stdio client works if it can launch a command with arguments:
 ```
 
 `template` is a preset id (`portfolio`, `journey`, `architecture`, `game`,
-`release`, `beforeAfter`) or a library block id (`apps-composer`,
-`composer-pipeline`, `composer-review`, `infra-runtime`, `infra-trust`, …).
-`project` selects an existing project topic palette. `x`/`y` place the
-template's top-left corner.
+`release`, `beforeAfter`), a library block id (`apps-composer`,
+`composer-pipeline`, `composer-review`, `infra-runtime`, `infra-trust`, …), a
+source-verified project model (`arch-composer`, `arch-woodhouse`,
+`arch-protocol11`, `arch-bubbles`, …) or a 16:9 composition
+(`composition-stage`, `composition-intro`, `composition-walkthrough`). `project`
+selects an existing project topic palette. `x`/`y` place the template's top-left
+corner.
 
 ### `ldraw_modify_scene`
 
@@ -270,6 +275,12 @@ Regenerating both committed examples with `pnpm mcp:demo` took 2.13 s wall
 
 ## Example scenes
 
+The 18 project architecture scenes in `public/architecture/` and the three
+16:9 stages in `public/compositions/` are also produced through these tools by
+`scripts/architecture-build.mjs` and `scripts/compositions-build.mjs`. They are
+reviewed, versioned content; they are not live repository access. The public
+handoff manifest is `public/architecture/manifest.json`.
+
 - `examples/app-composer-architecture/` — readable App Composer architecture
   using the approved Composer orange `#FC5B05`, existing fonts and existing
   blocks. `source.excalidraw` is the agent-authored scene;
@@ -312,5 +323,7 @@ each run, so compare content and IDs rather than raw JSON there.
   no repository redistribution licence.
 - An actual model-driven MCP session in the owner's client, and any editor
   round-trip on a physical device.
+- Owner visual/taste review of the 18 architecture scenes and three 16:9 stages;
+  agent source review and renderer checks are not taste approval.
 - Deployment, hostname, DNS and live-site verification (owned by the existing
   release path, not this adapter).

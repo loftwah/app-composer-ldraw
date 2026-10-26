@@ -9,6 +9,10 @@ const contentTypes = {
   ".js": "text/javascript",
   ".css": "text/css",
   ".json": "application/json",
+  ".webmanifest": "application/manifest+json",
+  ".xml": "application/xml",
+  ".txt": "text/plain; charset=utf-8",
+  ".ico": "image/x-icon",
   ".svg": "image/svg+xml",
   ".png": "image/png",
   ".webp": "image/webp",
@@ -65,6 +69,7 @@ export async function withBrowser(action, options = {}) {
       join(temporaryRoot, "profile"),
       {
         headless: true,
+        chromiumSandbox: false,
         ...(process.env.PLAYWRIGHT_CHROMIUM
           ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM }
           : {}),

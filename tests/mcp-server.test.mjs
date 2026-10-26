@@ -136,14 +136,7 @@ test("catalogue reports honest brand status and the measured font set", async (t
       unresolved.length >= 3,
       "starting colours must not read as approval",
     );
-    assert.deepEqual(catalog.unresolvedBrandIdentities, [
-      "Woodhouse",
-      "Protocol 11",
-      "Bubbles",
-      "SHOALSHOT",
-      "Fighter",
-      "LoftwahFM",
-    ]);
+    assert.deepEqual(catalog.unresolvedBrandIdentities, ["Pirates"]);
     assert.equal(catalog.textMetrics.font, "Excalifont");
     assert.equal(catalog.textMetrics.engine, "@excalidraw/excalidraw@0.18.1");
     assert.equal(

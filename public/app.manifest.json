@@ -2,12 +2,14 @@
   "contract": 1,
   "id": "ldraw",
   "name": "LDraw",
-  "description": "Local editable drawings, powered by Excalidraw.",
-  "version": "1.1.0",
+  "description": "Local-first Excalidraw workspace with real portfolio artwork and source-verified architecture.",
+  "version": "1.3.0",
   "repository": "https://github.com/loftwah/app-composer-ldraw",
   "runtime": "static-assets",
   "dataVersion": 1,
-  "routes": ["/ldraw"],
+  "routes": [
+    "/ldraw"
+  ],
   "capabilities": [],
   "configuration": {},
   "deviceSupport": {
@@ -42,9 +44,13 @@
       "svg-export",
       "dark-default-appearance",
       "named-block-library",
-      "finished-examples"
+      "finished-examples",
+      "portfolio-artwork-library",
+      "source-verified-architecture",
+      "presentation-mode",
+      "favicons-and-manifest"
     ],
     "offline": "core-editor-precache; requested-fonts-and-helpers-cached-after-load",
-    "agentConnection": "same-browser-window.ldraw; no MCP server"
+    "agentConnection": "same-browser window.ldraw plus local stdio MCP adapter"
   }
 }

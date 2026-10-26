@@ -1,0 +1,828 @@
+[
+  {
+    "id": "composer-architecture",
+    "project": "composer",
+    "title": "App Composer",
+    "summary": "Owner intent, agent proposal and independent delivery stay separate.",
+    "coverage": "source-verified",
+    "reviewedAt": "2026-10-26",
+    "sourceRevision": "00d0a6cd55021a8f635db60a101ae2e25abd7da3",
+    "primarySourceRepo": "app-composer",
+    "sourceFiles": [
+      "app-composer/package.json",
+      "app-composer/wrangler.jsonc",
+      "app-composer/src/worker.ts",
+      "app-composer/src/pages"
+    ],
+    "sources": [
+      "app-composer/package.json",
+      "app-composer/wrangler.jsonc",
+      "app-composer/src/worker.ts",
+      "app-composer/src/pages"
+    ],
+    "facts": [
+      "Astro 7, React islands and EmDash 1.0 run in one Cloudflare Worker.",
+      "Production, preview and independent apps keep separate D1/R2/KV resources.",
+      "Guestbook and Linkarooie are service bindings, not copied data."
+    ],
+    "scene": "/architecture/composer/overview.excalidraw",
+    "preview": "/architecture/composer/preview.webp",
+    "sceneSha256": "b33b043f68ee812ea371d676dc57ac9892005bb9c4be656078076bedc5cc3884",
+    "previewSha256": "aaa6e04471e62642aea8b7ed4547810bef174356ea33bd77b470d6c3cd2a3b37",
+    "previewWidth": 1000,
+    "previewHeight": 598,
+    "elements": 50,
+    "renderer": "@excalidraw/excalidraw@0.18.1",
+    "render": {
+      "pngSha256": "09b72561cc34d34362b64afd0c760410ef02129e7d6bbad50c37909ccf43dc19",
+      "svgSha256": "cc5d55b39520763dfebe75b16e63641cce4c8e777d05fb2904195222a5a1c3d3",
+      "builtFrom": "bf2fcb8c6ecae2f45cf1ad24633a26b0112e4fa5",
+      "durationMs": 1553,
+      "exportPadding": 24,
+      "background": true,
+      "svgExternalReferences": 0
+    },
+    "humanReview": "Source review performed; owner visual/taste review of the rendered composition remains pending."
+  },
+  {
+    "id": "ldraw-architecture",
+    "project": "ldraw",
+    "title": "LDraw",
+    "summary": "One local editor, native files and an agent adapter with no cloud dependency.",
+    "coverage": "source-verified",
+    "reviewedAt": "2026-10-26",
+    "sourceRevision": "bf2fcb8c6ecae2f45cf1ad24633a26b0112e4fa5",
+    "primarySourceRepo": "app-composer-ldraw",
+    "sourceFiles": [
+      "app-composer-ldraw/package.json",
+      "app-composer-ldraw/vite.config.mjs",
+      "app-composer-ldraw/src/App.tsx",
+      "app-composer-ldraw/scripts/mcp"
+    ],
+    "sources": [
+      "app-composer-ldraw/package.json",
+      "app-composer-ldraw/vite.config.mjs",
+      "app-composer-ldraw/src/App.tsx",
+      "app-composer-ldraw/scripts/mcp"
+    ],
+    "facts": [
+      "React 18 and Vite 8 host the pinned Excalidraw 0.18.1 engine.",
+      "Drawings stay in IndexedDB; exports and native files stay in the browser.",
+      "The local MCP adapter reads and writes one host-selected workspace."
+    ],
+    "scene": "/architecture/ldraw/overview.excalidraw",
+    "preview": "/architecture/ldraw/preview.webp",
+    "sceneSha256": "c93b988ee2da3b72b721ba8b5e713e8e9fed07eb49fb05ad84744d356b4f1023",
+    "previewSha256": "9789ef81a55afb10d705d8f61c482bf438711725263380f0aa643d495b1c83dc",
+    "previewWidth": 1000,
+    "previewHeight": 598,
+    "elements": 50,
+    "renderer": "@excalidraw/excalidraw@0.18.1",
+    "render": {
+      "pngSha256": "a4911fb61895b60c34fa34164f8bbc827a5dd5b78ca0867a4f18f8ee12bf5d1f",
+      "svgSha256": "7f992165d644d966fa7b61864cb9f3ae5b5159240284d324a77102bc942dad90",
+      "builtFrom": "bf2fcb8c6ecae2f45cf1ad24633a26b0112e4fa5",
+      "durationMs": 1406,
+      "exportPadding": 24,
+      "background": true,
+      "svgExternalReferences": 0
+    },
+    "humanReview": "Source review performed; owner visual/taste review of the rendered composition remains pending."
+  },
+  {
+    "id": "paperwork-architecture",
+    "project": "paperwork",
+    "title": "Paperwork",
+    "summary": "PDF fields, ink, signatures and printing never leave the browser.",
+    "coverage": "source-verified",
+    "reviewedAt": "2026-10-26",
+    "sourceRevision": "d01603eb5cd78d5431a8504a5a79011abe7d6b9f",
+    "primarySourceRepo": "app-composer-paperwork",
+    "sourceFiles": [
+      "app-composer-paperwork/package.json",
+      "app-composer-paperwork/wrangler.jsonc",
+      "app-composer-paperwork/src",
+      "app-composer-paperwork/public"
+    ],
+    "sources": [
+      "app-composer-paperwork/package.json",
+      "app-composer-paperwork/wrangler.jsonc",
+      "app-composer-paperwork/src",
+      "app-composer-paperwork/public"
+    ],
+    "facts": [
+      "Vite, TypeScript, PDF.js and pdf-lib run entirely in the browser.",
+      "The Worker serves static assets only; there is no document backend.",
+      "Saved completed PDFs keep original pages and native fields."
+    ],
+    "scene": "/architecture/paperwork/overview.excalidraw",
+    "preview": "/architecture/paperwork/preview.webp",
+    "sceneSha256": "9151971925114b0cbf7e14917e47b888370afd583b0447f6bad99b550b0343bb",
+    "previewSha256": "06fe0ae31b4967640cf322dc88b5d7fb96b1e7d5679bd588000045a765d49475",
+    "previewWidth": 1000,
+    "previewHeight": 598,
+    "elements": 46,
+    "renderer": "@excalidraw/excalidraw@0.18.1",
+    "render": {
+      "pngSha256": "1ebfffd2d2b0c1b8d4b002360547595a3837e01768ea1d194c92e6f9a67feeb9",
+      "svgSha256": "c0c75fc7997752c6a6c36a91f4672ea22542e349d5f6eef08e363c15f48ab96a",
+      "builtFrom": "bf2fcb8c6ecae2f45cf1ad24633a26b0112e4fa5",
+      "durationMs": 1342,
+      "exportPadding": 24,
+      "background": true,
+      "svgExternalReferences": 0
+    },
+    "humanReview": "Source review performed; owner visual/taste review of the rendered composition remains pending."
+  },
+  {
+    "id": "herethere-architecture",
+    "project": "herethere",
+    "title": "Here / there",
+    "summary": "Visitor photographs and postcards pass an explicit owner review.",
+    "coverage": "source-verified",
+    "reviewedAt": "2026-10-26",
+    "sourceRevision": "376129c8b48d29d26e982777084aa241966569c7",
+    "primarySourceRepo": "app-composer-guestbook",
+    "sourceFiles": [
+      "app-composer-guestbook/wrangler.jsonc",
+      "app-composer-guestbook/src/worker.ts",
+      "app-composer-guestbook/migrations",
+      "app-composer-guestbook/public"
+    ],
+    "sources": [
+      "app-composer-guestbook/wrangler.jsonc",
+      "app-composer-guestbook/src/worker.ts",
+      "app-composer-guestbook/migrations",
+      "app-composer-guestbook/public"
+    ],
+    "facts": [
+      "A TypeScript Worker serves the gallery and owner APIs.",
+      "D1 holds records; private R2 holds uploaded photos.",
+      "The guest postcard path is closed by default and never grants owner access."
+    ],
+    "scene": "/architecture/herethere/overview.excalidraw",
+    "preview": "/architecture/herethere/preview.webp",
+    "sceneSha256": "48189e0fe6a00319330962b9ed11b29083132cd4662cbe20b5297ee8e8b15072",
+    "previewSha256": "e9c7a432ef4fea3babd44f20ca7a7b6d641832e94a2f3aac23882bbccb1c3764",
+    "previewWidth": 1000,
+    "previewHeight": 598,
+    "elements": 47,
+    "renderer": "@excalidraw/excalidraw@0.18.1",
+    "render": {
+      "pngSha256": "9bd4ee88c1ff03c9e08c964aa58072061d64f1f733ef2f5b4d1e999d6e588985",
+      "svgSha256": "c5ea5794d7375c1c9b5c22049fec6ee6792ba0c23b471375d8d28d8d69db5696",
+      "builtFrom": "bf2fcb8c6ecae2f45cf1ad24633a26b0112e4fa5",
+      "durationMs": 1366,
+      "exportPadding": 24,
+      "background": true,
+      "svgExternalReferences": 0
+    },
+    "humanReview": "Source review performed; owner visual/taste review of the rendered composition remains pending."
+  },
+  {
+    "id": "linkarooie-architecture",
+    "project": "linkarooie",
+    "title": "Linkarooie",
+    "summary": "One public profile, app-owned records and approved Guestbook media.",
+    "coverage": "source-verified",
+    "reviewedAt": "2026-10-26",
+    "sourceRevision": "2f9280d3ae754076174b5527ab15224c918b8580",
+    "primarySourceRepo": "app-composer-showcase",
+    "sourceFiles": [
+      "app-composer-showcase/wrangler.jsonc",
+      "app-composer-showcase/src/worker.ts",
+      "app-composer-showcase/migrations",
+      "app-composer-showcase/public"
+    ],
+    "sources": [
+      "app-composer-showcase/wrangler.jsonc",
+      "app-composer-showcase/src/worker.ts",
+      "app-composer-showcase/migrations",
+      "app-composer-showcase/public"
+    ],
+    "facts": [
+      "A TypeScript Worker renders the profile and owner APIs.",
+      "D1 owns profile records; a service binding reads Guestbook content.",
+      "The accepted curator identity is carried as approved artwork, not redrawn."
+    ],
+    "scene": "/architecture/linkarooie/overview.excalidraw",
+    "preview": "/architecture/linkarooie/preview.webp",
+    "sceneSha256": "3bb099ec1a973ad1b808e8f7b6e46177a7a97173a030593e45062574d8f7cabc",
+    "previewSha256": "46facaa93078f45a8fab7dd4f47632bf557d298c7cc2008990a48db11e3bb0b8",
+    "previewWidth": 1000,
+    "previewHeight": 598,
+    "elements": 46,
+    "renderer": "@excalidraw/excalidraw@0.18.1",
+    "render": {
+      "pngSha256": "ad1384e5ce3c1338f60e50ddf55d1ab72b8c54c2dcd292aeecdbfb1a27729f07",
+      "svgSha256": "71f619b4edb9756a6d07b79b2e8e7e90b9e91b930f5060d3033b87a4765d0aca",
+      "builtFrom": "bf2fcb8c6ecae2f45cf1ad24633a26b0112e4fa5",
+      "durationMs": 1368,
+      "exportPadding": 24,
+      "background": true,
+      "svgExternalReferences": 0
+    },
+    "humanReview": "Source review performed; owner visual/taste review of the rendered composition remains pending."
+  },
+  {
+    "id": "linkcheck-architecture",
+    "project": "linkcheck",
+    "title": "Link Check",
+    "summary": "A bounded public-page inspection, not a crawler or trusted proxy.",
+    "coverage": "source-verified",
+    "reviewedAt": "2026-10-26",
+    "sourceRevision": "99d01322ca4c53332596b1b24791cf672376f69c",
+    "primarySourceRepo": "app-composer-linkcheck",
+    "sourceFiles": [
+      "app-composer-linkcheck/wrangler.jsonc",
+      "app-composer-linkcheck/src/worker.ts",
+      "app-composer-linkcheck/src/public-network.ts",
+      "app-composer-linkcheck/README.md"
+    ],
+    "sources": [
+      "app-composer-linkcheck/wrangler.jsonc",
+      "app-composer-linkcheck/src/worker.ts",
+      "app-composer-linkcheck/src/public-network.ts",
+      "app-composer-linkcheck/README.md"
+    ],
+    "facts": [
+      "TypeScript and Effect 4.0.4 run in a Worker with a 100 ms CPU limit.",
+      "Dual DNS checks plus public-only fetch reduce SSRF exposure.",
+      "There is no database, account or stored target content."
+    ],
+    "scene": "/architecture/linkcheck/overview.excalidraw",
+    "preview": "/architecture/linkcheck/preview.webp",
+    "sceneSha256": "878ab2cd83afc99f2557257a7c6637617c4ff5fe1fb40b4e761103aab3063265",
+    "previewSha256": "a8bfd5e9173047a68fd5ca59ef783f64e9b5cca26b5dcc63b25b4fddfab62c0a",
+    "previewWidth": 1000,
+    "previewHeight": 598,
+    "elements": 46,
+    "renderer": "@excalidraw/excalidraw@0.18.1",
+    "render": {
+      "pngSha256": "f03958ef27c26f62d105d772a150fc8c300240b486358e57c724636b17140f90",
+      "svgSha256": "f0b6a536c3022ed7b08d305cece5714d8c98d59ad04f1af42f5e809b70950a76",
+      "builtFrom": "bf2fcb8c6ecae2f45cf1ad24633a26b0112e4fa5",
+      "durationMs": 1400,
+      "exportPadding": 24,
+      "background": true,
+      "svgExternalReferences": 0
+    },
+    "humanReview": "Source review performed; owner visual/taste review of the rendered composition remains pending."
+  },
+  {
+    "id": "carry-architecture",
+    "project": "carry",
+    "title": "Carry / forward",
+    "summary": "A fictional memory vault that moves as an encrypted local file.",
+    "coverage": "source-verified",
+    "reviewedAt": "2026-10-26",
+    "sourceRevision": "f3d279f87ec3ce6b913e5dcd4f4d2a9380997fae",
+    "primarySourceRepo": "app-composer-state",
+    "sourceFiles": [
+      "app-composer-state/wrangler.jsonc",
+      "app-composer-state/worker.ts",
+      "app-composer-state/public",
+      "app-composer-state/README.md"
+    ],
+    "sources": [
+      "app-composer-state/wrangler.jsonc",
+      "app-composer-state/worker.ts",
+      "app-composer-state/public",
+      "app-composer-state/README.md"
+    ],
+    "facts": [
+      "A static Worker serves the browser application; no data binding.",
+      "The vault is encrypted locally and exported/imported by the visitor.",
+      "Fictional fixtures are mandatory until the separate security gate is proven."
+    ],
+    "scene": "/architecture/carry/overview.excalidraw",
+    "preview": "/architecture/carry/preview.webp",
+    "sceneSha256": "eb3808b75b998736140f6179f284b511fd5dd63c1fd3cf51a86e909aee8c1b25",
+    "previewSha256": "8f4382e52c228c9c43d7998913d492a44aba930153924ab466a8ff3023bc14da",
+    "previewWidth": 1000,
+    "previewHeight": 598,
+    "elements": 46,
+    "renderer": "@excalidraw/excalidraw@0.18.1",
+    "render": {
+      "pngSha256": "b04f6bdd75b1e5811eaced0cc9a79ef0a445ca2b142e305c8138fe7d99fe0ada",
+      "svgSha256": "ec6bf6b0cfd1d6b02f1bd4fb3ce035cadb6a729a748a28c2d5c2cce71e1bfb10",
+      "builtFrom": "bf2fcb8c6ecae2f45cf1ad24633a26b0112e4fa5",
+      "durationMs": 1397,
+      "exportPadding": 24,
+      "background": true,
+      "svgExternalReferences": 0
+    },
+    "humanReview": "Source review performed; owner visual/taste review of the rendered composition remains pending."
+  },
+  {
+    "id": "hello-architecture",
+    "project": "hello",
+    "title": "Hello World",
+    "summary": "The smallest real release: one page, one origin, no hidden backend.",
+    "coverage": "source-verified",
+    "reviewedAt": "2026-10-26",
+    "sourceRevision": "8efc6a4fb1d44b78d011b7237917920d7e1c2aef",
+    "primarySourceRepo": "app-composer-hello",
+    "sourceFiles": [
+      "app-composer-hello/wrangler.jsonc",
+      "app-composer-hello/src/worker.ts",
+      "app-composer-hello/public",
+      "app-composer-hello/README.md"
+    ],
+    "sources": [
+      "app-composer-hello/wrangler.jsonc",
+      "app-composer-hello/src/worker.ts",
+      "app-composer-hello/public",
+      "app-composer-hello/README.md"
+    ],
+    "facts": [
+      "A TypeScript Worker serves a small configurable public page.",
+      "There is no database, upload or runtime account.",
+      "Get Ready verifies the deployed origin; Init supplies portable configuration."
+    ],
+    "scene": "/architecture/hello/overview.excalidraw",
+    "preview": "/architecture/hello/preview.webp",
+    "sceneSha256": "d665e79d168427b5610e1e5acb68eac0b76fd5444f75f76d0d0ca50c41f05ccc",
+    "previewSha256": "1e99b3eea50d476333ac09a46354d54cdd9f8d039d7903479a23c0d106036104",
+    "previewWidth": 1000,
+    "previewHeight": 598,
+    "elements": 46,
+    "renderer": "@excalidraw/excalidraw@0.18.1",
+    "render": {
+      "pngSha256": "f0a71e8fd9b73b941395d8537ce1a31fea242c8d365474254210d6e355619ced",
+      "svgSha256": "767c14576eb0d92ab5dbe9eb77710335e4a00f89e0ce225d266550b8bbdfece5",
+      "builtFrom": "bf2fcb8c6ecae2f45cf1ad24633a26b0112e4fa5",
+      "durationMs": 1360,
+      "exportPadding": 24,
+      "background": true,
+      "svgExternalReferences": 0
+    },
+    "humanReview": "Source review performed; owner visual/taste review of the rendered composition remains pending."
+  },
+  {
+    "id": "launchkit-architecture",
+    "project": "launchkit",
+    "title": "Launch Kit",
+    "summary": "Local artwork becomes checked icons, install assets and share images.",
+    "coverage": "source-verified",
+    "reviewedAt": "2026-10-26",
+    "sourceRevision": "4e248c0353658569d703db401be226e414c656ef",
+    "primarySourceRepo": "app-composer-launch-kit",
+    "sourceFiles": [
+      "app-composer-launch-kit/wrangler.jsonc",
+      "app-composer-launch-kit/src",
+      "app-composer-launch-kit/README.md",
+      "app-composer-launch-kit/docs"
+    ],
+    "sources": [
+      "app-composer-launch-kit/wrangler.jsonc",
+      "app-composer-launch-kit/src",
+      "app-composer-launch-kit/README.md",
+      "app-composer-launch-kit/docs"
+    ],
+    "facts": [
+      "A static-assets Worker runs the whole tool with no Worker script.",
+      "Source artwork is processed locally with canvas and browser APIs.",
+      "The downloaded package is reviewed in Composer or a supported host."
+    ],
+    "scene": "/architecture/launchkit/overview.excalidraw",
+    "preview": "/architecture/launchkit/preview.webp",
+    "sceneSha256": "c73ae5d19e3a0f7a28af0111b7bbdad38dd0f865fe4ee585fd6dada1424311ca",
+    "previewSha256": "aa9b250080022b8cb330997f7e41bb931f568305c8fffff2a2537df00e83c24c",
+    "previewWidth": 1000,
+    "previewHeight": 598,
+    "elements": 46,
+    "renderer": "@excalidraw/excalidraw@0.18.1",
+    "render": {
+      "pngSha256": "30447370bb284dc7fa839e1513a753d5d8f613291591b8600b73a3f6c245a25f",
+      "svgSha256": "ddd96b870f08e7c2ef2fb6333813fe6b6c641dafedbda0ca98f8246eb626fa86",
+      "builtFrom": "bf2fcb8c6ecae2f45cf1ad24633a26b0112e4fa5",
+      "durationMs": 1348,
+      "exportPadding": 24,
+      "background": true,
+      "svgExternalReferences": 0
+    },
+    "humanReview": "Source review performed; owner visual/taste review of the rendered composition remains pending."
+  },
+  {
+    "id": "assethunter-architecture",
+    "project": "assethunter",
+    "title": "Asset Hunter",
+    "summary": "A rights-aware catalogue of possibilities, not a pile of unlicensed files.",
+    "coverage": "source-verified",
+    "reviewedAt": "2026-10-26",
+    "sourceRevision": "e7edea3e2e782ef163248c14e66d8be03c2f9d05",
+    "primarySourceRepo": "asset-hunter",
+    "sourceFiles": [
+      "asset-hunter/package.json",
+      "asset-hunter/wrangler.jsonc",
+      "asset-hunter/src/pages",
+      "asset-hunter/docs/BRAND.md"
+    ],
+    "sources": [
+      "asset-hunter/package.json",
+      "asset-hunter/wrangler.jsonc",
+      "asset-hunter/src/pages",
+      "asset-hunter/docs/BRAND.md"
+    ],
+    "facts": [
+      "Astro, React and EmDash run in a Cloudflare Worker with D1 and R2.",
+      "Each possibility carries its own technique, build notes and rights statement.",
+      "Catalogue APIs expose version, search, board and takedown signals."
+    ],
+    "scene": "/architecture/assethunter/overview.excalidraw",
+    "preview": "/architecture/assethunter/preview.webp",
+    "sceneSha256": "b749e7d3df71bb6dff9bf767017844af2a0808dbe1065e3fbd384e86f46eff66",
+    "previewSha256": "34e2ed6b1b00fe8c0e41808f6822cef7d8b4e17fc0c8434d1df7ac194213557e",
+    "previewWidth": 1000,
+    "previewHeight": 598,
+    "elements": 46,
+    "renderer": "@excalidraw/excalidraw@0.18.1",
+    "render": {
+      "pngSha256": "387743e03e5521150d76a6f33ff5bbd700531e66f3c827be36e6df9d51449282",
+      "svgSha256": "24ccdfae906194ca89d99c0eb7cf1965c42361476ec6a02827965a6e60632085",
+      "builtFrom": "bf2fcb8c6ecae2f45cf1ad24633a26b0112e4fa5",
+      "durationMs": 1383,
+      "exportPadding": 24,
+      "background": true,
+      "svgExternalReferences": 0
+    },
+    "humanReview": "Source review performed; owner visual/taste review of the rendered composition remains pending."
+  },
+  {
+    "id": "max-architecture",
+    "project": "max",
+    "title": "MAX",
+    "summary": "A software prototype and device boundary that does not claim a finished walker.",
+    "coverage": "source-verified",
+    "reviewedAt": "2026-10-26",
+    "sourceRevision": "ac93ce65d1416544c650dacfc859e9af011dbc1a",
+    "primarySourceRepo": "max",
+    "sourceFiles": [
+      "max/apps/web/wrangler.jsonc",
+      "max/apps/web/src/pages",
+      "max/apps/web/src/server",
+      "max/README.md"
+    ],
+    "sources": [
+      "max/apps/web/wrangler.jsonc",
+      "max/apps/web/src/pages",
+      "max/apps/web/src/server",
+      "max/README.md"
+    ],
+    "facts": [
+      "Astro 7 runs on a Cloudflare Worker with D1 and R2.",
+      "An installable owner PWA, public demo and simulator are separate surfaces.",
+      "Waitlist, demo requests, media and email are real services; hardware is not verified."
+    ],
+    "scene": "/architecture/max/overview.excalidraw",
+    "preview": "/architecture/max/preview.webp",
+    "sceneSha256": "e4e9de24bdecb91240ead015c150db4617dc90f3187d9d49ced586f083554e39",
+    "previewSha256": "c4892e311789d2c3e56b8e7980c254ff0e8781ad10af1e71d7fd217350c9305a",
+    "previewWidth": 1000,
+    "previewHeight": 598,
+    "elements": 46,
+    "renderer": "@excalidraw/excalidraw@0.18.1",
+    "render": {
+      "pngSha256": "da098b204ce071865f5c9fcef989beaef5f0a33337bbf4bb5788b56347183478",
+      "svgSha256": "e7d7df3431244b9033c647e81475560c464ff657f044dfc76a9158507a49bfea",
+      "builtFrom": "bf2fcb8c6ecae2f45cf1ad24633a26b0112e4fa5",
+      "durationMs": 1339,
+      "exportPadding": 24,
+      "background": true,
+      "svgExternalReferences": 0
+    },
+    "humanReview": "Source review performed; owner visual/taste review of the rendered composition remains pending."
+  },
+  {
+    "id": "protocol11-architecture",
+    "project": "protocol11",
+    "title": "Protocol 11",
+    "summary": "A local card table with optional rooms, invitations and persistent platform records.",
+    "coverage": "source-verified",
+    "reviewedAt": "2026-10-26",
+    "sourceRevision": "4dac378a33d7af9f970cedf92425df355f82c896",
+    "primarySourceRepo": "phase-11",
+    "sourceFiles": [
+      "phase-11/package.json",
+      "phase-11/wrangler.jsonc",
+      "phase-11/worker/index.ts",
+      "phase-11/worker/platform",
+      "phase-11/worker/multiplayer"
+    ],
+    "sources": [
+      "phase-11/package.json",
+      "phase-11/wrangler.jsonc",
+      "phase-11/worker/index.ts",
+      "phase-11/worker/platform",
+      "phase-11/worker/multiplayer"
+    ],
+    "facts": [
+      "Vite, React and a plain TypeScript rules engine render the table.",
+      "The Worker uses D1 plus GameRoom and Matchmaker Durable Objects.",
+      "Resend sends invitations and optional Turnstile gates registration."
+    ],
+    "scene": "/architecture/protocol11/overview.excalidraw",
+    "preview": "/architecture/protocol11/preview.webp",
+    "sceneSha256": "d3d1fb73e64312b44ed42f2498f951b71e7e606d1b567b1d0faf1780ea566fca",
+    "previewSha256": "94999286d50d37eae8afd048113cc5fee611c43c10c611618d5331290b834602",
+    "previewWidth": 1000,
+    "previewHeight": 598,
+    "elements": 50,
+    "renderer": "@excalidraw/excalidraw@0.18.1",
+    "render": {
+      "pngSha256": "d7ec23bee28f513aa186a6059bc3b7935bb4c92f9a2d6a10c515b7039d33adef",
+      "svgSha256": "4f3ee1387f78f7066d7a9c52289fd8368e9b775e26280108b2c9aa79a903715f",
+      "builtFrom": "bf2fcb8c6ecae2f45cf1ad24633a26b0112e4fa5",
+      "durationMs": 1390,
+      "exportPadding": 24,
+      "background": true,
+      "svgExternalReferences": 0
+    },
+    "humanReview": "Source review performed; owner visual/taste review of the rendered composition remains pending."
+  },
+  {
+    "id": "bubbles-architecture",
+    "project": "bubbles",
+    "title": "Bubbles",
+    "summary": "A static game with local saves, authored worlds and no account barrier.",
+    "coverage": "source-verified",
+    "reviewedAt": "2026-10-26",
+    "sourceRevision": "98608579813a47879815bc8eaee0e0058095e009",
+    "primarySourceRepo": "bubbles",
+    "sourceFiles": [
+      "bubbles/package.json",
+      "bubbles/vite.config.ts",
+      "bubbles/src/app",
+      "bubbles/src/scene",
+      "bubbles/src/platform",
+      "bubbles/src/assets/manifest.json"
+    ],
+    "sources": [
+      "bubbles/package.json",
+      "bubbles/vite.config.ts",
+      "bubbles/src/app",
+      "bubbles/src/scene",
+      "bubbles/src/platform",
+      "bubbles/src/assets/manifest.json"
+    ],
+    "facts": [
+      "Vite, React and Phaser render the game as a static Worker bundle.",
+      "Saves and preferences stay in localStorage with recovery checks.",
+      "The shared cast, mascots, worlds and achievements are registered assets."
+    ],
+    "scene": "/architecture/bubbles/overview.excalidraw",
+    "preview": "/architecture/bubbles/preview.webp",
+    "sceneSha256": "8635a96b630e116529b83079431aef0951f6369f6faf4986dc0f701ebf3939c5",
+    "previewSha256": "77c72d2d586d1b7645e50208094d923ae70ff84e2fec94a2f533373d20f6b7d4",
+    "previewWidth": 1000,
+    "previewHeight": 598,
+    "elements": 50,
+    "renderer": "@excalidraw/excalidraw@0.18.1",
+    "render": {
+      "pngSha256": "572e933a537b4704c6af8171676f7a6b8e06b24c281f2556ac1632a3d03d1a35",
+      "svgSha256": "84c3e58b7ada302b3e510da84b3f87023e6c9af5d8b327d1ba276d7c0a6a202e",
+      "builtFrom": "bf2fcb8c6ecae2f45cf1ad24633a26b0112e4fa5",
+      "durationMs": 1354,
+      "exportPadding": 24,
+      "background": true,
+      "svgExternalReferences": 0
+    },
+    "humanReview": "Source review performed; owner visual/taste review of the rendered composition remains pending."
+  },
+  {
+    "id": "shoalshot-architecture",
+    "project": "shoalshot",
+    "title": "SHOALSHOT",
+    "summary": "A local-first dive with authored specimens, launchers and a local share card.",
+    "coverage": "source-verified",
+    "reviewedAt": "2026-10-26",
+    "sourceRevision": "2aa18059bf217e1cfe4eac9762185badef13b53f",
+    "primarySourceRepo": "shoalshot-release",
+    "sourceFiles": [
+      "shoalshot-release/package.json",
+      "shoalshot-release/wrangler.jsonc",
+      "shoalshot-release/src",
+      "shoalshot-release/assets",
+      "shoalshot-release/README.md"
+    ],
+    "sources": [
+      "shoalshot-release/package.json",
+      "shoalshot-release/wrangler.jsonc",
+      "shoalshot-release/src",
+      "shoalshot-release/assets",
+      "shoalshot-release/README.md"
+    ],
+    "facts": [
+      "Vite, React, Phaser and Tailwind produce a static Worker game.",
+      "Gameplay progress and backups stay in localStorage; nothing is uploaded.",
+      "Share results are composed locally as a 1200 by 630 PNG."
+    ],
+    "scene": "/architecture/shoalshot/overview.excalidraw",
+    "preview": "/architecture/shoalshot/preview.webp",
+    "sceneSha256": "55c0ccadc1c2351baf1b9bb3fa24c414aa13efb445385d5c330102c647e4346c",
+    "previewSha256": "c5d86719dd5af5e8db83925fd3405bd2166ad72f72b1e389890b2ae2842d399b",
+    "previewWidth": 1000,
+    "previewHeight": 598,
+    "elements": 50,
+    "renderer": "@excalidraw/excalidraw@0.18.1",
+    "render": {
+      "pngSha256": "6a318f1dab38a982ea4b64d97ac1db204c0029fd76c16ccd7acc51517d7c1d25",
+      "svgSha256": "90428d041942964089cd4df5be419777fe5f2da3ba53da58fc37ee7dead825d3",
+      "builtFrom": "bf2fcb8c6ecae2f45cf1ad24633a26b0112e4fa5",
+      "durationMs": 1375,
+      "exportPadding": 24,
+      "background": true,
+      "svgExternalReferences": 0
+    },
+    "humanReview": "Source review performed; owner visual/taste review of the rendered composition remains pending."
+  },
+  {
+    "id": "fighter-architecture",
+    "project": "fighter",
+    "title": "LOFTWAH FIGHTER",
+    "summary": "Local battles, a generated roster and a small platform around suggestions.",
+    "coverage": "source-verified",
+    "reviewedAt": "2026-10-26",
+    "sourceRevision": "e27d3f2f3912d86209e6a6543c869b4accbfc6aa",
+    "primarySourceRepo": "fighter",
+    "sourceFiles": [
+      "fighter/wrangler.jsonc",
+      "fighter/worker/index.ts",
+      "fighter/src/app/App.ts",
+      "fighter/public/assets/generated/promotional/manifest.json",
+      "fighter/docs/brand-and-site.md"
+    ],
+    "sources": [
+      "fighter/wrangler.jsonc",
+      "fighter/worker/index.ts",
+      "fighter/src/app/App.ts",
+      "fighter/public/assets/generated/promotional/manifest.json",
+      "fighter/docs/brand-and-site.md"
+    ],
+    "facts": [
+      "Vite, React, Phaser and Tailwind render the game in a Worker bundle.",
+      "D1 stores platform suggestions; saves and preferences stay local.",
+      "Character art has a contract; real-person roster art is excluded here."
+    ],
+    "scene": "/architecture/fighter/overview.excalidraw",
+    "preview": "/architecture/fighter/preview.webp",
+    "sceneSha256": "cb2d3a4522ec8a30656d8f45b603a59782d82c71f44cba7d16dc5327d37a2638",
+    "previewSha256": "d782fe56632c1655de2f85401d9000afb637aa95709e5231b2174538ce4a9b8b",
+    "previewWidth": 1000,
+    "previewHeight": 598,
+    "elements": 50,
+    "renderer": "@excalidraw/excalidraw@0.18.1",
+    "render": {
+      "pngSha256": "08a8d4f1af80df4938babf3ee2236bb22039050caf21a78c8a9a6c1484eb20d9",
+      "svgSha256": "c7b2a98f0f6b13d5dd2b95a6b6d1aaaec3fedc27586c5332ad3b7bd84d305b93",
+      "builtFrom": "bf2fcb8c6ecae2f45cf1ad24633a26b0112e4fa5",
+      "durationMs": 1370,
+      "exportPadding": 24,
+      "background": true,
+      "svgExternalReferences": 0
+    },
+    "humanReview": "Source review performed; owner visual/taste review of the rendered composition remains pending."
+  },
+  {
+    "id": "pirates-architecture",
+    "project": "pirates",
+    "title": "Pirates",
+    "summary": "A source-first reconstruction. The original game is the authority, not a new style.",
+    "coverage": "source-verified",
+    "reviewedAt": "2026-10-26",
+    "sourceRevision": "7cf87fe215d7ea4b97eca09464ed9be0791897d6",
+    "primarySourceRepo": "pirates",
+    "sourceFiles": [
+      "pirates/package.json",
+      "pirates/README.md",
+      "pirates/docs/ADR-001-architecture-r1.md",
+      "pirates/src",
+      "pirates/public/assets/source"
+    ],
+    "sources": [
+      "pirates/package.json",
+      "pirates/README.md",
+      "pirates/docs/ADR-001-architecture-r1.md",
+      "pirates/src",
+      "pirates/public/assets/source"
+    ],
+    "facts": [
+      "Vite, React, TypeScript and Phaser 3.90 run a 600 by 420 logical game.",
+      "The original source/export remains authoritative during parity work.",
+      "Third-party source art is reference-only and not cleared for reuse."
+    ],
+    "scene": "/architecture/pirates/overview.excalidraw",
+    "preview": "/architecture/pirates/preview.webp",
+    "sceneSha256": "5eeb0347b6c7fd65b70193d428b2774e01e0f991ea6eaddafdd5cc57883f9bed",
+    "previewSha256": "57c66edb03961bfd6fcfe1bac4ae4fe0d95335ea94286cc9fb47da8ec0ba896e",
+    "previewWidth": 1000,
+    "previewHeight": 598,
+    "elements": 46,
+    "renderer": "@excalidraw/excalidraw@0.18.1",
+    "render": {
+      "pngSha256": "605fe2e6ba52a8837695ced6c567f6ca41b6ac251f3efc868547b51d57c40619",
+      "svgSha256": "eec4fe972fbef34743a2556dfd36224abaaac88e0226b59d3a05ab8e329f4f0d",
+      "builtFrom": "bf2fcb8c6ecae2f45cf1ad24633a26b0112e4fa5",
+      "durationMs": 1368,
+      "exportPadding": 24,
+      "background": true,
+      "svgExternalReferences": 0
+    },
+    "humanReview": "Source review performed; owner visual/taste review of the rendered composition remains pending."
+  },
+  {
+    "id": "loftwahfm-architecture",
+    "project": "loftwahfm",
+    "title": "LoftwahFM",
+    "summary": "A music catalogue, continuous player and shared game-radio service.",
+    "coverage": "source-verified",
+    "reviewedAt": "2026-10-26",
+    "sourceRevision": "64f53a32cfa3a00856bbd761e5c2c5eee561f8bd",
+    "primarySourceRepo": "loftwahfm",
+    "sourceFiles": [
+      "loftwahfm/wrangler.toml",
+      "loftwahfm/src/cloudflare-entry.ts",
+      "loftwahfm/src/pages",
+      "loftwahfm/src/components/player",
+      "loftwahfm/docs"
+    ],
+    "sources": [
+      "loftwahfm/wrangler.toml",
+      "loftwahfm/src/cloudflare-entry.ts",
+      "loftwahfm/src/pages",
+      "loftwahfm/src/components/player",
+      "loftwahfm/docs"
+    ],
+    "facts": [
+      "Astro and React run on a Cloudflare Worker with D1, R2 and KV.",
+      "R2 stores music and video; D1 owns catalogue and radio records.",
+      "Cron stages run radio dispatch and analytics; checkout stays disabled."
+    ],
+    "scene": "/architecture/loftwahfm/overview.excalidraw",
+    "preview": "/architecture/loftwahfm/preview.webp",
+    "sceneSha256": "6aea0204980ec6b2ca074333e532fb8dee48d01d91a7bc546aea03998c68d434",
+    "previewSha256": "05b08c604c8488fd4def5dfbc8d651a0541b70410cfb375d394531fb92bfe01d",
+    "previewWidth": 1000,
+    "previewHeight": 598,
+    "elements": 50,
+    "renderer": "@excalidraw/excalidraw@0.18.1",
+    "render": {
+      "pngSha256": "4e519bb0858c7425656edc8477507c218209d4829bee2a926138970d87a6d23d",
+      "svgSha256": "041c05bcbcb922e636b29e007c3fea5080f821e68d602d8aa7840cab5a1deccd",
+      "builtFrom": "bf2fcb8c6ecae2f45cf1ad24633a26b0112e4fa5",
+      "durationMs": 1347,
+      "exportPadding": 24,
+      "background": true,
+      "svgExternalReferences": 0
+    },
+    "humanReview": "Source review performed; owner visual/taste review of the rendered composition remains pending."
+  },
+  {
+    "id": "woodhouse-architecture",
+    "project": "woodhouse",
+    "title": "Woodhouse",
+    "summary": "Independent projects become a reviewed, dated public record.",
+    "coverage": "source-verified",
+    "reviewedAt": "2026-10-26",
+    "sourceRevision": "a25f6fcba3284541f1c1a7da62fec81daede11fa",
+    "primarySourceRepo": "woodhouse-new",
+    "sourceFiles": [
+      "woodhouse-new/wrangler.jsonc",
+      "woodhouse-new/src/worker.ts",
+      "woodhouse-new/src/content",
+      "woodhouse-new/src/pages",
+      "woodhouse-new/ARCHITECTURE.md"
+    ],
+    "sources": [
+      "woodhouse-new/wrangler.jsonc",
+      "woodhouse-new/src/worker.ts",
+      "woodhouse-new/src/content",
+      "woodhouse-new/src/pages",
+      "woodhouse-new/ARCHITECTURE.md"
+    ],
+    "facts": [
+      "Astro 7 and EmDash run on a Cloudflare Worker.",
+      "D1 stores editorial records; R2 stores media; KV holds cache and sessions.",
+      "Preview and production use distinct D1/R2/KV resources."
+    ],
+    "scene": "/architecture/woodhouse/overview.excalidraw",
+    "preview": "/architecture/woodhouse/preview.webp",
+    "sceneSha256": "18d87009491c4d64662124d2d551d992384a7ad1aeb19b10e13a45e7dab2d2c2",
+    "previewSha256": "cf9dda15d1506239cd093dec8516594aaada1bb8bacf62ea83780d5de6450fad",
+    "previewWidth": 1000,
+    "previewHeight": 598,
+    "elements": 50,
+    "renderer": "@excalidraw/excalidraw@0.18.1",
+    "render": {
+      "pngSha256": "e6c0112856a702201594de376e483650874047bb6ecb7c665f22435ce50c147e",
+      "svgSha256": "e943d333c2f838e2fefbbefe6a9dda8d20223841baa535a44f9ed5744ee3c736",
+      "builtFrom": "bf2fcb8c6ecae2f45cf1ad24633a26b0112e4fa5",
+      "durationMs": 1391,
+      "exportPadding": 24,
+      "background": true,
+      "svgExternalReferences": 0
+    },
+    "humanReview": "Source review performed; owner visual/taste review of the rendered composition remains pending."
+  }
+]
