@@ -30,22 +30,26 @@
       "id": "ldraw-architecture",
       "project": "ldraw",
       "title": "LDraw",
-      "summary": "One local editor, native files and an agent adapter with no cloud dependency.",
+      "summary": "A local portfolio editor with real artwork, editable architecture and a presentation view.",
       "coverage": "source-verified",
       "reviewedAt": "2026-10-26",
-      "sourceRevision": "bf2fcb8c6ecae2f45cf1ad24633a26b0112e4fa5",
+      "sourceRevision": "ef7c27e098c4948e9017642d4362c7dc3c1d672b",
       "primarySourceRepo": "app-composer-ldraw",
       "sourceFiles": [
         "app-composer-ldraw/package.json",
         "app-composer-ldraw/vite.config.mjs",
         "app-composer-ldraw/src/App.tsx",
+        "app-composer-ldraw/src/LibraryDialog.tsx",
+        "app-composer-ldraw/src/architecture.mjs",
+        "app-composer-ldraw/src/compositions.mjs",
+        "app-composer-ldraw/scripts/architecture-build.mjs",
         "app-composer-ldraw/scripts/mcp"
       ],
       "scene": "/architecture/ldraw/overview.excalidraw",
-      "sceneSha256": "c93b988ee2da3b72b721ba8b5e713e8e9fed07eb49fb05ad84744d356b4f1023",
+      "sceneSha256": "5467d41d656d661aca35f6e3227da1bba7b9c971abefbc43af8cebc823ba623d",
       "preview": "/architecture/ldraw/preview.webp",
-      "previewSha256": "9789ef81a55afb10d705d8f61c482bf438711725263380f0aa643d495b1c83dc",
-      "elements": 50
+      "previewSha256": "d6ef5968452cbe9978e84ab69ac0e102cf4192b54d652aff92e26bf7a5461353",
+      "elements": 61
     },
     {
       "id": "paperwork-architecture",
@@ -310,7 +314,7 @@
       "summary": "Local battles, a generated roster and a small platform around suggestions.",
       "coverage": "source-verified",
       "reviewedAt": "2026-10-26",
-      "sourceRevision": "e27d3f2f3912d86209e6a6543c869b4accbfc6aa",
+      "sourceRevision": "00e4abbb0ae6b7c2e327e3616182acbe204ed12f",
       "primarySourceRepo": "fighter",
       "sourceFiles": [
         "fighter/wrangler.jsonc",

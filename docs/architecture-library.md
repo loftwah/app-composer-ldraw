@@ -9,7 +9,7 @@ The diagrams are authored from the source files named below, then rendered by LD
 | Project | Scene | Reviewed | Native scene | Preview | Source revision |
 | --- | --- | --- | --- | --- | --- |
 | App Composer | App Composer — Owner intent, agent proposal and independent delivery stay separate. | 2026-10-26 | `/architecture/composer/overview.excalidraw` | `/architecture/composer/preview.webp` | `00d0a6cd55021a8f635db60a101ae2e25abd7da3` |
-| LDraw | LDraw — One local editor, native files and an agent adapter with no cloud dependency. | 2026-10-26 | `/architecture/ldraw/overview.excalidraw` | `/architecture/ldraw/preview.webp` | `bf2fcb8c6ecae2f45cf1ad24633a26b0112e4fa5` |
+| LDraw | LDraw — A local portfolio editor with real artwork, editable architecture and a presentation view. | 2026-10-26 | `/architecture/ldraw/overview.excalidraw` | `/architecture/ldraw/preview.webp` | `ef7c27e098c4948e9017642d4362c7dc3c1d672b` |
 | Paperwork | Paperwork — PDF fields, ink, signatures and printing never leave the browser. | 2026-10-26 | `/architecture/paperwork/overview.excalidraw` | `/architecture/paperwork/preview.webp` | `d01603eb5cd78d5431a8504a5a79011abe7d6b9f` |
 | Here / there | Here / there — Visitor photographs and postcards pass an explicit owner review. | 2026-10-26 | `/architecture/herethere/overview.excalidraw` | `/architecture/herethere/preview.webp` | `376129c8b48d29d26e982777084aa241966569c7` |
 | Linkarooie | Linkarooie — One public profile, app-owned records and approved Guestbook media. | 2026-10-26 | `/architecture/linkarooie/overview.excalidraw` | `/architecture/linkarooie/preview.webp` | `2f9280d3ae754076174b5527ab15224c918b8580` |
@@ -22,7 +22,7 @@ The diagrams are authored from the source files named below, then rendered by LD
 | Protocol 11 | Protocol 11 — A local card table with optional rooms, invitations and persistent platform records. | 2026-10-26 | `/architecture/protocol11/overview.excalidraw` | `/architecture/protocol11/preview.webp` | `4dac378a33d7af9f970cedf92425df355f82c896` |
 | Bubbles | Bubbles — A static game with local saves, authored worlds and no account barrier. | 2026-10-26 | `/architecture/bubbles/overview.excalidraw` | `/architecture/bubbles/preview.webp` | `98608579813a47879815bc8eaee0e0058095e009` |
 | SHOALSHOT | SHOALSHOT — A local-first dive with authored specimens, launchers and a local share card. | 2026-10-26 | `/architecture/shoalshot/overview.excalidraw` | `/architecture/shoalshot/preview.webp` | `2aa18059bf217e1cfe4eac9762185badef13b53f` |
-| LOFTWAH FIGHTER | LOFTWAH FIGHTER — Local battles, a generated roster and a small platform around suggestions. | 2026-10-26 | `/architecture/fighter/overview.excalidraw` | `/architecture/fighter/preview.webp` | `e27d3f2f3912d86209e6a6543c869b4accbfc6aa` |
+| LOFTWAH FIGHTER | LOFTWAH FIGHTER — Local battles, a generated roster and a small platform around suggestions. | 2026-10-26 | `/architecture/fighter/overview.excalidraw` | `/architecture/fighter/preview.webp` | `00e4abbb0ae6b7c2e327e3616182acbe204ed12f` |
 | Pirates | Pirates — A source-first reconstruction. The original game is the authority, not a new style. | 2026-10-26 | `/architecture/pirates/overview.excalidraw` | `/architecture/pirates/preview.webp` | `7cf87fe215d7ea4b97eca09464ed9be0791897d6` |
 | LoftwahFM | LoftwahFM — A music catalogue, continuous player and shared game-radio service. | 2026-10-26 | `/architecture/loftwahfm/overview.excalidraw` | `/architecture/loftwahfm/preview.webp` | `64f53a32cfa3a00856bbd761e5c2c5eee561f8bd` |
 | Woodhouse | Woodhouse — Independent projects become a reviewed, dated public record. | 2026-10-26 | `/architecture/woodhouse/overview.excalidraw` | `/architecture/woodhouse/preview.webp` | `a25f6fcba3284541f1c1a7da62fec81daede11fa` |
@@ -50,13 +50,14 @@ The diagrams are authored from the source files named below, then rendered by LD
 - Project: LDraw
 - Reviewed: 2026-10-26
 - Coverage: source-verified
-- Scene: `/architecture/ldraw/overview.excalidraw` (50 elements), SHA-256 `c93b988ee2da3b72b721ba8b5e713e8e9fed07eb49fb05ad84744d356b4f1023`
-- Preview: `/architecture/ldraw/preview.webp` (1000×598), SHA-256 `9789ef81a55afb10d705d8f61c482bf438711725263380f0aa643d495b1c83dc`
-- Owning revision: `bf2fcb8c6ecae2f45cf1ad24633a26b0112e4fa5`
-- Source files: `app-composer-ldraw/package.json`, `app-composer-ldraw/vite.config.mjs`, `app-composer-ldraw/src/App.tsx`, `app-composer-ldraw/scripts/mcp`
+- Scene: `/architecture/ldraw/overview.excalidraw` (61 elements), SHA-256 `5467d41d656d661aca35f6e3227da1bba7b9c971abefbc43af8cebc823ba623d`
+- Preview: `/architecture/ldraw/preview.webp` (1000×598), SHA-256 `d6ef5968452cbe9978e84ab69ac0e102cf4192b54d652aff92e26bf7a5461353`
+- Owning revision: `ef7c27e098c4948e9017642d4362c7dc3c1d672b`
+- Source files: `app-composer-ldraw/package.json`, `app-composer-ldraw/vite.config.mjs`, `app-composer-ldraw/src/App.tsx`, `app-composer-ldraw/src/LibraryDialog.tsx`, `app-composer-ldraw/src/architecture.mjs`, `app-composer-ldraw/src/compositions.mjs`, `app-composer-ldraw/scripts/architecture-build.mjs`, `app-composer-ldraw/scripts/mcp`
 - Facts:
   - React 18 and Vite 8 host the pinned Excalidraw 0.18.1 engine.
-  - Drawings stay in IndexedDB; exports and native files stay in the browser.
+  - The library ships 95 real assets, three 16:9 stages and 18 architecture scenes.
+  - Drawings stay in IndexedDB; presentation and exports stay in the browser.
   - The local MCP adapter reads and writes one host-selected workspace.
 - Renderer: @excalidraw/excalidraw@0.18.1
 - Human review: Source review performed; owner visual/taste review of the rendered composition remains pending.
@@ -260,7 +261,7 @@ The diagrams are authored from the source files named below, then rendered by LD
 - Coverage: source-verified
 - Scene: `/architecture/fighter/overview.excalidraw` (50 elements), SHA-256 `cb2d3a4522ec8a30656d8f45b603a59782d82c71f44cba7d16dc5327d37a2638`
 - Preview: `/architecture/fighter/preview.webp` (1000×598), SHA-256 `d782fe56632c1655de2f85401d9000afb637aa95709e5231b2174538ce4a9b8b`
-- Owning revision: `e27d3f2f3912d86209e6a6543c869b4accbfc6aa`
+- Owning revision: `00e4abbb0ae6b7c2e327e3616182acbe204ed12f`
 - Source files: `fighter/wrangler.jsonc`, `fighter/worker/index.ts`, `fighter/src/app/App.ts`, `fighter/public/assets/generated/promotional/manifest.json`, `fighter/docs/brand-and-site.md`
 - Facts:
   - Vite, React, Phaser and Tailwind render the game in a Worker bundle.

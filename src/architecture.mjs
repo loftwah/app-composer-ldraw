@@ -45,7 +45,6 @@ export const architectureModels = [
     key: "composer",
     title: "App Composer",
     subtitle: "Owner intent, agent proposal and independent delivery stay separate.",
-    sourceRevision: "00d0a6cd55021a8f635db60a101ae2e25abd7da3",
     sources: [
       "app-composer/package.json",
       "app-composer/wrangler.jsonc",
@@ -82,46 +81,54 @@ export const architectureModels = [
   model({
     key: "ldraw",
     title: "LDraw",
-    subtitle: "One local editor, native files and an agent adapter with no cloud dependency.",
-    sourceRevision: "bf2fcb8c6ecae2f45cf1ad24633a26b0112e4fa5",
+    subtitle: "A local portfolio editor with real artwork, editable architecture and a presentation view.",
     sources: [
       "app-composer-ldraw/package.json",
       "app-composer-ldraw/vite.config.mjs",
       "app-composer-ldraw/src/App.tsx",
+      "app-composer-ldraw/src/LibraryDialog.tsx",
+      "app-composer-ldraw/src/architecture.mjs",
+      "app-composer-ldraw/src/compositions.mjs",
+      "app-composer-ldraw/scripts/architecture-build.mjs",
       "app-composer-ldraw/scripts/mcp",
     ],
     facts: [
       "React 18 and Vite 8 host the pinned Excalidraw 0.18.1 engine.",
-      "Drawings stay in IndexedDB; exports and native files stay in the browser.",
+      "The library ships 95 real assets, three 16:9 stages and 18 architecture scenes.",
+      "Drawings stay in IndexedDB; presentation and exports stay in the browser.",
       "The local MCP adapter reads and writes one host-selected workspace.",
     ],
     nodes: [
       ["visitor", "Visitor", "Draws, opens native files and exports locally"],
       ["library", "Portfolio library", "Real artwork, architecture scenes and blocks"],
       ["agent", "Local agent", "Host-selected stdio MCP workspace"],
+      ["presentation", "Presentation", "Clean fullscreen view of the current scene"],
       ["worker", "Static Cloudflare Worker", "No Worker script or service binding"],
       ["engine", "Excalidraw 0.18.1", "Same editor, renderer and export pipeline"],
       ["cache", "Service worker cache", "Core editor, fonts and reviewed local assets"],
+      ["present", "Presentation view", "Zen mode, Fit and exact 16:9 export"],
       ["indexeddb", "IndexedDB draft", "Current save, previous snapshot, revision check"],
       ["files", "Native .excalidraw", "Embedded image bytes and human element IDs"],
       ["renderer", "Local renderer", "Playwright plus the same Excalidraw renderer"],
+      ["handoff", "Architecture manifest", "Scene hashes and source revision for consumers"],
     ],
     links: [
       ["visitor", "engine"],
       ["library", "engine"],
+      ["presentation", "present"],
       ["engine", "cache"],
       ["engine", "indexeddb"],
       ["engine", "files"],
       ["agent", "files"],
       ["files", "renderer"],
       ["worker", "cache"],
+      ["worker", "handoff"],
     ],
   }),
   model({
     key: "paperwork",
     title: "Paperwork",
     subtitle: "PDF fields, ink, signatures and printing never leave the browser.",
-    sourceRevision: "d01603eb5cd78d5431a8504a5a79011abe7d6b9f",
     sources: [
       "app-composer-paperwork/package.json",
       "app-composer-paperwork/wrangler.jsonc",
@@ -157,7 +164,6 @@ export const architectureModels = [
     key: "herethere",
     title: "Here / there",
     subtitle: "Visitor photographs and postcards pass an explicit owner review.",
-    sourceRevision: "376129c8b48d29d26e982777084aa241966569c7",
     sources: [
       "app-composer-guestbook/wrangler.jsonc",
       "app-composer-guestbook/src/worker.ts",
@@ -194,7 +200,6 @@ export const architectureModels = [
     key: "linkarooie",
     title: "Linkarooie",
     subtitle: "One public profile, app-owned records and approved Guestbook media.",
-    sourceRevision: "2f9280d3ae754076174b5527ab15224c918b8580",
     sources: [
       "app-composer-showcase/wrangler.jsonc",
       "app-composer-showcase/src/worker.ts",
@@ -230,7 +235,6 @@ export const architectureModels = [
     key: "linkcheck",
     title: "Link Check",
     subtitle: "A bounded public-page inspection, not a crawler or trusted proxy.",
-    sourceRevision: "99d01322ca4c53332596b1b24791cf672376f69c",
     sources: [
       "app-composer-linkcheck/wrangler.jsonc",
       "app-composer-linkcheck/src/worker.ts",
@@ -266,7 +270,6 @@ export const architectureModels = [
     key: "carry",
     title: "Carry / forward",
     subtitle: "A fictional memory vault that moves as an encrypted local file.",
-    sourceRevision: "f3d279f87ec3ce6b913e5dcd4f4d2a9380997fae",
     sources: [
       "app-composer-state/wrangler.jsonc",
       "app-composer-state/worker.ts",
@@ -302,7 +305,6 @@ export const architectureModels = [
     key: "hello",
     title: "Hello World",
     subtitle: "The smallest real release: one page, one origin, no hidden backend.",
-    sourceRevision: "8efc6a4fb1d44b78d011b7237917920d7e1c2aef",
     sources: [
       "app-composer-hello/wrangler.jsonc",
       "app-composer-hello/src/worker.ts",
@@ -338,7 +340,6 @@ export const architectureModels = [
     key: "launchkit",
     title: "Launch Kit",
     subtitle: "Local artwork becomes checked icons, install assets and share images.",
-    sourceRevision: "4e248c0353658569d703db401be226e414c656ef",
     sources: [
       "app-composer-launch-kit/wrangler.jsonc",
       "app-composer-launch-kit/src",
@@ -374,7 +375,6 @@ export const architectureModels = [
     key: "assethunter",
     title: "Asset Hunter",
     subtitle: "A rights-aware catalogue of possibilities, not a pile of unlicensed files.",
-    sourceRevision: "e7edea3e2e782ef163248c14e66d8be03c2f9d05",
     sources: [
       "asset-hunter/package.json",
       "asset-hunter/wrangler.jsonc",
@@ -410,7 +410,6 @@ export const architectureModels = [
     key: "max",
     title: "MAX",
     subtitle: "A software prototype and device boundary that does not claim a finished walker.",
-    sourceRevision: "ac93ce65d1416544c650dacfc859e9af011dbc1a",
     sources: [
       "max/apps/web/wrangler.jsonc",
       "max/apps/web/src/pages",
@@ -446,7 +445,6 @@ export const architectureModels = [
     key: "protocol11",
     title: "Protocol 11",
     subtitle: "A local card table with optional rooms, invitations and persistent platform records.",
-    sourceRevision: "4dac378a33d7af9f970cedf92425df355f82c896",
     sources: [
       "phase-11/package.json",
       "phase-11/wrangler.jsonc",
@@ -485,7 +483,6 @@ export const architectureModels = [
     key: "bubbles",
     title: "Bubbles",
     subtitle: "A static game with local saves, authored worlds and no account barrier.",
-    sourceRevision: "98608579813a47879815bc8eaee0e0058095e009",
     sources: [
       "bubbles/package.json",
       "bubbles/vite.config.ts",
@@ -525,7 +522,6 @@ export const architectureModels = [
     key: "shoalshot",
     title: "SHOALSHOT",
     subtitle: "A local-first dive with authored specimens, launchers and a local share card.",
-    sourceRevision: "2aa18059bf217e1cfe4eac9762185badef13b53f",
     sources: [
       "shoalshot-release/package.json",
       "shoalshot-release/wrangler.jsonc",
@@ -564,7 +560,6 @@ export const architectureModels = [
     key: "fighter",
     title: "LOFTWAH FIGHTER",
     subtitle: "Local battles, a generated roster and a small platform around suggestions.",
-    sourceRevision: "e27d3f2f3912d86209e6a6543c869b4accbfc6aa",
     sources: [
       "fighter/wrangler.jsonc",
       "fighter/worker/index.ts",
@@ -603,7 +598,6 @@ export const architectureModels = [
     key: "pirates",
     title: "Pirates",
     subtitle: "A source-first reconstruction. The original game is the authority, not a new style.",
-    sourceRevision: "7cf87fe215d7ea4b97eca09464ed9be0791897d6",
     sources: [
       "pirates/package.json",
       "pirates/README.md",
@@ -640,7 +634,6 @@ export const architectureModels = [
     key: "loftwahfm",
     title: "LoftwahFM",
     subtitle: "A music catalogue, continuous player and shared game-radio service.",
-    sourceRevision: "64f53a32cfa3a00856bbd761e5c2c5eee561f8bd",
     sources: [
       "loftwahfm/wrangler.toml",
       "loftwahfm/src/cloudflare-entry.ts",
@@ -679,7 +672,6 @@ export const architectureModels = [
     key: "woodhouse",
     title: "Woodhouse",
     subtitle: "Independent projects become a reviewed, dated public record.",
-    sourceRevision: "a25f6fcba3284541f1c1a7da62fec81daede11fa",
     sources: [
       "woodhouse-new/wrangler.jsonc",
       "woodhouse-new/src/worker.ts",

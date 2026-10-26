@@ -201,8 +201,16 @@ if (mode === "check") {
   const failures = [];
   const drift = [];
   for (const entry of manifest) {
-    const scenePath = join(REPO_ROOT, entry.scene.replace(/^\//, ""));
-    const previewPath = join(REPO_ROOT, entry.preview.replace(/^\//, ""));
+    const scenePath = join(
+      REPO_ROOT,
+      "public",
+      entry.scene.replace(/^\//, ""),
+    );
+    const previewPath = join(
+      REPO_ROOT,
+      "public",
+      entry.preview.replace(/^\//, ""),
+    );
     try {
       const sceneBytes = await readFile(scenePath);
       assert.equal(hash(sceneBytes), entry.sceneSha256, "scene hash");
@@ -243,8 +251,9 @@ if (mode === "check") {
       2,
     ),
   );
-  if (failures.length || (strictSources && drift.length)) process.exitCode = 1;
-  process.exit(0);
+  process.exit(
+    failures.length || (strictSources && drift.length) ? 1 : 0,
+  );
 }
 
 const tool = await convertTool();

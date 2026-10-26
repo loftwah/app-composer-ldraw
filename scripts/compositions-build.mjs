@@ -148,8 +148,7 @@ if (mode === "check") {
     }
   }
   console.log(JSON.stringify({ mode, entries: manifest.length, failures }, null, 2));
-  if (failures.length) process.exitCode = 1;
-  process.exit(0);
+  process.exit(failures.length ? 1 : 0);
 }
 
 const tool = await converter();
