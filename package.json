@@ -37,19 +37,19 @@
   },
   "dependencies": {
     "@excalidraw/excalidraw": "0.18.1",
-    "@modelcontextprotocol/server": "2.3.1",
+    "@modelcontextprotocol/server": "2.4.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "zod": "4.6.7"
   },
   "devDependencies": {
-    "@modelcontextprotocol/client": "2.3.1",
+    "@modelcontextprotocol/client": "2.4.0",
     "@types/react": "18.3.31",
     "@types/react-dom": "18.3.7",
-    "playwright": "1.62.1",
+    "playwright": "1.65.0",
     "prettier": "3.9.10",
     "typescript": "6.0.3",
-    "vite": "8.3.5",
-    "wrangler": "4.143.1"
+    "vite": "8.3.6",
+    "wrangler": "4.158.0"
   }
 }
