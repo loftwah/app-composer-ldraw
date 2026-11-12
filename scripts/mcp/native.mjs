@@ -373,14 +373,15 @@ export function applyOperations(input, operations, artwork = new Map()) {
         const measured = measureText(operation.text, fontSize);
         const container = scene.elements.find((entry) => entry.id === element.containerId);
         const rectangular = container?.type === "rectangle";
-        const maxWidth = rectangular ? container.width - 10 : element.width;
+        const boxWidth = rectangular ? container.width - 10 : element.width;
+        const fixedWidth = element.autoResize === false;
+        const maxWidth = fixedWidth ? Math.min(boxWidth, element.width) : boxWidth;
         const maxHeight = rectangular ? container.height - 10 : element.height;
         const height = round(measured.lines * fontSize * (element.lineHeight ?? LINE_HEIGHT));
-        if ((container || element.autoResize === false) && measured.width > maxWidth)
+        if (((container || fixedWidth) && measured.width > maxWidth) ||
+            (container && height > maxHeight))
           throw new SceneRefusal("The text exceeds its current box. Shorten the label or resize it in the browser.");
-        if (container && height > maxHeight)
-          throw new SceneRefusal("The text exceeds its current box. Shorten the label or resize it in the browser.");
-        const width = element.autoResize === false ? element.width : measured.width;
+        const width = fixedWidth ? element.width : measured.width;
         if (container && container.type !== "arrow") {
           const horizontal = { left: 0, center: 0.5, right: 1 }[element.textAlign] ?? 0;
           const vertical = { top: 0, middle: 0.5, bottom: 1 }[element.verticalAlign] ?? 0;
