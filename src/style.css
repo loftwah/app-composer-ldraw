@@ -373,13 +373,6 @@ body.presenting {
   gap: 20px;
   padding: 16px 18px 12px;
 }
-.library-kicker {
-  margin: 0 0 3px;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.09em;
-  color: var(--accent);
-}
 .library-head h2 {
   margin: 0 0 4px;
   font-family: "Space Grotesk", system-ui, sans-serif;
@@ -874,6 +867,17 @@ body.presenting {
   flex: 1 1 auto;
   min-width: 110px;
   font-size: 11px;
+}
+.copy-image-status {
+  flex-basis: 100%;
+  color: var(--text);
+}
+.copy-image-status:empty {
+  position: absolute;
+}
+.preview .preview-actions button {
+  min-height: 44px;
+  font-size: inherit;
 }
 .preview-note {
   margin: 0;

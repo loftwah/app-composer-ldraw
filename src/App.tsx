@@ -38,6 +38,7 @@ import {
   placeNearViewport,
   sceneElementsForAdd,
 } from "./insertion.mjs";
+import { CopyImageButton } from "./CopyImageButton";
 import { LibraryDialog } from "./LibraryDialog";
 import {
   applyTheme,
@@ -1287,12 +1288,20 @@ export function App() {
           <div className="preview-image">
             <img src={preview.url} alt="Your drawing export" />
           </div>
-          <button
-            className="primary"
-            onClick={() => download(preview.blob, `drawing.${preview.kind}`)}
-          >
-            Download {preview.kind.toUpperCase()}
-          </button>
+          <div className="preview-actions">
+            <button
+              className="primary"
+              onClick={() => download(preview.blob, `drawing.${preview.kind}`)}
+            >
+              Download {preview.kind.toUpperCase()}
+            </button>
+            {preview.kind === "png" ? (
+              <CopyImageButton
+                image={() => preview.blob}
+                fallback="Download the PNG instead."
+              />
+            ) : null}
+          </div>
         </dialog>
       ) : null}
     </main>

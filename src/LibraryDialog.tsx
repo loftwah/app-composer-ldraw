@@ -10,6 +10,7 @@ import {
   architectureCatalogue,
   portfolioProjects,
 } from "./portfolio.mjs";
+import { CopyImageButton, imageFileAsPng } from "./CopyImageButton";
 import { BlockPreview } from "./BlockPreview";
 import {
   assetEntries,
@@ -121,7 +122,7 @@ function ProjectRail({
         onClick={() => setProject("recent")}
       >
         <span>Recently used</span>
-        <b>{recent.length}</b>
+        <b>{entries.filter((entry) => recent.includes(entryKey(entry))).length}</b>
       </button>
       {groups.map((group) => {
         const projects = portfolioProjects.filter(
@@ -223,16 +224,17 @@ export function LibraryDialog({
   );
 
   const visibleBlocks = useMemo(() => {
-    const needle = query.trim().toLowerCase();
-    return blocks.filter(
-      (item) =>
-        (collection === "all" || item.collection === collection) &&
-        (!needle ||
-          `${item.name} ${item.description} ${item.collection}`
-            .toLowerCase()
-            .includes(needle)),
-    );
-  }, [blocks, collection, query]);
+    const savedView = collection === "favourites" || collection === "recent";
+    const candidates = collection === "all" || savedView
+      ? blocks
+      : blocks.filter((item) => item.collection === collection);
+    return filterEntries(candidates, {
+      project: savedView ? collection : "all",
+      query,
+      favouriteIds: favourites,
+      recentIds: recent,
+    });
+  }, [blocks, collection, query, favourites, recent]);
 
   const currentList =
     tab === "artwork"
@@ -309,14 +311,8 @@ export function LibraryDialog({
       <div className="library-shell">
         <header className="library-head">
           <div>
-            <p className="library-kicker">YOUR COLLECTION, READY TO USE</p>
             <h2>Portfolio library</h2>
-            <p>
-              {assetEntries.length} real artwork and illustration assets ·{" "}
-              {architectureCatalogue.length} source-verified architecture
-              scenes · {blocks.length} editable blocks. Insert images
-              standalone, as a card, as a composition or open a native diagram.
-            </p>
+            <p>Find project artwork, editable diagrams and reusable blocks.</p>
           </div>
           <button
             className="library-close"
@@ -335,7 +331,7 @@ export function LibraryDialog({
               type="search"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Project, character, logo, screenshot, use…"
+              placeholder={tab === "blocks" ? "Search by task or block name…" : "Search by project, name or use…"}
             />
           </label>
           <div className="library-tabs" role="tablist" aria-label="Library type">
@@ -377,6 +373,22 @@ export function LibraryDialog({
               >
                 <span>All blocks</span>
                 <b>{blocks.length}</b>
+              </button>
+              <button
+                className={collection === "favourites" ? "active" : ""}
+                aria-pressed={collection === "favourites"}
+                onClick={() => setCollection("favourites")}
+              >
+                <span>Favourites</span>
+                <b>{blocks.filter((item) => favourites.has(entryKey(item))).length}</b>
+              </button>
+              <button
+                className={collection === "recent" ? "active" : ""}
+                aria-pressed={collection === "recent"}
+                onClick={() => setCollection("recent")}
+              >
+                <span>Recently used</span>
+                <b>{blocks.filter((item) => recent.includes(entryKey(item))).length}</b>
               </button>
               {blockCollections.map((key) => {
                 const label =
@@ -726,6 +738,13 @@ export function LibraryDialog({
                         Insert block
                       </button>
                     )}
+                    {tab === "artwork" ? (
+                      <CopyImageButton
+                        key={entryKey(selected)}
+                        image={() => imageFileAsPng(selected.file)}
+                        fallback="You can still insert it into the drawing."
+                      />
+                    ) : null}
                   </div>
 
                   {tab === "architecture" ? (
