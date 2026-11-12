@@ -406,17 +406,21 @@ function flow(id, x, y, labels, options = {}) {
         height,
       }),
     );
-    if (index < labels.length - 1)
-      elements.push(
-        arrow(
-          `${id}-arrow-${index + 1}`,
-          x + index * (width + gap) + width,
-          y + height / 2,
-          gap,
-          0,
-          { stroke: options.accent ?? ORANGE },
-        ),
+    if (index < labels.length - 1) {
+      const connector = arrow(
+        `${id}-arrow-${index + 1}`,
+        x + index * (width + gap) + width,
+        y + height / 2,
+        gap,
+        0,
+        { stroke: options.accent ?? ORANGE },
       );
+      if (options.bind) {
+        connector.start = { id: `${id}-${index + 1}` };
+        connector.end = { id: `${id}-${index + 2}` };
+      }
+      elements.push(connector);
+    }
   });
   return elements;
 }
@@ -690,7 +694,14 @@ const workflowStarters = [
     height: 102,
     elements: [
       text(`${key}-title`, 0, 0, name, { size: 24, color: accent }),
-      ...flow(key, 0, 42, stages, { width: 168, gap: 24, height: 60, accent, tint }),
+      ...flow(key, 0, 42, stages, {
+        width: 168,
+        gap: 24,
+        height: 60,
+        accent,
+        tint,
+        bind: true,
+      }),
     ],
   };
 });

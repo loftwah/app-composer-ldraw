@@ -43,10 +43,9 @@ export function CopyImageButton({
     try {
       // Start the write in the click handler, while user activation is live.
       const png = Promise.resolve(image());
-      const write = navigator.clipboard.write([
-        new ClipboardItem({ "image/png": png }),
-      ]);
-      await Promise.all([png, write]);
+      // A synchronous clipboard failure can leave the conversion in flight.
+      void png.catch(() => undefined);
+      await navigator.clipboard.write([new ClipboardItem({ "image/png": png })]);
       setStatus("PNG copied to clipboard.");
     } catch {
       setStatus(`Could not copy the image. ${fallback}`);
