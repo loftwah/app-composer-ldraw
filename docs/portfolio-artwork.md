@@ -1,6 +1,6 @@
 # Portfolio artwork in LDraw
 
-Generated 26 October 2026 by `scripts/catalogue.mjs`. The maintained record is `catalogue/assets.json`; this page and `src/portfolio.mjs` are generated from it. 95 local WebP assets cover 18 projects.
+Generated 26 October 2026 by `scripts/catalogue.mjs`. The maintained record is `catalogue/assets.json`; this page and `src/portfolio.mjs` are generated from it. 108 local WebP assets cover 18 projects.
 
 The library inserts the local WebP derived from the owning project. Source paths and both SHA-256 values travel with the record and into native image `customData`. Approval language is deliberately literal: `approved` is never substituted for `documented`, `current`, `candidate` or `sample`.
 
@@ -19,7 +19,7 @@ The library inserts the local WebP derived from the owning project. Source paths
 | Project | Group | Brand state | Artwork | Architecture |
 | --- | --- | --- | ---: | --- |
 | App Composer | Apps | approved-identity | 6 | source-verified scene |
-| LDraw | Apps | authored-identity | 3 | source-verified scene |
+| LDraw | Apps | authored-identity | 16 | source-verified scene |
 | Paperwork | Apps | documented | 4 | source-verified scene |
 | Here / there | Apps | documented | 4 | source-verified scene |
 | Linkarooie | Apps | qualified | 5 | source-verified scene |
@@ -49,7 +49,20 @@ The library inserts the local WebP derived from the owning project. Source paths
 | App Composer | Templates | App Composer product card — Make software. Keep it yours. | approved | `/portfolio/composer-product-card.webp` 1200×630 | `app-composer/public/brand/campaign/product-og-20261022b.jpg` | `0ed47d3fea06…` |
 | App Composer | Templates | PHP2Shell campaign — The approved orange editorial campaign | approved | `/portfolio/composer-php2shell.webp` 1200×630 | `app-composer/public/brand/campaign/php2shell-australia-20261022b-1200x630.jpg` | `5193fac292eb…` |
 | LDraw | Logos | LDraw mark — Drafting L on a charcoal tile | current | `/portfolio/ldraw-mark.webp` 64×64 | `public/brand/ldraw-mark.svg` | `d1cc04890d28…` |
+| LDraw | Icons | Access gate symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-shield-lock.webp` 192×192 | `catalogue/source/tabler/shield-lock.svg` | `bcc4099982df…` |
+| LDraw | Icons | Artwork symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-photo.webp` 192×192 | `catalogue/source/tabler/photo.svg` | `a71ca0a3b87f…` |
+| LDraw | Icons | Browser symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-browser.webp` 192×192 | `catalogue/source/tabler/browser.svg` | `9b28c3d1df70…` |
+| LDraw | Icons | Checklist symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-list-check.webp` 192×192 | `catalogue/source/tabler/list-check.svg` | `d98b085b0546…` |
+| LDraw | Icons | Cloud symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-cloud.webp` 192×192 | `catalogue/source/tabler/cloud.svg` | `575f2b915db8…` |
+| LDraw | Icons | Database symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-database.webp` 192×192 | `catalogue/source/tabler/database.svg` | `f2e3b7e8c845…` |
+| LDraw | Icons | Deployment symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-rocket.webp` 192×192 | `catalogue/source/tabler/rocket.svg` | `c0e929826735…` |
+| LDraw | Icons | Gamepad symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-device-gamepad-2.webp` 192×192 | `catalogue/source/tabler/device-gamepad-2.svg` | `8eea6ed405d3…` |
+| LDraw | Icons | Phone symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-device-mobile.webp` 192×192 | `catalogue/source/tabler/device-mobile.svg` | `5047957142c0…` |
+| LDraw | Icons | Pull request symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-git-pull-request.webp` 192×192 | `catalogue/source/tabler/git-pull-request.svg` | `2a61ca5a6187…` |
+| LDraw | Icons | Server symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-server.webp` 192×192 | `catalogue/source/tabler/server.svg` | `889d21d00a35…` |
+| LDraw | Icons | Webhook symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-webhook.webp` 192×192 | `catalogue/source/tabler/webhook.svg` | `ac09d11fe961…` |
 | LDraw | Screenshots | LDraw workspace — Editable drawing, real portfolio blocks | documented | `/portfolio/ldraw-workspace.webp` 1200×833 | `app-composer/public/brand/apps/ldraw-workspace-fa7a2ab6171c-010cfbd2-r2-1440.webp` | `325323e80c4c…` |
+| LDraw | Illustrations | From sketch to software — A notebook, modular blocks and a working screen | documented | `/portfolio/idea-to-software.webp` 1200×600 | `catalogue/source/idea-to-software.png` | `81407aa901d0…` |
 | LDraw | Templates | LDraw share card — The editor beside its text identity | documented | `/portfolio/ldraw-share.webp` 1200×630 | `app-composer/public/brand/apps/ldraw-share-fa7a2ab6171c-010cfbd2-r2.png` | `15248624ad58…` |
 | Paperwork | Icons | Paperwork icon — Document, ink and a clear action | documented | `/portfolio/paperwork-icon.webp` 64×64 | `app-composer-paperwork/public/icon.svg` | `75b36c679c60…` |
 | Paperwork | Screenshots | Paperwork editor — Real fields, ink and a fictional document | documented | `/portfolio/paperwork-editor.webp` 1200×917 | `app-composer/public/paperwork/editor-20261024-compact.webp` | `041b4a7eb61f…` |
@@ -238,6 +251,174 @@ The library inserts the local WebP derived from the owning project. Source paths
 - Tags: ldraw, mark, logo, drafting, favicon, identity
 - Note: Original agent-designed LDraw identity built for this release under the owner's product direction. It is not copied from Death Note and is not an AI-generated character. Owner taste approval of the final mark is not separately recorded.
 
+### Access gate symbol
+
+- Project: LDraw
+- Category: Icons
+- Status: MIT-licensed symbol (`documented`)
+- Credit: Tabler Icons · MIT
+- Source: `catalogue/source/tabler/shield-lock.svg` (adapted MIT icon)
+- Source SHA-256: `bcc4099982df627a393ad7f5231f6f990cbb2b6bdae0a07502d74b7b75199d77`
+- Derivative: `/portfolio/tabler-shield-lock.webp` (192×192), SHA-256 `fc2f706ea1935b8bf4d1d58e7b8eef9d29fc3de4a861687994a759c89149b5a1`
+- Thumbnail: `/portfolio/thumbs/tabler-shield-lock.webp`
+- Intended use: Mark an authentication or permissions boundary.
+- Tags: tabler, symbol, auth, security, permissions
+- Note: Outline shield-lock from Tabler Icons v3.49.0, icons/outline/shield-lock.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. Full MIT notice in /licenses/Tabler-MIT.txt.
+
+### Artwork symbol
+
+- Project: LDraw
+- Category: Icons
+- Status: MIT-licensed symbol (`documented`)
+- Credit: Tabler Icons · MIT
+- Source: `catalogue/source/tabler/photo.svg` (adapted MIT icon)
+- Source SHA-256: `a71ca0a3b87fdbd03ea5e717934187384ce97f4d8b458da880d92ace00e76d14`
+- Derivative: `/portfolio/tabler-photo.webp` (192×192), SHA-256 `fc2f706ea1935b8bf4d1d58e7b8eef9d29fc3de4a861687994a759c89149b5a1`
+- Thumbnail: `/portfolio/thumbs/tabler-photo.webp`
+- Intended use: Mark an image, asset handoff or media slot.
+- Tags: tabler, symbol, asset, media, screenshot
+- Note: Outline photo from Tabler Icons v3.49.0, icons/outline/photo.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. Full MIT notice in /licenses/Tabler-MIT.txt.
+
+### Browser symbol
+
+- Project: LDraw
+- Category: Icons
+- Status: MIT-licensed symbol (`documented`)
+- Credit: Tabler Icons · MIT
+- Source: `catalogue/source/tabler/browser.svg` (adapted MIT icon)
+- Source SHA-256: `9b28c3d1df70ebdd2d1c552367def4698eb3e6e7d8bab4ff02b348bf3be3b82c`
+- Derivative: `/portfolio/tabler-browser.webp` (192×192), SHA-256 `fc2f706ea1935b8bf4d1d58e7b8eef9d29fc3de4a861687994a759c89149b5a1`
+- Thumbnail: `/portfolio/thumbs/tabler-browser.webp`
+- Intended use: Represent a web visitor or browser boundary.
+- Tags: tabler, symbol, frontend, visitor
+- Note: Outline browser from Tabler Icons v3.49.0, icons/outline/browser.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. Full MIT notice in /licenses/Tabler-MIT.txt.
+
+### Checklist symbol
+
+- Project: LDraw
+- Category: Icons
+- Status: MIT-licensed symbol (`documented`)
+- Credit: Tabler Icons · MIT
+- Source: `catalogue/source/tabler/list-check.svg` (adapted MIT icon)
+- Source SHA-256: `d98b085b0546e54e95058a843cd495c3514596b1b5abcae1708c906b55b79980`
+- Derivative: `/portfolio/tabler-list-check.webp` (192×192), SHA-256 `fc2f706ea1935b8bf4d1d58e7b8eef9d29fc3de4a861687994a759c89149b5a1`
+- Thumbnail: `/portfolio/thumbs/tabler-list-check.webp`
+- Intended use: Mark acceptance evidence or a release checklist.
+- Tags: tabler, symbol, verification, check, evidence
+- Note: Outline list-check from Tabler Icons v3.49.0, icons/outline/list-check.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. Full MIT notice in /licenses/Tabler-MIT.txt.
+
+### Cloud symbol
+
+- Project: LDraw
+- Category: Icons
+- Status: MIT-licensed symbol (`documented`)
+- Credit: Tabler Icons · MIT
+- Source: `catalogue/source/tabler/cloud.svg` (adapted MIT icon)
+- Source SHA-256: `575f2b915db8c33912da99a8cf763b9cbc50ed1c790c511709513ee05bf5d3c2`
+- Derivative: `/portfolio/tabler-cloud.webp` (192×192), SHA-256 `fc2f706ea1935b8bf4d1d58e7b8eef9d29fc3de4a861687994a759c89149b5a1`
+- Thumbnail: `/portfolio/thumbs/tabler-cloud.webp`
+- Intended use: Show a hosting or edge infrastructure boundary.
+- Tags: tabler, symbol, edge, cloudflare, infrastructure
+- Note: Outline cloud from Tabler Icons v3.49.0, icons/outline/cloud.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. Full MIT notice in /licenses/Tabler-MIT.txt.
+
+### Database symbol
+
+- Project: LDraw
+- Category: Icons
+- Status: MIT-licensed symbol (`documented`)
+- Credit: Tabler Icons · MIT
+- Source: `catalogue/source/tabler/database.svg` (adapted MIT icon)
+- Source SHA-256: `f2e3b7e8c845a784404ca9db0d9c2b969ea0b48e4a745229d299be03e56976b4`
+- Derivative: `/portfolio/tabler-database.webp` (192×192), SHA-256 `fc2f706ea1935b8bf4d1d58e7b8eef9d29fc3de4a861687994a759c89149b5a1`
+- Thumbnail: `/portfolio/thumbs/tabler-database.webp`
+- Intended use: Show a persistent store such as D1 or PostgreSQL.
+- Tags: tabler, symbol, d1, sql, storage
+- Note: Outline database from Tabler Icons v3.49.0, icons/outline/database.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. Full MIT notice in /licenses/Tabler-MIT.txt.
+
+### Deployment symbol
+
+- Project: LDraw
+- Category: Icons
+- Status: MIT-licensed symbol (`documented`)
+- Credit: Tabler Icons · MIT
+- Source: `catalogue/source/tabler/rocket.svg` (adapted MIT icon)
+- Source SHA-256: `c0e929826735c73f1d95ddecf4c90ea5cba9c6ea3c87cb72061593ed85ac3760`
+- Derivative: `/portfolio/tabler-rocket.webp` (192×192), SHA-256 `fc2f706ea1935b8bf4d1d58e7b8eef9d29fc3de4a861687994a759c89149b5a1`
+- Thumbnail: `/portfolio/thumbs/tabler-rocket.webp`
+- Intended use: Mark when a reviewed revision is published.
+- Tags: tabler, symbol, release, publish, production
+- Note: Outline rocket from Tabler Icons v3.49.0, icons/outline/rocket.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. Full MIT notice in /licenses/Tabler-MIT.txt.
+
+### Gamepad symbol
+
+- Project: LDraw
+- Category: Icons
+- Status: MIT-licensed symbol (`documented`)
+- Credit: Tabler Icons · MIT
+- Source: `catalogue/source/tabler/device-gamepad-2.svg` (adapted MIT icon)
+- Source SHA-256: `8eea6ed405d3ac9ca1f4ffe22f8a2857e6f67f99fc7d5b07379b954e31a3f107`
+- Derivative: `/portfolio/tabler-device-gamepad-2.webp` (192×192), SHA-256 `fc2f706ea1935b8bf4d1d58e7b8eef9d29fc3de4a861687994a759c89149b5a1`
+- Thumbnail: `/portfolio/thumbs/tabler-device-gamepad-2.webp`
+- Intended use: Mark player input or an interactive playtest step.
+- Tags: tabler, symbol, player, game, playtest
+- Note: Outline device-gamepad-2 from Tabler Icons v3.49.0, icons/outline/device-gamepad-2.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. Full MIT notice in /licenses/Tabler-MIT.txt.
+
+### Phone symbol
+
+- Project: LDraw
+- Category: Icons
+- Status: MIT-licensed symbol (`documented`)
+- Credit: Tabler Icons · MIT
+- Source: `catalogue/source/tabler/device-mobile.svg` (adapted MIT icon)
+- Source SHA-256: `5047957142c0d4e5b93d7116c8d32e0fb713e2195468a3498816b51aea359b27`
+- Derivative: `/portfolio/tabler-device-mobile.webp` (192×192), SHA-256 `fc2f706ea1935b8bf4d1d58e7b8eef9d29fc3de4a861687994a759c89149b5a1`
+- Thumbnail: `/portfolio/thumbs/tabler-device-mobile.webp`
+- Intended use: Mark a touch journey or a phone acceptance step.
+- Tags: tabler, symbol, mobile, touch, device
+- Note: Outline device-mobile from Tabler Icons v3.49.0, icons/outline/device-mobile.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. Full MIT notice in /licenses/Tabler-MIT.txt.
+
+### Pull request symbol
+
+- Project: LDraw
+- Category: Icons
+- Status: MIT-licensed symbol (`documented`)
+- Credit: Tabler Icons · MIT
+- Source: `catalogue/source/tabler/git-pull-request.svg` (adapted MIT icon)
+- Source SHA-256: `2a61ca5a61876c8d04bf5c916d09d1642795dd61860d44aa36abeea391b6821c`
+- Derivative: `/portfolio/tabler-git-pull-request.webp` (192×192), SHA-256 `fc2f706ea1935b8bf4d1d58e7b8eef9d29fc3de4a861687994a759c89149b5a1`
+- Thumbnail: `/portfolio/thumbs/tabler-git-pull-request.webp`
+- Intended use: Mark a review and integration step.
+- Tags: tabler, symbol, git, review, merge
+- Note: Outline git-pull-request from Tabler Icons v3.49.0, icons/outline/git-pull-request.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. Full MIT notice in /licenses/Tabler-MIT.txt.
+
+### Server symbol
+
+- Project: LDraw
+- Category: Icons
+- Status: MIT-licensed symbol (`documented`)
+- Credit: Tabler Icons · MIT
+- Source: `catalogue/source/tabler/server.svg` (adapted MIT icon)
+- Source SHA-256: `889d21d00a359b832c1984cf07fc540864bfae27dd9634909dd12c9a433b74f0`
+- Derivative: `/portfolio/tabler-server.webp` (192×192), SHA-256 `fc2f706ea1935b8bf4d1d58e7b8eef9d29fc3de4a861687994a759c89149b5a1`
+- Thumbnail: `/portfolio/thumbs/tabler-server.webp`
+- Intended use: Mark a service, Worker or backend runtime.
+- Tags: tabler, symbol, worker, backend, service
+- Note: Outline server from Tabler Icons v3.49.0, icons/outline/server.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. Full MIT notice in /licenses/Tabler-MIT.txt.
+
+### Webhook symbol
+
+- Project: LDraw
+- Category: Icons
+- Status: MIT-licensed symbol (`documented`)
+- Credit: Tabler Icons · MIT
+- Source: `catalogue/source/tabler/webhook.svg` (adapted MIT icon)
+- Source SHA-256: `ac09d11fe9611b8001e07dc993ec72430aa292419f10c4d5c9c2d71eaf771bca`
+- Derivative: `/portfolio/tabler-webhook.webp` (192×192), SHA-256 `fc2f706ea1935b8bf4d1d58e7b8eef9d29fc3de4a861687994a759c89149b5a1`
+- Thumbnail: `/portfolio/thumbs/tabler-webhook.webp`
+- Intended use: Show event delivery or a notification destination.
+- Tags: tabler, symbol, event, notification, discord
+- Note: Outline webhook from Tabler Icons v3.49.0, icons/outline/webhook.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. Full MIT notice in /licenses/Tabler-MIT.txt.
+
 ### LDraw workspace
 
 - Project: LDraw
@@ -251,6 +432,20 @@ The library inserts the local WebP derived from the owning project. Source paths
 - Intended use: Show the real editor in a portfolio, architecture or onboarding explanation.
 - Tags: ldraw, screenshot, workspace, dark, excalidraw, capture
 - Note: Actual deployed LDraw workspace with the Creator journey example. Source fa7a2ab, capture provenance retained in Composer. No owner approval claimed for the capture.
+
+### From sketch to software
+
+- Project: LDraw
+- Category: Illustrations
+- Status: Original generated illustration (`documented`)
+- Credit: LDraw · generated with Codex ImageGen
+- Source: `catalogue/source/idea-to-software.png` (Codex ImageGen)
+- Source SHA-256: `81407aa901d02ae7aa900e3feff41b195a07f9e3a8d60d063159b17b3795c7c3`
+- Derivative: `/portfolio/idea-to-software.webp` (1200×600), SHA-256 `bc748d52d84891754da64d03b9871770a0f4685a23fd599a6fa55f4ae5647d20`
+- Thumbnail: `/portfolio/thumbs/idea-to-software.webp`
+- Intended use: Open a product walkthrough or explain the journey from an initial sketch to a working app.
+- Tags: illustration, design, delivery, onboarding, imagegen
+- Note: Original generated resource for LDraw. See docs/workspace-resources.md for the exact prompt and provenance.
 
 ### LDraw share card
 

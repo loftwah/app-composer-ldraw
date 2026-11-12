@@ -30,6 +30,11 @@ export const LIME_TINT = "#ECFCCB";
 
 export const collections = [
   {
+    id: "workflows",
+    label: "Workflow starters",
+    description: "Editable starting points for planning, delivery and review.",
+  },
+  {
     id: "apps",
     label: "Apps",
     description: "Editable cards for the maintained portfolio apps.",
@@ -401,17 +406,21 @@ function flow(id, x, y, labels, options = {}) {
         height,
       }),
     );
-    if (index < labels.length - 1)
-      elements.push(
-        arrow(
-          `${id}-arrow-${index + 1}`,
-          x + index * (width + gap) + width,
-          y + height / 2,
-          gap,
-          0,
-          { stroke: options.accent ?? ORANGE },
-        ),
+    if (index < labels.length - 1) {
+      const connector = arrow(
+        `${id}-arrow-${index + 1}`,
+        x + index * (width + gap) + width,
+        y + height / 2,
+        gap,
+        0,
+        { stroke: options.accent ?? ORANGE },
       );
+      if (options.bind) {
+        connector.start = { id: `${id}-${index + 1}` };
+        connector.end = { id: `${id}-${index + 2}` };
+      }
+      elements.push(connector);
+    }
   });
   return elements;
 }
@@ -609,8 +618,97 @@ function storageStack(id, x, y, accent = BLUE) {
   return elements;
 }
 
+const workflowStarters = [
+  {
+    id: "app-wiring",
+    name: "App wiring map",
+    description: "Architecture starter for a browser, app, service binding and owned data.",
+    stages: ["Browser", "App boundary", "Service binding", "Owned data"],
+    accent: BLUE,
+    tint: BLUE_TINT,
+  },
+  {
+    id: "release-verification",
+    name: "Release verification",
+    description: "Production checklist for an exact revision and a rollback point.",
+    stages: ["Review revision", "Deploy", "Verify live flow", "Record evidence"],
+    accent: GREEN,
+    tint: GREEN_TINT,
+  },
+  {
+    id: "incident-response",
+    name: "Incident response",
+    description: "Outage triage, mitigation, rollback and recovery.",
+    stages: ["Confirm impact", "Choose mitigation", "Verify recovery", "Record timeline"],
+    accent: ORANGE,
+    tint: ORANGE_TINT,
+  },
+  {
+    id: "player-journey",
+    name: "Player journey",
+    description: "Playtest a game loop, from first decision through the result and retry.",
+    stages: ["Enter match", "Make a choice", "Read result", "Retry or exit"],
+    accent: VIOLET,
+    tint: VIOLET_TINT,
+  },
+  {
+    id: "onboarding-journey",
+    name: "First-run journey",
+    description: "Product onboarding, first success and return path.",
+    stages: ["Arrive", "Pick a task", "Finish first task", "Return later"],
+    accent: BLUE,
+    tint: BLUE_TINT,
+  },
+  {
+    id: "publication-review",
+    name: "Publication review",
+    description: "Editorial and artwork handoff for provenance, approval and public checks.",
+    stages: ["Draft", "Check sources", "Approve and publish", "Inspect public view"],
+    accent: VIOLET,
+    tint: VIOLET_TINT,
+  },
+  {
+    id: "data-recovery",
+    name: "Data recovery drill",
+    description: "Save, restore and verify in an isolated environment.",
+    stages: ["Export backup", "Restore in isolation", "Compare records", "Record gaps"],
+    accent: BLUE,
+    tint: BLUE_TINT,
+  },
+  {
+    id: "agent-handoff",
+    name: "Agent handoff",
+    description: "Define the goal, authorized workspace, editable output and human review.",
+    stages: ["Define scope", "Read sources", "Produce draft", "Review and resume"],
+    accent: GREEN,
+    tint: GREEN_TINT,
+  },
+].map(({ id, name, description, stages, accent, tint }) => {
+  const key = `workflow-${id}`;
+  return {
+    id: key,
+    name,
+    description,
+    collection: "workflows",
+    width: 744,
+    height: 102,
+    elements: [
+      text(`${key}-title`, 0, 0, name, { size: 24, color: accent }),
+      ...flow(key, 0, 42, stages, {
+        width: 168,
+        gap: 24,
+        height: 60,
+        accent,
+        tint,
+        bind: true,
+      }),
+    ],
+  };
+});
+
 /** Library items, grouped by the collection ids above. */
 export const librarySpecs = [
+  ...workflowStarters,
   ...apps.map((app) => ({
     id: `apps-${app.key}`,
     name: app.title,

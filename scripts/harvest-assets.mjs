@@ -41,6 +41,11 @@ const mode = args.includes("--write")
   : args.includes("--discover")
     ? "discover"
     : "check";
+const idsIndex = args.indexOf("--ids");
+const requestedIds = idsIndex < 0 ? [] : (args[idsIndex + 1] ?? "").split(",");
+if (requestedIds.some((id) => !id) || (mode === "discover" && requestedIds.length))
+  throw new Error("Use --ids with a comma-separated list of asset IDs in write or check mode.");
+
 const rootIndex = args.indexOf("--repos-root");
 const reposRoot = resolve(
   rootIndex >= 0 ? args[rootIndex + 1] : join(repoRoot, ".."),
@@ -205,11 +210,17 @@ if (mode === "discover") {
   process.exit(0);
 }
 
+for (const id of requestedIds)
+  if (!entries.some((entry) => entry.id === id))
+    throw new Error(`Unknown asset ID: ${id}`);
+const selected = requestedIds.length
+  ? entries.filter((entry) => requestedIds.includes(entry.id))
+  : entries;
 const tool = mode === "write" ? await converter() : null;
 const failures = [];
 const changes = [];
 
-for (const entry of entries) {
+for (const entry of selected) {
   const source = sourcePath(entry);
   const output = join(repoRoot, "public", entry.file.replace(/^\//, ""));
   const thumb = join(repoRoot, "public", entry.thumb.replace(/^\//, ""));

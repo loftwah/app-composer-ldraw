@@ -74,6 +74,9 @@ export function searchHaystack(entry) {
   return normalise(
     [
       entry.title,
+      entry.name,
+      entry.description,
+      entry.collection,
       entry.subtitle,
       entry.project,
       entry.projectLabel,
@@ -142,13 +145,17 @@ function storage() {
   }
 }
 
+function limitFor(key) {
+  return key === LIBRARY_RECENT_KEY ? RECENT_LIMIT : Infinity;
+}
+
 export function readStringArray(key) {
   const store = storage();
   if (!store) return [];
   try {
     const value = JSON.parse(store.getItem(key) ?? "[]");
     return Array.isArray(value)
-      ? value.filter((entry) => typeof entry === "string").slice(0, RECENT_LIMIT)
+      ? value.filter((entry) => typeof entry === "string").slice(0, limitFor(key))
       : [];
   } catch {
     return [];
@@ -159,7 +166,7 @@ export function writeStringArray(key, values) {
   const store = storage();
   if (!store) return false;
   try {
-    store.setItem(key, JSON.stringify(values.slice(0, RECENT_LIMIT)));
+    store.setItem(key, JSON.stringify(values.slice(0, limitFor(key))));
     return true;
   } catch {
     return false;
