@@ -100,6 +100,12 @@ test("the portfolio library is substantial, local, searchable and hashed", () =>
   }
 });
 
+test("the technical symbols have distinct derivatives instead of identical tiles", () => {
+  const symbols = portfolioArtwork.filter((item) => item.id.startsWith("tabler-"));
+  assert.ok(symbols.length >= 12);
+  assert.equal(new Set(symbols.map((item) => item.derivativeSha)).size, symbols.length);
+});
+
 test("all maintained projects are discoverable, including architecture-only work", () => {
   const expected = [
     "composer",
