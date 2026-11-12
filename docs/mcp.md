@@ -31,11 +31,11 @@ URL, an account, a database or a cloud dependency.
 | --- | --- |
 | Node.js | `>=22 <23` (verified 22.23.4) |
 | pnpm | 12.8.1 (`packageManager`) |
-| `@modelcontextprotocol/server` | 2.3.1 (same pin as Composer) |
-| `@modelcontextprotocol/client` | 2.3.1 (devDependency, tests only) |
+| `@modelcontextprotocol/server` | 2.4.0 |
+| `@modelcontextprotocol/client` | 2.4.0 (devDependency, tests only) |
 | `zod` | 4.6.7 (same pin as Composer) |
 | `@excalidraw/excalidraw` | 0.18.1 |
-| `playwright` | 1.62.1 (devDependency, render only) |
+| `playwright` | 1.65.0 (devDependency, render only) |
 
 `pnpm-lock.yaml` pins integrity for each of these. No extra service, account or
 paid plan is involved.
@@ -112,7 +112,7 @@ Any other MCP stdio client works if it can launch a command with arguments:
 ### Verified in this run
 
 - `tests/mcp-server.test.mjs` starts the real entrypoint through the official
-  `StdioClientTransport` and `Client` from `@modelcontextprotocol/client@2.3.1`,
+  `StdioClientTransport` and `Client` from `@modelcontextprotocol/client@2.4.0`,
   lists tools, creates a scene and closes the connection.
 - Codex CLI 0.145.0 read the config above from a throw-away `CODEX_HOME` and
   reported the server as an enabled `stdio` transport. No model-driven Codex or
@@ -131,6 +131,27 @@ Any other MCP stdio client works if it can launch a command with arguments:
 
 `--read-only` registers only the first two tools. Tool annotations mark
 `readOnlyHint`, `destructiveHint: false` and `openWorldHint: false` accordingly.
+
+### Branded portfolio diagrams
+
+`ldraw_list_templates` includes the reviewed artwork IDs agents can insert,
+with credits, allowed uses and derivative hashes. Use project workflow blocks
+such as `workflow-composer-creator-hub` and `workflow-bubbles-quickstart`
+for editable, project-specific scenes.
+
+```json
+{ "op": "insert_artwork", "artwork": "composer-mark", "id": "project-mark", "x": 12, "y": -140, "maxSize": 100 }
+```
+
+The adapter embeds the verified bundled WebP, preserves its aspect ratio,
+and writes catalogue provenance onto the image element. Image approval and
+redistribution rights follow the catalogue record. For example, the Bubbles
+mark is available for internal portfolio diagrams. The editing operation
+accepts a catalogue ID and the scene's current revision.
+
+Label edits retain the element's native style, group, frame and container.
+The local authoring tool measures Excalifont text. For other fonts or a label
+that needs a larger fixed box, resize or edit the text in the browser.
 
 ### `ldraw_create_scene`
 

@@ -32,6 +32,7 @@ export const RECENT_LIMIT: number;
 export const SPECIAL_PROJECTS: Array<{ key: string; label: string }>;
 export const assetEntries: LibraryEntry[];
 export const libraryProjects: Array<Record<string, unknown>>;
+export function artworkCustomData(item: PortfolioArtwork): Record<string, string>;
 export function entryKey(entry: any): string;
 export function countForProject(projectKey: string, entries?: any[]): number | null;
 export function searchHaystack(entry: any): string;

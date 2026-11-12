@@ -39,6 +39,7 @@ import {
   sceneElementsForAdd,
 } from "./insertion.mjs";
 import { CopyImageButton } from "./CopyImageButton";
+import { artworkCustomData } from "./library.mjs";
 import { LibraryDialog } from "./LibraryDialog";
 import {
   applyTheme,
@@ -698,20 +699,6 @@ export function App() {
     } finally {
       setBusy(false);
     }
-  }
-
-  function artworkCustomData(item: any) {
-    return {
-      ldrawArtworkId: item.id,
-      ldrawProject: item.project,
-      ldrawCategory: item.category,
-      ldrawStatus: item.status,
-      ldrawStatusLabel: item.statusLabel,
-      ldrawSource: item.source,
-      ldrawSourceSha256: item.sourceSha,
-      ldrawDerivativeSha256: item.derivativeSha,
-      ldrawUse: item.use,
-    };
   }
 
   async function insertArtwork(

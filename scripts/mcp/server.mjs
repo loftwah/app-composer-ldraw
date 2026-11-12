@@ -23,6 +23,7 @@ import {
   unresolvedBrandIdentities,
 } from "../../src/diagrams.mjs";
 import { validateScene } from "../../src/scene.mjs";
+import { agentArtworkCatalogue, loadAgentArtwork } from "./artwork.mjs";
 import { metricsProvenance } from "./metrics.mjs";
 import {
   applyOperations,
@@ -39,6 +40,7 @@ import {
   prepareOutputDirectory,
   readSceneFile,
   replaceSceneFile,
+  requireSceneRevision,
   WorkspaceRefusal,
   writeRenderOutputs,
 } from "./workspace.mjs";
@@ -81,6 +83,16 @@ const operationSchema = z.discriminatedUnion("op", [
       idPrefix: idSchema,
       x: coordinate,
       y: coordinate,
+    })
+    .strict(),
+  z
+    .object({
+      op: z.literal("insert_artwork"),
+      artwork: idSchema,
+      id: idSchema,
+      x: coordinate,
+      y: coordinate,
+      maxSize: z.number().int().min(32).max(1200).optional(),
     })
     .strict(),
   z
@@ -167,6 +179,7 @@ function catalog() {
   return {
     presets,
     blocks,
+    artwork: agentArtworkCatalogue(),
     collections,
     projects: Object.entries(projects).map(([key, value]) => ({
       key,
@@ -360,9 +373,9 @@ export function createLdrawMcp(
     server.registerTool(
       "ldraw_modify_scene",
       {
-        title: "Edit labels or insert existing blocks safely",
+        title: "Edit labels and insert reviewed blocks or artwork",
         description:
-          "Apply 1-40 bounded operations (insert_block, add_label, update_label) to an existing native scene. Requires the exact sha256 revision from ldraw_read_scene; a stale revision is refused and the newer file is left byte-identical. All operations must succeed before one atomic replacement. Element IDs, existing artwork and image bytes are preserved. Editing tool.",
+          "Apply 1-40 bounded operations (insert_block, insert_artwork, add_label, update_label) to an existing native scene. Requires the exact sha256 revision from ldraw_read_scene; a stale revision is refused and the newer file is left byte-identical. All operations must succeed before one atomic replacement. Element IDs, existing artwork and image bytes are preserved. Editing tool.",
         inputSchema: z
           .object({
             path: z.string().min(1).max(300),
@@ -379,8 +392,14 @@ export function createLdrawMcp(
       },
       handler(async ({ path, expectedRevision, operations }) => {
         const current = await readSceneFile(workspace, path);
+        const expected = normaliseRevision(expectedRevision);
+        requireSceneRevision(expected, current.revision);
         const scene = validateStandalone(current.text);
-        const applied = applyOperations(scene, operations);
+        const artwork = new Map();
+        for (const operation of operations)
+          if (operation.op === "insert_artwork" && !artwork.has(operation.artwork))
+            artwork.set(operation.artwork, await loadAgentArtwork(operation.artwork));
+        const applied = applyOperations(scene, operations, artwork);
         const written = await replaceSceneFile(
           workspace,
           path,

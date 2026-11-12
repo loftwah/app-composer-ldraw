@@ -35,6 +35,11 @@ export const collections = [
     description: "Editable starting points for planning, delivery and review.",
   },
   {
+    id: "portfolio-workflows",
+    label: "Portfolio workflows",
+    description: "Editable flows for the projects we ship, playtest and maintain.",
+  },
+  {
     id: "apps",
     label: "Apps",
     description: "Editable cards for the maintained portfolio apps.",
@@ -683,15 +688,101 @@ const workflowStarters = [
     accent: GREEN,
     tint: GREEN_TINT,
   },
-].map(({ id, name, description, stages, accent, tint }) => {
+];
+
+const portfolioWorkflows = [
+  {
+    id: "composer-creator-hub",
+    name: "App Composer Creator Hub",
+    description: "Publish a moderated visitor contribution through Guestbook and Linkarooie.",
+    stages: ["Send postcard", "Review privately", "Approve source", "Feature on profile"],
+    note: "Check: hiding the source removes the contribution from both public views.",
+    accent: ORANGE,
+    tint: ORANGE_TINT,
+  },
+  {
+    id: "composer-owner-handoff",
+    name: "App Composer owner handoff",
+    description: "Turn a stack specification into a release owned by the creator.",
+    stages: ["Export stack spec", "Confirm targets", "Deploy provider", "Verify consumer"],
+    note: "Record the exact deployed revision of each independent app.",
+    accent: ORANGE,
+    tint: ORANGE_TINT,
+  },
+  {
+    id: "woodhouse-delivery",
+    name: "Woodhouse delivery receipt",
+    description: "Follow a verified release through the portfolio showcase.",
+    stages: ["Record main SHA", "Verify live flow", "Post outcome", "Read back receipt"],
+    note: "Record the source, Worker version and what the live check covered.",
+    accent: LIME,
+    tint: LIME_TINT,
+  },
+  {
+    id: "protocol11-room",
+    name: "Protocol 11 room journey",
+    description: "Walk through a card match with an invitation and a readable result.",
+    stages: ["Create or join", "Take a turn", "Read result", "Return to lobby"],
+    note: "Playtest whether players can explain the result and find their next action.",
+    accent: VIOLET,
+    tint: VIOLET_TINT,
+  },
+  {
+    id: "bubbles-quickstart",
+    name: "Bubbles Quick Start",
+    description: "Use an actual board to explain aim, match and the penalty.",
+    stages: ["Read the board", "Aim the shot", "Make a match", "Check the penalty"],
+    note: "Use real board captures. Keep presentation mascots outside gameplay.",
+    accent: "#2563EB",
+    tint: BLUE_TINT,
+  },
+  {
+    id: "shoalshot-field-log",
+    name: "Shoalshot field log",
+    description: "Trace a local-first dive through the specimen and share card.",
+    stages: ["Read conditions", "Place a shot", "Review specimen", "Share the card"],
+    note: "Check the actual touch journey and the exported card on the target device.",
+    accent: "#B45309",
+    tint: "#FEF3C7",
+  },
+  {
+    id: "fighter-mission",
+    name: "Fighter mission playtest",
+    description: "Walk through the charge strip, squad battle and mission progression.",
+    stages: ["Choose squad", "Read charge strip", "Resolve battle", "Verify progress"],
+    note: "Reopen the game and check the same save after the result.",
+    accent: "#4338CA",
+    tint: "#E0E7FF",
+  },
+  {
+    id: "loftwahfm-radio",
+    name: "LoftwahFM radio handoff",
+    description: "Track a radio edition from catalogue through real listener playback.",
+    stages: ["Prepare edition", "Publish media", "Verify player", "Check game radio"],
+    note: "Record the actual playback device and the shared catalogue revision.",
+    accent: "#BE185D",
+    tint: "#FCE7F3",
+  },
+  {
+    id: "paperwork-fill-print",
+    name: "Paperwork fill and print",
+    description: "Validate a fictional form through local PDF editing and print output.",
+    stages: ["Open local PDF", "Fill real fields", "Export the file", "Reopen and print"],
+    note: "Use a fictional fixture and inspect the saved widgets and rendered pages.",
+    accent: "#9A3412",
+    tint: "#FFEDD5",
+  },
+];
+
+function workflowBlock({ id, name, description, stages, accent, tint, note }, collection) {
   const key = `workflow-${id}`;
   return {
     id: key,
     name,
     description,
-    collection: "workflows",
+    collection,
     width: 744,
-    height: 102,
+    height: note ? 142 : 102,
     elements: [
       text(`${key}-title`, 0, 0, name, { size: 24, color: accent }),
       ...flow(key, 0, 42, stages, {
@@ -702,13 +793,15 @@ const workflowStarters = [
         tint,
         bind: true,
       }),
+      ...(note ? [text(`${key}-note`, 0, 116, note, { size: 15, color: MUTED })] : []),
     ],
   };
-});
+}
 
 /** Library items, grouped by the collection ids above. */
 export const librarySpecs = [
-  ...workflowStarters,
+  ...workflowStarters.map((starter) => workflowBlock(starter, "workflows")),
+  ...portfolioWorkflows.map((starter) => workflowBlock(starter, "portfolio-workflows")),
   ...apps.map((app) => ({
     id: `apps-${app.key}`,
     name: app.title,

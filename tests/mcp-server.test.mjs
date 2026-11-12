@@ -283,6 +283,50 @@ test("create, read, modify and validate round trip keeps ids and refuses stale e
   }
 });
 
+test("reviewed artwork is embedded once with provenance and rejected edits are atomic", async (t) => {
+  const root = await workspace(t);
+  const { client, close } = await connect(root);
+  try {
+    const catalogue = await client.callTool({ name: "ldraw_list_templates", arguments: {} });
+    const assets = catalogue.structuredContent.artwork;
+    assert(assets.some((item) => item.id === "composer-mark" && item.status === "approved"));
+    assert(assets.some((item) => item.id === "bubbles-icon" && item.status === "approved"));
+    assert(!assets.some((item) => item.id === "protocol11-card-back"));
+    const path = "branded.excalidraw";
+    const created = await client.callTool({ name: "ldraw_create_scene", arguments: {
+      path, template: "workflow-composer-creator-hub",
+    } });
+    assert.equal(created.isError, undefined);
+    const image = { op: "insert_artwork", artwork: "composer-mark", id: "mark", x: 0, y: -160 };
+    const modified = await client.callTool({ name: "ldraw_modify_scene", arguments: {
+      path, expectedRevision: created.structuredContent.revision,
+      operations: [image, { ...image, id: "second-mark", x: 220 }],
+    } });
+    assert.equal(modified.isError, undefined, modified.content[0].text);
+    const file = join(root, path);
+    const snapshot = await readFile(file, "utf8");
+    const drawing = JSON.parse(snapshot);
+    assert.equal(Object.keys(drawing.files).length, 1);
+    for (const id of ["mark", "second-mark"]) {
+      const element = drawing.elements.find((item) => item.id === id);
+      assert.equal(element.customData.ldrawArtworkId, "composer-mark");
+      assert.match(drawing.files[element.fileId].dataURL, /^data:image\/webp;base64,/);
+    }
+    const refused = await client.callTool({ name: "ldraw_modify_scene", arguments: {
+      path, expectedRevision: modified.structuredContent.revision,
+      operations: [
+        { ...image, id: "would-be-added" },
+        { ...image, id: "unreviewed", artwork: "protocol11-card-back" },
+      ],
+    } });
+    assert.equal(refused.isError, true);
+    assert.match(refused.content[0].text, /reviewed artwork ID/);
+    assert.equal(await readFile(file, "utf8"), snapshot);
+  } finally {
+    await close();
+  }
+});
+
 test("malformed, remote-asset and missing-image scenes fail without a write", async (t) => {
   const root = await workspace(t);
   const { client, close } = await connect(root);
