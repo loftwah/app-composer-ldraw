@@ -11,7 +11,8 @@ labels describe example workflows and can be edited in Excalidraw.
 - The 12 technical symbols come from [Tabler Icons v3.49.0](https://github.com/tabler/tabler-icons/tree/bbed884d15354b5cebf2493371f20dc2d5e83eaf/icons/outline).
   Each catalogue entry names its upstream file and revision. Local SVGs retain
   the original geometry, with a larger viewport output size, graphite stroke
-  and an ivory backing. [The MIT notice](../public/licenses/Tabler-MIT.txt)
+  and an ivory backing. The PNG masters were rendered with macOS ImageIO
+  (`sips -s format png <source.svg> --out <master.png>`). [The MIT notice](../public/licenses/Tabler-MIT.txt)
   accompanies the local WebP images and thumbnails.
 - **From sketch to software** was generated with Codex's built-in ImageGen on
   12 November 2026. The [original source](../catalogue/source/idea-to-software.png)

@@ -49,18 +49,18 @@ The library inserts the local WebP derived from the owning project. Source paths
 | App Composer | Templates | App Composer product card — Make software. Keep it yours. | approved | `/portfolio/composer-product-card.webp` 1200×630 | `app-composer/public/brand/campaign/product-og-20261022b.jpg` | `0ed47d3fea06…` |
 | App Composer | Templates | PHP2Shell campaign — The approved orange editorial campaign | approved | `/portfolio/composer-php2shell.webp` 1200×630 | `app-composer/public/brand/campaign/php2shell-australia-20261022b-1200x630.jpg` | `5193fac292eb…` |
 | LDraw | Logos | LDraw mark — Drafting L on a charcoal tile | current | `/portfolio/ldraw-mark.webp` 64×64 | `public/brand/ldraw-mark.svg` | `d1cc04890d28…` |
-| LDraw | Icons | Access gate symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-shield-lock.webp` 192×192 | `catalogue/source/tabler/shield-lock.svg` | `bcc4099982df…` |
-| LDraw | Icons | Artwork symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-photo.webp` 192×192 | `catalogue/source/tabler/photo.svg` | `a71ca0a3b87f…` |
-| LDraw | Icons | Browser symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-browser.webp` 192×192 | `catalogue/source/tabler/browser.svg` | `9b28c3d1df70…` |
-| LDraw | Icons | Checklist symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-list-check.webp` 192×192 | `catalogue/source/tabler/list-check.svg` | `d98b085b0546…` |
-| LDraw | Icons | Cloud symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-cloud.webp` 192×192 | `catalogue/source/tabler/cloud.svg` | `575f2b915db8…` |
-| LDraw | Icons | Database symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-database.webp` 192×192 | `catalogue/source/tabler/database.svg` | `f2e3b7e8c845…` |
-| LDraw | Icons | Deployment symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-rocket.webp` 192×192 | `catalogue/source/tabler/rocket.svg` | `c0e929826735…` |
-| LDraw | Icons | Gamepad symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-device-gamepad-2.webp` 192×192 | `catalogue/source/tabler/device-gamepad-2.svg` | `8eea6ed405d3…` |
-| LDraw | Icons | Phone symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-device-mobile.webp` 192×192 | `catalogue/source/tabler/device-mobile.svg` | `5047957142c0…` |
-| LDraw | Icons | Pull request symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-git-pull-request.webp` 192×192 | `catalogue/source/tabler/git-pull-request.svg` | `2a61ca5a6187…` |
-| LDraw | Icons | Server symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-server.webp` 192×192 | `catalogue/source/tabler/server.svg` | `889d21d00a35…` |
-| LDraw | Icons | Webhook symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-webhook.webp` 192×192 | `catalogue/source/tabler/webhook.svg` | `ac09d11fe961…` |
+| LDraw | Icons | Access gate symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-shield-lock.webp` 192×192 | `catalogue/source/tabler/shield-lock.png` | `9421c36c2d86…` |
+| LDraw | Icons | Artwork symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-photo.webp` 192×192 | `catalogue/source/tabler/photo.png` | `737c75fd913f…` |
+| LDraw | Icons | Browser symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-browser.webp` 192×192 | `catalogue/source/tabler/browser.png` | `c2654b746f06…` |
+| LDraw | Icons | Checklist symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-list-check.webp` 192×192 | `catalogue/source/tabler/list-check.png` | `695a955a8e7b…` |
+| LDraw | Icons | Cloud symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-cloud.webp` 192×192 | `catalogue/source/tabler/cloud.png` | `bd6744ffcc8b…` |
+| LDraw | Icons | Database symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-database.webp` 192×192 | `catalogue/source/tabler/database.png` | `6b9d5a7a3cf5…` |
+| LDraw | Icons | Deployment symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-rocket.webp` 192×192 | `catalogue/source/tabler/rocket.png` | `a2a7f46b180c…` |
+| LDraw | Icons | Gamepad symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-device-gamepad-2.webp` 192×192 | `catalogue/source/tabler/device-gamepad-2.png` | `df9545c730d9…` |
+| LDraw | Icons | Phone symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-device-mobile.webp` 192×192 | `catalogue/source/tabler/device-mobile.png` | `6f6d42d9031a…` |
+| LDraw | Icons | Pull request symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-git-pull-request.webp` 192×192 | `catalogue/source/tabler/git-pull-request.png` | `717b36fbefbb…` |
+| LDraw | Icons | Server symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-server.webp` 192×192 | `catalogue/source/tabler/server.png` | `ef8bd6ec76d4…` |
+| LDraw | Icons | Webhook symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-webhook.webp` 192×192 | `catalogue/source/tabler/webhook.png` | `959bd9bda41a…` |
 | LDraw | Screenshots | LDraw workspace — Editable drawing, real portfolio blocks | documented | `/portfolio/ldraw-workspace.webp` 1200×833 | `app-composer/public/brand/apps/ldraw-workspace-fa7a2ab6171c-010cfbd2-r2-1440.webp` | `325323e80c4c…` |
 | LDraw | Illustrations | From sketch to software — A notebook, modular blocks and a working screen | documented | `/portfolio/idea-to-software.webp` 1200×600 | `catalogue/source/idea-to-software.png` | `81407aa901d0…` |
 | LDraw | Templates | LDraw share card — The editor beside its text identity | documented | `/portfolio/ldraw-share.webp` 1200×630 | `app-composer/public/brand/apps/ldraw-share-fa7a2ab6171c-010cfbd2-r2.png` | `15248624ad58…` |
@@ -257,13 +257,13 @@ The library inserts the local WebP derived from the owning project. Source paths
 - Category: Icons
 - Status: MIT-licensed symbol (`documented`)
 - Credit: Tabler Icons · MIT
-- Source: `catalogue/source/tabler/shield-lock.svg` (adapted MIT icon)
-- Source SHA-256: `bcc4099982df627a393ad7f5231f6f990cbb2b6bdae0a07502d74b7b75199d77`
-- Derivative: `/portfolio/tabler-shield-lock.webp` (192×192), SHA-256 `fc2f706ea1935b8bf4d1d58e7b8eef9d29fc3de4a861687994a759c89149b5a1`
+- Source: `catalogue/source/tabler/shield-lock.png` (adapted MIT icon)
+- Source SHA-256: `9421c36c2d86ce120e9a5640a51bfa5a274b036ade296620c7064222c01bcf97`
+- Derivative: `/portfolio/tabler-shield-lock.webp` (192×192), SHA-256 `af8dc65c56d74c9aa14b9ca409d1177621b38ab1b4811f3ed2254905060e31cf`
 - Thumbnail: `/portfolio/thumbs/tabler-shield-lock.webp`
 - Intended use: Mark an authentication or permissions boundary.
 - Tags: tabler, symbol, auth, security, permissions
-- Note: Outline shield-lock from Tabler Icons v3.49.0, icons/outline/shield-lock.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. Full MIT notice in /licenses/Tabler-MIT.txt.
+- Note: Outline shield-lock from Tabler Icons v3.49.0, icons/outline/shield-lock.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. The adapted SVG is beside the local PNG master. Full MIT notice in /licenses/Tabler-MIT.txt.
 
 ### Artwork symbol
 
@@ -271,13 +271,13 @@ The library inserts the local WebP derived from the owning project. Source paths
 - Category: Icons
 - Status: MIT-licensed symbol (`documented`)
 - Credit: Tabler Icons · MIT
-- Source: `catalogue/source/tabler/photo.svg` (adapted MIT icon)
-- Source SHA-256: `a71ca0a3b87fdbd03ea5e717934187384ce97f4d8b458da880d92ace00e76d14`
-- Derivative: `/portfolio/tabler-photo.webp` (192×192), SHA-256 `fc2f706ea1935b8bf4d1d58e7b8eef9d29fc3de4a861687994a759c89149b5a1`
+- Source: `catalogue/source/tabler/photo.png` (adapted MIT icon)
+- Source SHA-256: `737c75fd913fdfcaf98aa963333947a9713d3e8857165b71ae982b6a6284c243`
+- Derivative: `/portfolio/tabler-photo.webp` (192×192), SHA-256 `4b42f58919e2cbeeda2b3eb1d571cc69e4bca7d4e0e9bdd39a380b4e587c895b`
 - Thumbnail: `/portfolio/thumbs/tabler-photo.webp`
 - Intended use: Mark an image, asset handoff or media slot.
 - Tags: tabler, symbol, asset, media, screenshot
-- Note: Outline photo from Tabler Icons v3.49.0, icons/outline/photo.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. Full MIT notice in /licenses/Tabler-MIT.txt.
+- Note: Outline photo from Tabler Icons v3.49.0, icons/outline/photo.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. The adapted SVG is beside the local PNG master. Full MIT notice in /licenses/Tabler-MIT.txt.
 
 ### Browser symbol
 
@@ -285,13 +285,13 @@ The library inserts the local WebP derived from the owning project. Source paths
 - Category: Icons
 - Status: MIT-licensed symbol (`documented`)
 - Credit: Tabler Icons · MIT
-- Source: `catalogue/source/tabler/browser.svg` (adapted MIT icon)
-- Source SHA-256: `9b28c3d1df70ebdd2d1c552367def4698eb3e6e7d8bab4ff02b348bf3be3b82c`
-- Derivative: `/portfolio/tabler-browser.webp` (192×192), SHA-256 `fc2f706ea1935b8bf4d1d58e7b8eef9d29fc3de4a861687994a759c89149b5a1`
+- Source: `catalogue/source/tabler/browser.png` (adapted MIT icon)
+- Source SHA-256: `c2654b746f06f194c11dc51005453da71f2821c72af12f49c16d700397cf769c`
+- Derivative: `/portfolio/tabler-browser.webp` (192×192), SHA-256 `8ea2bf6c5a293365371602ce342f83e6a1bc338dc10b2e6fc2d4492862a2cf55`
 - Thumbnail: `/portfolio/thumbs/tabler-browser.webp`
 - Intended use: Represent a web visitor or browser boundary.
 - Tags: tabler, symbol, frontend, visitor
-- Note: Outline browser from Tabler Icons v3.49.0, icons/outline/browser.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. Full MIT notice in /licenses/Tabler-MIT.txt.
+- Note: Outline browser from Tabler Icons v3.49.0, icons/outline/browser.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. The adapted SVG is beside the local PNG master. Full MIT notice in /licenses/Tabler-MIT.txt.
 
 ### Checklist symbol
 
@@ -299,13 +299,13 @@ The library inserts the local WebP derived from the owning project. Source paths
 - Category: Icons
 - Status: MIT-licensed symbol (`documented`)
 - Credit: Tabler Icons · MIT
-- Source: `catalogue/source/tabler/list-check.svg` (adapted MIT icon)
-- Source SHA-256: `d98b085b0546e54e95058a843cd495c3514596b1b5abcae1708c906b55b79980`
-- Derivative: `/portfolio/tabler-list-check.webp` (192×192), SHA-256 `fc2f706ea1935b8bf4d1d58e7b8eef9d29fc3de4a861687994a759c89149b5a1`
+- Source: `catalogue/source/tabler/list-check.png` (adapted MIT icon)
+- Source SHA-256: `695a955a8e7be0b385141bd0204ee4f6e67f1d1eb8756580ee36f8a4559c0155`
+- Derivative: `/portfolio/tabler-list-check.webp` (192×192), SHA-256 `0cb0dcb2ba5bc03a5f2b42e0efcc54c5f0fc25abcaf61641227ba5bec6bacfc6`
 - Thumbnail: `/portfolio/thumbs/tabler-list-check.webp`
 - Intended use: Mark acceptance evidence or a release checklist.
 - Tags: tabler, symbol, verification, check, evidence
-- Note: Outline list-check from Tabler Icons v3.49.0, icons/outline/list-check.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. Full MIT notice in /licenses/Tabler-MIT.txt.
+- Note: Outline list-check from Tabler Icons v3.49.0, icons/outline/list-check.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. The adapted SVG is beside the local PNG master. Full MIT notice in /licenses/Tabler-MIT.txt.
 
 ### Cloud symbol
 
@@ -313,13 +313,13 @@ The library inserts the local WebP derived from the owning project. Source paths
 - Category: Icons
 - Status: MIT-licensed symbol (`documented`)
 - Credit: Tabler Icons · MIT
-- Source: `catalogue/source/tabler/cloud.svg` (adapted MIT icon)
-- Source SHA-256: `575f2b915db8c33912da99a8cf763b9cbc50ed1c790c511709513ee05bf5d3c2`
-- Derivative: `/portfolio/tabler-cloud.webp` (192×192), SHA-256 `fc2f706ea1935b8bf4d1d58e7b8eef9d29fc3de4a861687994a759c89149b5a1`
+- Source: `catalogue/source/tabler/cloud.png` (adapted MIT icon)
+- Source SHA-256: `bd6744ffcc8bca176522aa86133163175dcca01109c5a0be9aefc09356b519a2`
+- Derivative: `/portfolio/tabler-cloud.webp` (192×192), SHA-256 `c62a3f5eb70baf2314a5cf2d3a202570fc072f781e33a50012c3dd17ddb079c1`
 - Thumbnail: `/portfolio/thumbs/tabler-cloud.webp`
 - Intended use: Show a hosting or edge infrastructure boundary.
 - Tags: tabler, symbol, edge, cloudflare, infrastructure
-- Note: Outline cloud from Tabler Icons v3.49.0, icons/outline/cloud.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. Full MIT notice in /licenses/Tabler-MIT.txt.
+- Note: Outline cloud from Tabler Icons v3.49.0, icons/outline/cloud.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. The adapted SVG is beside the local PNG master. Full MIT notice in /licenses/Tabler-MIT.txt.
 
 ### Database symbol
 
@@ -327,13 +327,13 @@ The library inserts the local WebP derived from the owning project. Source paths
 - Category: Icons
 - Status: MIT-licensed symbol (`documented`)
 - Credit: Tabler Icons · MIT
-- Source: `catalogue/source/tabler/database.svg` (adapted MIT icon)
-- Source SHA-256: `f2e3b7e8c845a784404ca9db0d9c2b969ea0b48e4a745229d299be03e56976b4`
-- Derivative: `/portfolio/tabler-database.webp` (192×192), SHA-256 `fc2f706ea1935b8bf4d1d58e7b8eef9d29fc3de4a861687994a759c89149b5a1`
+- Source: `catalogue/source/tabler/database.png` (adapted MIT icon)
+- Source SHA-256: `6b9d5a7a3cf5930d018e3320f87cd4ae5698b3824bff1b19bf67d8e102d46ea7`
+- Derivative: `/portfolio/tabler-database.webp` (192×192), SHA-256 `3480a10abf66c54ce69c93a053e2c4c4dc4d3280505371d20aa091fefed036c3`
 - Thumbnail: `/portfolio/thumbs/tabler-database.webp`
 - Intended use: Show a persistent store such as D1 or PostgreSQL.
 - Tags: tabler, symbol, d1, sql, storage
-- Note: Outline database from Tabler Icons v3.49.0, icons/outline/database.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. Full MIT notice in /licenses/Tabler-MIT.txt.
+- Note: Outline database from Tabler Icons v3.49.0, icons/outline/database.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. The adapted SVG is beside the local PNG master. Full MIT notice in /licenses/Tabler-MIT.txt.
 
 ### Deployment symbol
 
@@ -341,13 +341,13 @@ The library inserts the local WebP derived from the owning project. Source paths
 - Category: Icons
 - Status: MIT-licensed symbol (`documented`)
 - Credit: Tabler Icons · MIT
-- Source: `catalogue/source/tabler/rocket.svg` (adapted MIT icon)
-- Source SHA-256: `c0e929826735c73f1d95ddecf4c90ea5cba9c6ea3c87cb72061593ed85ac3760`
-- Derivative: `/portfolio/tabler-rocket.webp` (192×192), SHA-256 `fc2f706ea1935b8bf4d1d58e7b8eef9d29fc3de4a861687994a759c89149b5a1`
+- Source: `catalogue/source/tabler/rocket.png` (adapted MIT icon)
+- Source SHA-256: `a2a7f46b180c0504a51b74cd18080c701e78ee4dbb2b57676f4f7221b88adfcd`
+- Derivative: `/portfolio/tabler-rocket.webp` (192×192), SHA-256 `88c12f739eab47f0323a25251a12f13fc8258874307ffdd365297a063ad4a08b`
 - Thumbnail: `/portfolio/thumbs/tabler-rocket.webp`
 - Intended use: Mark when a reviewed revision is published.
 - Tags: tabler, symbol, release, publish, production
-- Note: Outline rocket from Tabler Icons v3.49.0, icons/outline/rocket.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. Full MIT notice in /licenses/Tabler-MIT.txt.
+- Note: Outline rocket from Tabler Icons v3.49.0, icons/outline/rocket.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. The adapted SVG is beside the local PNG master. Full MIT notice in /licenses/Tabler-MIT.txt.
 
 ### Gamepad symbol
 
@@ -355,13 +355,13 @@ The library inserts the local WebP derived from the owning project. Source paths
 - Category: Icons
 - Status: MIT-licensed symbol (`documented`)
 - Credit: Tabler Icons · MIT
-- Source: `catalogue/source/tabler/device-gamepad-2.svg` (adapted MIT icon)
-- Source SHA-256: `8eea6ed405d3ac9ca1f4ffe22f8a2857e6f67f99fc7d5b07379b954e31a3f107`
-- Derivative: `/portfolio/tabler-device-gamepad-2.webp` (192×192), SHA-256 `fc2f706ea1935b8bf4d1d58e7b8eef9d29fc3de4a861687994a759c89149b5a1`
+- Source: `catalogue/source/tabler/device-gamepad-2.png` (adapted MIT icon)
+- Source SHA-256: `df9545c730d96d11b0bc9e36d2d5e777956a3b71d04c1afd5b954bfb22bcf079`
+- Derivative: `/portfolio/tabler-device-gamepad-2.webp` (192×192), SHA-256 `5994580f01f6b6e80c095820ddec67b84cebbe88cb1b41b078ecf55e05e98026`
 - Thumbnail: `/portfolio/thumbs/tabler-device-gamepad-2.webp`
 - Intended use: Mark player input or an interactive playtest step.
 - Tags: tabler, symbol, player, game, playtest
-- Note: Outline device-gamepad-2 from Tabler Icons v3.49.0, icons/outline/device-gamepad-2.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. Full MIT notice in /licenses/Tabler-MIT.txt.
+- Note: Outline device-gamepad-2 from Tabler Icons v3.49.0, icons/outline/device-gamepad-2.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. The adapted SVG is beside the local PNG master. Full MIT notice in /licenses/Tabler-MIT.txt.
 
 ### Phone symbol
 
@@ -369,13 +369,13 @@ The library inserts the local WebP derived from the owning project. Source paths
 - Category: Icons
 - Status: MIT-licensed symbol (`documented`)
 - Credit: Tabler Icons · MIT
-- Source: `catalogue/source/tabler/device-mobile.svg` (adapted MIT icon)
-- Source SHA-256: `5047957142c0d4e5b93d7116c8d32e0fb713e2195468a3498816b51aea359b27`
-- Derivative: `/portfolio/tabler-device-mobile.webp` (192×192), SHA-256 `fc2f706ea1935b8bf4d1d58e7b8eef9d29fc3de4a861687994a759c89149b5a1`
+- Source: `catalogue/source/tabler/device-mobile.png` (adapted MIT icon)
+- Source SHA-256: `6f6d42d9031af08c95e009e25a10968af1381ed41c69a29021ce9d62a367a8bf`
+- Derivative: `/portfolio/tabler-device-mobile.webp` (192×192), SHA-256 `492b28b88baf8ea41a65f2c5f0600c518507a25f20bc8ec92b3b028cd8bbefe4`
 - Thumbnail: `/portfolio/thumbs/tabler-device-mobile.webp`
 - Intended use: Mark a touch journey or a phone acceptance step.
 - Tags: tabler, symbol, mobile, touch, device
-- Note: Outline device-mobile from Tabler Icons v3.49.0, icons/outline/device-mobile.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. Full MIT notice in /licenses/Tabler-MIT.txt.
+- Note: Outline device-mobile from Tabler Icons v3.49.0, icons/outline/device-mobile.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. The adapted SVG is beside the local PNG master. Full MIT notice in /licenses/Tabler-MIT.txt.
 
 ### Pull request symbol
 
@@ -383,13 +383,13 @@ The library inserts the local WebP derived from the owning project. Source paths
 - Category: Icons
 - Status: MIT-licensed symbol (`documented`)
 - Credit: Tabler Icons · MIT
-- Source: `catalogue/source/tabler/git-pull-request.svg` (adapted MIT icon)
-- Source SHA-256: `2a61ca5a61876c8d04bf5c916d09d1642795dd61860d44aa36abeea391b6821c`
-- Derivative: `/portfolio/tabler-git-pull-request.webp` (192×192), SHA-256 `fc2f706ea1935b8bf4d1d58e7b8eef9d29fc3de4a861687994a759c89149b5a1`
+- Source: `catalogue/source/tabler/git-pull-request.png` (adapted MIT icon)
+- Source SHA-256: `717b36fbefbb2ee0c4545a5cc31832d22660b3966cfad0451c5f77aa489e0e57`
+- Derivative: `/portfolio/tabler-git-pull-request.webp` (192×192), SHA-256 `cca291bc8d79e3a0f0361e8bd7b6bf202ee20cd6a4eee7f756372a09dfcad935`
 - Thumbnail: `/portfolio/thumbs/tabler-git-pull-request.webp`
 - Intended use: Mark a review and integration step.
 - Tags: tabler, symbol, git, review, merge
-- Note: Outline git-pull-request from Tabler Icons v3.49.0, icons/outline/git-pull-request.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. Full MIT notice in /licenses/Tabler-MIT.txt.
+- Note: Outline git-pull-request from Tabler Icons v3.49.0, icons/outline/git-pull-request.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. The adapted SVG is beside the local PNG master. Full MIT notice in /licenses/Tabler-MIT.txt.
 
 ### Server symbol
 
@@ -397,13 +397,13 @@ The library inserts the local WebP derived from the owning project. Source paths
 - Category: Icons
 - Status: MIT-licensed symbol (`documented`)
 - Credit: Tabler Icons · MIT
-- Source: `catalogue/source/tabler/server.svg` (adapted MIT icon)
-- Source SHA-256: `889d21d00a359b832c1984cf07fc540864bfae27dd9634909dd12c9a433b74f0`
-- Derivative: `/portfolio/tabler-server.webp` (192×192), SHA-256 `fc2f706ea1935b8bf4d1d58e7b8eef9d29fc3de4a861687994a759c89149b5a1`
+- Source: `catalogue/source/tabler/server.png` (adapted MIT icon)
+- Source SHA-256: `ef8bd6ec76d4fdb72a5026414677b82ac3c26e341f57770d4e9b6b10f90ad873`
+- Derivative: `/portfolio/tabler-server.webp` (192×192), SHA-256 `904b1aba7734519820f5f2caf1d46f92839602de37c194ecfdf64d6b040a6128`
 - Thumbnail: `/portfolio/thumbs/tabler-server.webp`
 - Intended use: Mark a service, Worker or backend runtime.
 - Tags: tabler, symbol, worker, backend, service
-- Note: Outline server from Tabler Icons v3.49.0, icons/outline/server.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. Full MIT notice in /licenses/Tabler-MIT.txt.
+- Note: Outline server from Tabler Icons v3.49.0, icons/outline/server.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. The adapted SVG is beside the local PNG master. Full MIT notice in /licenses/Tabler-MIT.txt.
 
 ### Webhook symbol
 
@@ -411,13 +411,13 @@ The library inserts the local WebP derived from the owning project. Source paths
 - Category: Icons
 - Status: MIT-licensed symbol (`documented`)
 - Credit: Tabler Icons · MIT
-- Source: `catalogue/source/tabler/webhook.svg` (adapted MIT icon)
-- Source SHA-256: `ac09d11fe9611b8001e07dc993ec72430aa292419f10c4d5c9c2d71eaf771bca`
-- Derivative: `/portfolio/tabler-webhook.webp` (192×192), SHA-256 `fc2f706ea1935b8bf4d1d58e7b8eef9d29fc3de4a861687994a759c89149b5a1`
+- Source: `catalogue/source/tabler/webhook.png` (adapted MIT icon)
+- Source SHA-256: `959bd9bda41aee0a9cbbf649027782b81c3c84e2f75255cf4815598a1eff2528`
+- Derivative: `/portfolio/tabler-webhook.webp` (192×192), SHA-256 `202baac87eac8f1a91259b92620fa3da95fa240b269ac41725aa033b0407f61e`
 - Thumbnail: `/portfolio/thumbs/tabler-webhook.webp`
 - Intended use: Show event delivery or a notification destination.
 - Tags: tabler, symbol, event, notification, discord
-- Note: Outline webhook from Tabler Icons v3.49.0, icons/outline/webhook.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. Full MIT notice in /licenses/Tabler-MIT.txt.
+- Note: Outline webhook from Tabler Icons v3.49.0, icons/outline/webhook.svg at bbed884d15354b5cebf2493371f20dc2d5e83eaf. Resized and placed on an ivory tile. The adapted SVG is beside the local PNG master. Full MIT notice in /licenses/Tabler-MIT.txt.
 
 ### LDraw workspace
 

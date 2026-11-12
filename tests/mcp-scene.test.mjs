@@ -90,6 +90,30 @@ test("authored presets and blocks materialise as valid native scenes with stable
   );
 });
 
+test("workflow connectors keep both native bindings when an agent inserts a prefixed block", () => {
+  const input = buildSceneFromTemplate({ template: "composer-pipeline" }).scene;
+  const { scene } = applyOperations(input, [{
+    op: "insert_block",
+    block: "workflow-release-verification",
+    idPrefix: "rollout",
+    x: 120,
+    y: 240,
+  }]);
+  const elements = new Map(scene.elements.map((element) => [element.id, element]));
+  const prefix = "rollout-workflow-release-verification";
+  for (let index = 1; index <= 3; index++) {
+    const arrow = elements.get(`${prefix}-arrow-${index}`);
+    const from = elements.get(`${prefix}-${index}`);
+    const to = elements.get(`${prefix}-${index + 1}`);
+    assert.equal(arrow.startBinding.elementId, from.id);
+    assert.equal(arrow.endBinding.elementId, to.id);
+    for (const target of [from, to])
+      assert(target.boundElements.some((binding) =>
+        binding.id === arrow.id && binding.type === "arrow"));
+    assert.equal("start" in arrow || "end" in arrow, false);
+  }
+});
+
 test("chip labels become real editable text with measured bounds", () => {
   const scene = buildSceneFromTemplate({ template: "composer-pipeline" }).scene;
   const labels = scene.elements.filter((element) => element.type === "text");

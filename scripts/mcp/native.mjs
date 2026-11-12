@@ -106,9 +106,11 @@ export function materialise(
   { idPrefix, offsetX = 0, offsetY = 0, warnings = [] } = {},
 ) {
   const elements = [];
+  const connectors = [];
+  const scopedId = (id) => idPrefix ? `${idPrefix}-${id}` : id;
   for (const skeleton of skeletons) {
-    const { label, ...rest } = skeleton;
-    const id = idPrefix ? `${idPrefix}-${rest.id}` : rest.id;
+    const { label, start, end, ...rest } = skeleton;
+    const id = scopedId(rest.id);
     const x = (rest.x ?? 0) + offsetX;
     const y = (rest.y ?? 0) + offsetY;
     const geometry = {
@@ -155,7 +157,10 @@ export function materialise(
       const extra = Object.fromEntries(
         Object.entries(rest).filter(([key]) => !handled.has(key)),
       );
-      elements.push({ ...baseElement({ ...rest, id }, geometry), ...extra });
+      const element = { ...baseElement({ ...rest, id }, geometry), ...extra };
+      elements.push(element);
+      if (rest.type === "arrow" && (start || end))
+        connectors.push({ element, start, end });
     }
     if (label && rest.type !== "text") {
       const fontSize = label.fontSize ?? 15;
@@ -174,6 +179,20 @@ export function materialise(
           color: label.strokeColor ?? INK,
         }),
       );
+    }
+  }
+  if (connectors.length) {
+    const byId = new Map(elements.map((element) => [element.id, element]));
+    for (const { element, start, end } of connectors) {
+      for (const [key, endpoint] of [["startBinding", start], ["endBinding", end]]) {
+        if (!endpoint) continue;
+        const target = byId.get(scopedId(endpoint.id));
+        if (!target)
+          throw new SceneRefusal(`Missing connector target ${endpoint.id} for ${element.id}.`);
+        element[key] = { elementId: target.id, focus: 0, gap: 1 };
+        target.boundElements ??= [];
+        target.boundElements.push({ id: element.id, type: "arrow" });
+      }
     }
   }
   return elements;
