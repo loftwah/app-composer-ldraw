@@ -252,6 +252,10 @@ test("label edits preserve native container, frame, group and presentation state
     "textAlign", "verticalAlign", "strokeColor", "opacity", "link", "customData"])
     assert.deepEqual(revised[key], label[key], key);
   assert.deepEqual(result.scene.elements.find((element) => element.id === container.id), container);
+  assert(Math.abs(revised.x + revised.width / 2 - label.x - label.width / 2) < 0.01);
+  assert.throws(() => applyOperations(scene, [
+    { op: "update_label", id: label.id, text: "One\nTwo\nThree\nFour" },
+  ]), /exceeds its current box/);
   assert.equal(revised.originalText, "Owner brief");
 });
 

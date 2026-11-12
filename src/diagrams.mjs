@@ -733,7 +733,7 @@ const portfolioWorkflows = [
     description: "Use an actual board to explain aim, match and the penalty.",
     stages: ["Read the board", "Aim the shot", "Make a match", "Check the penalty"],
     note: "Use real board captures. Keep presentation mascots outside gameplay.",
-    accent: BLUE,
+    accent: "#2563EB",
     tint: BLUE_TINT,
   },
   {

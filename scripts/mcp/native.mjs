@@ -372,14 +372,26 @@ export function applyOperations(input, operations, artwork = new Map()) {
           throw new SceneRefusal("Edit this label in the browser to keep its font. The agent can measure Excalifont labels.");
         const measured = measureText(operation.text, fontSize);
         const container = scene.elements.find((entry) => entry.id === element.containerId);
-        const maxWidth = container?.type === "rectangle" ? container.width - 10 : element.width;
+        const rectangular = container?.type === "rectangle";
+        const maxWidth = rectangular ? container.width - 10 : element.width;
+        const maxHeight = rectangular ? container.height - 10 : element.height;
+        const height = round(measured.lines * fontSize * (element.lineHeight ?? LINE_HEIGHT));
         if ((container || element.autoResize === false) && measured.width > maxWidth)
           throw new SceneRefusal("The text exceeds its current box. Shorten the label or resize it in the browser.");
+        if (container && height > maxHeight)
+          throw new SceneRefusal("The text exceeds its current box. Shorten the label or resize it in the browser.");
+        const width = element.autoResize === false ? element.width : measured.width;
+        if (container && container.type !== "arrow") {
+          const horizontal = { left: 0, center: 0.5, right: 1 }[element.textAlign] ?? 0;
+          const vertical = { top: 0, middle: 0.5, bottom: 1 }[element.verticalAlign] ?? 0;
+          element.x = round(element.x + (element.width - width) * horizontal);
+          element.y = round(element.y + (element.height - height) * vertical);
+        }
         element.text = operation.text;
         element.originalText = operation.text;
         element.fontSize = fontSize;
-        if (element.autoResize !== false) element.width = measured.width;
-        element.height = round(measured.lines * fontSize * (element.lineHeight ?? LINE_HEIGHT));
+        element.width = width;
+        element.height = height;
       }
       if (operation.tone) element.strokeColor = TONES[operation.tone];
       element.version += 1;
