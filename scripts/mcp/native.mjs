@@ -20,6 +20,8 @@ import {
   ORANGE,
   presetBuilders,
 } from "../../src/diagrams.mjs";
+import { artworkCustomData } from "../../src/library.mjs";
+import { fitSize } from "../../src/insertion.mjs";
 import { validateScene } from "../../src/scene.mjs";
 import {
   FONT_FAMILY,
@@ -276,7 +278,7 @@ function blockBounds(elements) {
 }
 
 /** Bounded edits. Every operation is applied to a clone before one write. */
-export function applyOperations(input, operations) {
+export function applyOperations(input, operations, artwork = new Map()) {
   const scene = validateScene(structuredClone(input));
   const added = [];
   const updated = [];
@@ -306,6 +308,36 @@ export function applyOperations(input, operations) {
         scene.elements.push(element);
         added.push(element.id);
       }
+    } else if (operation.op === "insert_artwork") {
+      const asset = artwork.get(operation.artwork);
+      if (!asset) throw new SceneRefusal("Choose a reviewed artwork ID from ldraw_list_templates.");
+      const { item, dataURL } = asset;
+      const { id, x, y, maxSize = 240 } = operation;
+      if (!ID_PATTERN.test(id ?? "") || sceneHasElement(scene, id))
+        throw new SceneRefusal("Give the image a new lower-case element ID.");
+      const fileId = `ldraw-${item.derivativeSha}`;
+      scene.files ??= {};
+      const file = scene.files[fileId];
+      if (file && file.dataURL !== dataURL)
+        throw new SceneRefusal("An existing image file has that ID with different bytes.");
+      scene.files[fileId] ??= {
+        id: fileId,
+        mimeType: "image/webp",
+        dataURL,
+        created: AUTHORED_AT,
+        lastRetrieved: AUTHORED_AT,
+        version: 1,
+      };
+      const { width, height } = fitSize(item.width, item.height, maxSize, maxSize);
+      scene.elements.push({
+        ...baseElement({ id, type: "image", strokeColor: "transparent" }, { x, y, width, height }),
+        fileId,
+        status: "saved",
+        scale: [1, 1],
+        crop: null,
+        customData: artworkCustomData(item),
+      });
+      added.push(id);
     } else if (operation.op === "add_label") {
       if (!ID_PATTERN.test(operation.id ?? ""))
         throw new SceneRefusal(
@@ -333,19 +365,25 @@ export function applyOperations(input, operations) {
         throw new SceneRefusal("Only text labels can be updated by id.");
       if (element.isDeleted)
         throw new SceneRefusal("That label is deleted in the current scene.");
-      const next = toTextElement({
-        id: element.id,
-        text: operation.text,
-        x: element.x,
-        y: element.y,
-        fontSize: operation.fontSize ?? element.fontSize,
-        color: TONES[operation.tone ?? "ink"],
-      });
-      Object.assign(element, {
-        ...next,
-        version: element.version + 1,
-        versionNonce: stableSeed(`${element.id}:${element.version + 1}`),
-      });
+      const fontSize = operation.fontSize ?? element.fontSize;
+      const originalText = element.originalText ?? element.text;
+      if (operation.text !== originalText || fontSize !== element.fontSize) {
+        if (element.fontFamily !== FONT_FAMILY)
+          throw new SceneRefusal("Edit this label in the browser to keep its font. The agent can measure Excalifont labels.");
+        const measured = measureText(operation.text, fontSize);
+        const container = scene.elements.find((entry) => entry.id === element.containerId);
+        const maxWidth = container?.type === "rectangle" ? container.width - 10 : element.width;
+        if ((container || element.autoResize === false) && measured.width > maxWidth)
+          throw new SceneRefusal("The text exceeds its current box. Shorten the label or resize it in the browser.");
+        element.text = operation.text;
+        element.originalText = operation.text;
+        element.fontSize = fontSize;
+        if (element.autoResize !== false) element.width = measured.width;
+        element.height = round(measured.lines * fontSize * (element.lineHeight ?? LINE_HEIGHT));
+      }
+      if (operation.tone) element.strokeColor = TONES[operation.tone];
+      element.version += 1;
+      element.versionNonce = stableSeed(`${element.id}:${element.version}`);
       updated.push(element.id);
     } else {
       throw new SceneRefusal("Unsupported scene operation.");

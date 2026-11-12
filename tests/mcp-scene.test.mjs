@@ -228,6 +228,33 @@ test("bounded edits preserve existing ids and re-measure only changed text", () 
   );
 });
 
+test("label edits preserve native container, frame, group and presentation state", () => {
+  const { scene } = buildSceneFromTemplate({ template: "composer-pipeline" });
+  const label = scene.elements.find((element) => element.type === "text" && element.text === "Brief");
+  const container = scene.elements.find((element) => element.id === "composer-pipeline-1");
+  Object.assign(label, {
+    containerId: container.id,
+    groupIds: ["owner-group"],
+    frameId: "owner-frame",
+    angle: 0.1,
+    locked: true,
+    textAlign: "center",
+    verticalAlign: "middle",
+    strokeColor: "#047857",
+    opacity: 80,
+    link: "https://example.com",
+    customData: { owner: true },
+  });
+  container.boundElements = [{ id: label.id, type: "text" }];
+  const result = applyOperations(scene, [{ op: "update_label", id: label.id, text: "Owner brief" }]);
+  const revised = result.scene.elements.find((element) => element.id === label.id);
+  for (const key of ["containerId", "groupIds", "frameId", "angle", "locked",
+    "textAlign", "verticalAlign", "strokeColor", "opacity", "link", "customData"])
+    assert.deepEqual(revised[key], label[key], key);
+  assert.deepEqual(result.scene.elements.find((element) => element.id === container.id), container);
+  assert.equal(revised.originalText, "Owner brief");
+});
+
 test("unsafe or colliding edits are refused before anything changes", () => {
   const scene = buildSceneFromTemplate({ template: "composer-pipeline" }).scene;
   const snapshot = structuredClone(scene);

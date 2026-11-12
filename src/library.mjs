@@ -22,6 +22,20 @@ export const SPECIAL_PROJECTS = [
   { key: "recent", label: "Recently used" },
 ];
 
+export function artworkCustomData(item) {
+  return {
+    ldrawArtworkId: item.id,
+    ldrawProject: item.project,
+    ldrawCategory: item.category,
+    ldrawStatus: item.status,
+    ldrawStatusLabel: item.statusLabel,
+    ldrawSource: item.source,
+    ldrawSourceSha256: item.sourceSha,
+    ldrawDerivativeSha256: item.derivativeSha,
+    ldrawUse: item.use,
+  };
+}
+
 export function entryKey(entry) {
   const kind =
     entry.kind ??

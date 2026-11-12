@@ -36,7 +36,7 @@ never call an image service, and never invent a logo or palette.
 
 1. **Catalogue.** Call `ldraw_list_templates`. Note the presets, blocks,
    project architecture models (`arch-*`), 16:9 stages (`composition-*`),
-   collection ids, project topics, brand status and unresolved identities.
+   collection IDs, reviewed artwork IDs, project topics, brand status and unresolved identities.
 2. **Choose one purpose.** Decide the diagram's claim, audience and the labels
    that make it true. Prefer one readable idea over a dense wall of boxes.
 3. **Create.** Call `ldraw_create_scene` with a preset, block, architecture
@@ -44,7 +44,7 @@ never call an image service, and never invent a logo or palette.
    `x`/`y` origin. Give the file a stable, descriptive relative path.
 4. **Read.** Call `ldraw_read_scene` and keep the returned revision.
 5. **Compose.** Call `ldraw_modify_scene` with bounded operations:
-   `insert_block` for existing blocks (unique `idPrefix`), `add_label` for new
+   `insert_block` for existing blocks (unique `idPrefix`), `insert_artwork` for a reviewed catalogue image, `add_label` for new
    labels, `update_label` to revise existing text. Keep related elements
    aligned; leave breathing room between sections.
 6. **Render.** Call `ldraw_render_scene` with the same revision and an output

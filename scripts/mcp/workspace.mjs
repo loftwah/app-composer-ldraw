@@ -224,6 +224,13 @@ export async function createSceneFile(workspace, input, scene) {
  * Replace an existing scene only when its exact bytes still match the
  * revision the caller inspected. A stale edit leaves the newer file intact.
  */
+export function requireSceneRevision(expected, current) {
+  if (current !== expected)
+    throw new WorkspaceRefusal(
+      `The scene changed since it was read. Expected ${expected}, now ${current}. Call ldraw_read_scene, re-apply the change and retry; the newer file was not modified.`,
+    );
+}
+
 export async function replaceSceneFile(
   workspace,
   input,
@@ -231,10 +238,7 @@ export async function replaceSceneFile(
   scene,
 ) {
   const current = await readSceneFile(workspace, input);
-  if (current.revision !== expectedRevision)
-    refuse(
-      `The scene changed since it was read. Expected ${expectedRevision}, now ${current.revision}. Call ldraw_read_scene, re-apply the change and retry; the newer file was not modified.`,
-    );
+  requireSceneRevision(expectedRevision, current.revision);
   await assertRegularFileNotLink(current.target);
   const revision = await writeAtomic(current.target, scene);
   return {
