@@ -29,8 +29,8 @@ URL, an account, a database or a cloud dependency.
 
 | Component | Version |
 | --- | --- |
-| Node.js | `>=22 <23` (verified 22.23.4) |
-| pnpm | 12.8.1 (`packageManager`) |
+| Node.js | `>=22.23.5 <23 || >=24.22.3 <25 || >=26.13.1 <27` (default 26.13.1) |
+| pnpm | 12.19.0 (`packageManager`) |
 | `@modelcontextprotocol/server` | 2.4.0 |
 | `@modelcontextprotocol/client` | 2.4.0 (devDependency, tests only) |
 | `zod` | 4.6.7 (same pin as Composer) |
