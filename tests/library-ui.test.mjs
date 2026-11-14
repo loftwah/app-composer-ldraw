@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   assetEntries,
+  artworkCustomData,
   categoriesFor,
   entryKey,
   filterEntries,
@@ -9,6 +10,15 @@ import {
   pushRecent,
   statusTone,
 } from "../src/library.mjs";
+
+test("the LDraw Studio artwork remains insertable with its published provenance", () => {
+  const matches = filterEntries(assetEntries, { project: "ldraw", query: "line escapes" });
+  assert.equal(matches.length, 1);
+  const [asset] = matches;
+  assert.equal(asset.studioPage, "https://media.loftwah.com/p/N1wzgVkef0KjJmlM");
+  assert.equal(artworkCustomData(asset).ldrawStudioPage, asset.studioPage);
+  assert.equal(asset.sourceSha, "7758a17cd5e12dd15692ac6db8153e59387527697030d1605f9174119e72411b");
+});
 
 test("the browser can search by project, character, name and intended use", () => {
   const fizz = filterEntries(assetEntries, { query: "fizz mascot" });

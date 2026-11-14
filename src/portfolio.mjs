@@ -875,6 +875,39 @@ export const portfolioArtwork = [
     "tint": "#FFE8D9"
   },
   {
+    "id": "ldraw-line-studio",
+    "project": "ldraw",
+    "category": "illustration",
+    "title": "The line escapes the margin",
+    "subtitle": "From Woodhouse Share through Media Studio",
+    "source": "catalogue/source/ldraw-line-studio.png",
+    "sourceKind": "OpenAI Image API · Woodhouse commission",
+    "status": "documented",
+    "statusLabel": "Credited commissioned illustration",
+    "credit": "Woodhouse · gpt-image-2.6-flare · OpenAI Image API",
+    "note": "Woodhouse commission new-073, imported and published unchanged through Media Studio. Source https://woodhouse.loftwah.com/api/v1/assets/new-073; Studio asset asset_5aecf24dc01904de7b8d5855fa4e53fd19395c40d8b2343746bff7523d523bec. No generation or edit was performed in Studio. Share reuse metadata is unconfirmed; owner-commissioned work included for this portfolio placement, not a general redistribution licence.",
+    "tags": [
+      "ldraw",
+      "illustration",
+      "diagram",
+      "woodhouse",
+      "media studio",
+      "line",
+      "portfolio"
+    ],
+    "use": "Insert into a diagram or presentation about taking a drawing beyond the page.",
+    "file": "/portfolio/ldraw-line-studio.webp",
+    "thumb": "/portfolio/thumbs/ldraw-line-studio.webp",
+    "studioPage": "https://media.loftwah.com/p/N1wzgVkef0KjJmlM",
+    "sourceSha": "7758a17cd5e12dd15692ac6db8153e59387527697030d1605f9174119e72411b",
+    "derivativeSha": "939aae12aefd10ced0324fe9d2c601276ba51e3fb4d2f3240c05e2e230f63fd2",
+    "width": 1200,
+    "height": 675,
+    "projectLabel": "LDraw",
+    "accent": "#FC5B05",
+    "tint": "#FFE8D9"
+  },
+  {
     "id": "ldraw-share",
     "project": "ldraw",
     "category": "template",
@@ -3528,7 +3561,7 @@ export const artworkProjects = [
     "group": "Apps",
     "accent": "#FC5B05",
     "tint": "#FFE8D9",
-    "count": 16,
+    "count": 17,
     "architecture": true
   },
   {
@@ -3726,7 +3759,7 @@ export const artworkCategories = [
   {
     "key": "illustration",
     "label": "Illustrations",
-    "count": 11
+    "count": 12
   },
   {
     "key": "template",
@@ -4701,7 +4734,7 @@ export const architectureCatalogue = [
 
 export const libraryStats = {
   "projects": 18,
-  "assets": 108,
+  "assets": 109,
   "compositions": 3,
   "architecture": 18,
   "categories": 11
@@ -5579,6 +5612,39 @@ export const artworkByProject = {
       "derivativeSha": "bc748d52d84891754da64d03b9871770a0f4685a23fd599a6fa55f4ae5647d20",
       "width": 1200,
       "height": 600,
+      "projectLabel": "LDraw",
+      "accent": "#FC5B05",
+      "tint": "#FFE8D9"
+    },
+    {
+      "id": "ldraw-line-studio",
+      "project": "ldraw",
+      "category": "illustration",
+      "title": "The line escapes the margin",
+      "subtitle": "From Woodhouse Share through Media Studio",
+      "source": "catalogue/source/ldraw-line-studio.png",
+      "sourceKind": "OpenAI Image API · Woodhouse commission",
+      "status": "documented",
+      "statusLabel": "Credited commissioned illustration",
+      "credit": "Woodhouse · gpt-image-2.6-flare · OpenAI Image API",
+      "note": "Woodhouse commission new-073, imported and published unchanged through Media Studio. Source https://woodhouse.loftwah.com/api/v1/assets/new-073; Studio asset asset_5aecf24dc01904de7b8d5855fa4e53fd19395c40d8b2343746bff7523d523bec. No generation or edit was performed in Studio. Share reuse metadata is unconfirmed; owner-commissioned work included for this portfolio placement, not a general redistribution licence.",
+      "tags": [
+        "ldraw",
+        "illustration",
+        "diagram",
+        "woodhouse",
+        "media studio",
+        "line",
+        "portfolio"
+      ],
+      "use": "Insert into a diagram or presentation about taking a drawing beyond the page.",
+      "file": "/portfolio/ldraw-line-studio.webp",
+      "thumb": "/portfolio/thumbs/ldraw-line-studio.webp",
+      "studioPage": "https://media.loftwah.com/p/N1wzgVkef0KjJmlM",
+      "sourceSha": "7758a17cd5e12dd15692ac6db8153e59387527697030d1605f9174119e72411b",
+      "derivativeSha": "939aae12aefd10ced0324fe9d2c601276ba51e3fb4d2f3240c05e2e230f63fd2",
+      "width": 1200,
+      "height": 675,
       "projectLabel": "LDraw",
       "accent": "#FC5B05",
       "tint": "#FFE8D9"

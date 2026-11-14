@@ -84,6 +84,8 @@ for (const asset of assets) {
     fail(`${asset.id}: unknown status ${asset.status}`);
   if (!asset.title || !asset.subtitle || !asset.credit || !asset.note)
     fail(`${asset.id}: incomplete record`);
+  if (asset.studioPage && !/^https:\/\/media\.loftwah\.com\/p\/[A-Za-z0-9_-]+$/.test(asset.studioPage))
+    fail(`${asset.id}: Studio provenance must be a published Media Studio page`);
   if (!asset.file?.startsWith("/portfolio/"))
     fail(`${asset.id}: local /portfolio/ file required`);
   if (!asset.thumb?.startsWith("/portfolio/thumbs/"))

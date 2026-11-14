@@ -857,6 +857,14 @@ body.presenting {
   line-height: 1.45;
   color: var(--text);
 }
+.preview-source {
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 650;
+  text-decoration: none;
+}
+.preview-source:hover { color: var(--accent); }
+.preview-source:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .preview-actions {
   display: flex;
   gap: 6px;

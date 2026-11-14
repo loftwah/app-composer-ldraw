@@ -1,6 +1,6 @@
 # Portfolio artwork in LDraw
 
-Generated 26 October 2026 by `scripts/catalogue.mjs`. The maintained record is `catalogue/assets.json`; this page and `src/portfolio.mjs` are generated from it. 108 local WebP assets cover 18 projects.
+Generated 26 October 2026 by `scripts/catalogue.mjs`. The maintained record is `catalogue/assets.json`; this page and `src/portfolio.mjs` are generated from it. 109 local WebP assets cover 18 projects.
 
 The library inserts the local WebP derived from the owning project. Source paths and both SHA-256 values travel with the record and into native image `customData`. Approval language is deliberately literal: `approved` is never substituted for `documented`, `current`, `candidate` or `sample`.
 
@@ -19,7 +19,7 @@ The library inserts the local WebP derived from the owning project. Source paths
 | Project | Group | Brand state | Artwork | Architecture |
 | --- | --- | --- | ---: | --- |
 | App Composer | Apps | approved-identity | 6 | source-verified scene |
-| LDraw | Apps | authored-identity | 16 | source-verified scene |
+| LDraw | Apps | authored-identity | 17 | source-verified scene |
 | Paperwork | Apps | documented | 4 | source-verified scene |
 | Here / there | Apps | documented | 4 | source-verified scene |
 | Linkarooie | Apps | qualified | 5 | source-verified scene |
@@ -63,6 +63,7 @@ The library inserts the local WebP derived from the owning project. Source paths
 | LDraw | Icons | Webhook symbol — Technical symbols · Tabler Icons | documented | `/portfolio/tabler-webhook.webp` 192×192 | `catalogue/source/tabler/webhook.png` | `959bd9bda41a…` |
 | LDraw | Screenshots | LDraw workspace — Editable drawing, real portfolio blocks | documented | `/portfolio/ldraw-workspace.webp` 1200×833 | `app-composer/public/brand/apps/ldraw-workspace-fa7a2ab6171c-010cfbd2-r2-1440.webp` | `325323e80c4c…` |
 | LDraw | Illustrations | From sketch to software — A notebook, modular blocks and a working screen | documented | `/portfolio/idea-to-software.webp` 1200×600 | `catalogue/source/idea-to-software.png` | `81407aa901d0…` |
+| LDraw | Illustrations | The line escapes the margin — From Woodhouse Share through Media Studio | documented | `/portfolio/ldraw-line-studio.webp` 1200×675 | `catalogue/source/ldraw-line-studio.png` | `7758a17cd5e1…` |
 | LDraw | Templates | LDraw share card — The editor beside its text identity | documented | `/portfolio/ldraw-share.webp` 1200×630 | `app-composer/public/brand/apps/ldraw-share-fa7a2ab6171c-010cfbd2-r2.png` | `15248624ad58…` |
 | Paperwork | Icons | Paperwork icon — Document, ink and a clear action | documented | `/portfolio/paperwork-icon.webp` 64×64 | `app-composer-paperwork/public/icon.svg` | `75b36c679c60…` |
 | Paperwork | Screenshots | Paperwork editor — Real fields, ink and a fictional document | documented | `/portfolio/paperwork-editor.webp` 1200×917 | `app-composer/public/paperwork/editor-20261024-compact.webp` | `041b4a7eb61f…` |
@@ -446,6 +447,20 @@ The library inserts the local WebP derived from the owning project. Source paths
 - Intended use: Open a product walkthrough or explain the journey from an initial sketch to a working app.
 - Tags: illustration, design, delivery, onboarding, imagegen
 - Note: Original generated resource for LDraw. See docs/workspace-resources.md for the exact prompt and provenance.
+
+### The line escapes the margin
+
+- Project: LDraw
+- Category: Illustrations
+- Status: Credited commissioned illustration (`documented`)
+- Credit: Woodhouse · gpt-image-2.6-flare · OpenAI Image API
+- Source: `catalogue/source/ldraw-line-studio.png` (OpenAI Image API · Woodhouse commission)
+- Source SHA-256: `7758a17cd5e12dd15692ac6db8153e59387527697030d1605f9174119e72411b`
+- Derivative: `/portfolio/ldraw-line-studio.webp` (1200×675), SHA-256 `939aae12aefd10ced0324fe9d2c601276ba51e3fb4d2f3240c05e2e230f63fd2`
+- Thumbnail: `/portfolio/thumbs/ldraw-line-studio.webp`
+- Intended use: Insert into a diagram or presentation about taking a drawing beyond the page.
+- Tags: ldraw, illustration, diagram, woodhouse, media studio, line, portfolio
+- Note: Woodhouse commission new-073, imported and published unchanged through Media Studio. Source https://woodhouse.loftwah.com/api/v1/assets/new-073; Studio asset asset_5aecf24dc01904de7b8d5855fa4e53fd19395c40d8b2343746bff7523d523bec. No generation or edit was performed in Studio. Share reuse metadata is unconfirmed; owner-commissioned work included for this portfolio placement, not a general redistribution licence.
 
 ### LDraw share card
 

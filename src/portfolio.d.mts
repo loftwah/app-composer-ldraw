@@ -42,6 +42,7 @@ export type PortfolioArtwork = {
   sourceKind: string;
   sourceSha: string;
   derivativeSha: string;
+  studioPage?: string;
 };
 
 export type PortfolioProject = {

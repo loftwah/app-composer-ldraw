@@ -33,6 +33,7 @@ export function artworkCustomData(item) {
     ldrawSourceSha256: item.sourceSha,
     ldrawDerivativeSha256: item.derivativeSha,
     ldrawUse: item.use,
+    ...(item.studioPage ? { ldrawStudioPage: item.studioPage } : {}),
   };
 }
 

@@ -657,6 +657,9 @@ export function LibraryDialog({
                   {tab === "artwork" ? (
                     <p className="preview-use">{selected.use}</p>
                   ) : null}
+                  {tab === "artwork" && "studioPage" in selected && typeof selected.studioPage === "string" ? (
+                    <p className="preview-use"><a className="preview-source" href={selected.studioPage} target="_blank" rel="noopener noreferrer">See the published Media Studio source ↗</a></p>
+                  ) : null}
                   {tab === "architecture" ? (
                     <>
                       <dl className="preview-facts">
