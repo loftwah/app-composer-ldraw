@@ -786,6 +786,12 @@ body.presenting {
 .block-card .asset-copy > span {
   -webkit-line-clamp: 2;
 }
+.studio-motion { margin: 0 0 12px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-2); }
+.studio-motion summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+.studio-motion-content { display: flex; flex-wrap: wrap; gap: 14px; align-items: start; padding-top: 12px; }
+.studio-motion-content video { width: min(100%, 180px); max-height: 225px; background: #111; border-radius: 6px; }
+.studio-motion-content div { flex: 1 1 220px; font-size: 0.875rem; line-height: 1.5; }
+.studio-motion-content p { margin: 6px 0; }
 .library-preview {
   min-width: 0;
   min-height: 0;

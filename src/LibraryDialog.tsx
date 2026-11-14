@@ -419,6 +419,22 @@ export function LibraryDialog({
           )}
 
           <section className="library-results" aria-label="Library results">
+            {tab === "artwork" && project === "ldraw" && category === "all" && !query.trim() ? (
+              <details className="studio-motion">
+                <summary>Watch an LDraw motion study</summary>
+                <div className="studio-motion-content">
+                  <video controls playsInline preload="none" poster="/films/move-the-mountain-poster.png" aria-label="Move the mountain, a silent generated motion study">
+                    <source src="/films/move-the-mountain-studio.mp4" type="video/mp4" />
+                  </video>
+                  <div>
+                    <strong>Move the mountain</strong>
+                    <p>A six-second generated illustration of moving a shape. This is a motion study, not a recording of LDraw.</p>
+                    <p>Original: Woodhouse commission new-074, made with OpenAI Image API. Motion: Hailuo 2.3 in Media Studio.</p>
+                    <a href="https://media.loftwah.com/p/hvhyL90Wm1EXbrAE" target="_blank" rel="noopener noreferrer">See the Studio source and credit ↗</a>
+                  </div>
+                </div>
+              </details>
+            ) : null}
             {tab === "artwork" ? (
               <div className="category-chips" aria-label="Filter by category">
                 <button
