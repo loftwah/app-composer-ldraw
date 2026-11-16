@@ -35,7 +35,7 @@ URL, an account, a database or a cloud dependency.
 | `@modelcontextprotocol/client` | 2.4.0 (devDependency, tests only) |
 | `zod` | 4.6.7 (same pin as Composer) |
 | `@excalidraw/excalidraw` | 0.18.1 |
-| `playwright` | 1.65.0 (devDependency, render only) |
+| `playwright` | 1.65.1 (devDependency, render only) |
 
 `pnpm-lock.yaml` pins integrity for each of these. No extra service, account or
 paid plan is involved.
