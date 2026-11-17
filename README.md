@@ -24,7 +24,7 @@ node scripts/library-check.mjs   # built app + local Playwright
   three authored 16:9 compositions.
 - **18 source-verified architecture scenes** — native `.excalidraw` files with
   previews, provenance and a public handoff manifest.
-- **44 editable native blocks** — project cards, nine portfolio workflows,
+- **46 editable native blocks** — project cards, nine portfolio workflows,
   eight general workflow starters, and infrastructure, game, music and wireframe blocks.
 - **18 maintained projects** — App Composer, LDraw, Paperwork, Here / there,
   Linkarooie, Link Check, Carry / forward, Hello World, Launch Kit, Asset
@@ -66,6 +66,15 @@ insertion. The native Excalidraw personal library remains available from
 The original 18 blocks and the owner's own Excalidraw library items are retained.
 Built-in native items keep stable `ldraw-*` IDs and merge with, never replace,
 personal items.
+
+### App Composer page planning
+
+In **Portfolio → Blocks → App Composer**, insert **Composer public page map** to
+see where people find apps, try a sample, build, and find published work. The
+cards link to the public pages and the map records the Composer revision it
+describes. Insert **Does this need its own page?** to review a proposed page or
+navigation item against the destinations that already exist. Both diagrams use
+editable native text, boxes and arrows.
 
 ## Architecture library
 

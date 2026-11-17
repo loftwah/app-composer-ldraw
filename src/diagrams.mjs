@@ -798,10 +798,204 @@ function workflowBlock({ id, name, description, stages, accent, tint, note }, co
   };
 }
 
+const composerPageGroups = [
+  {
+    id: "start",
+    title: "Find or start work",
+    pages: [
+      ["Browse by task", "/discover"],
+      ["App library", "/apps"],
+      ["Learn", "/learn"],
+      ["Get Ready", "/ready"],
+      ["Create an app", "/init"],
+    ],
+    handoffs: [
+      [0, 1],
+      [2, 3],
+      [3, 4],
+    ],
+  },
+  {
+    id: "try",
+    title: "Try something before building",
+    pages: [
+      ["Demos", "/demo"],
+      ["Working examples", "/demo/examples"],
+      ["Paperwork sample", "/demo/examples/print-shop"],
+    ],
+    handoffs: [
+      [0, 1],
+      [1, 2],
+    ],
+  },
+  {
+    id: "published",
+    title: "Find something already published",
+    pages: [
+      ["Share artwork", "/share"],
+      ["Media Studio films", "/media-studio/films"],
+      ["Published stacks", "/studio/published"],
+      ["Project stories", "/projects"],
+    ],
+    handoffs: [],
+  },
+  {
+    id: "reference",
+    title: "Look something up or take it away",
+    pages: [
+      ["Documentation", "/docs"],
+      ["Prompt library", "/prompts"],
+      ["App contracts", "/catalogue"],
+      ["App activity", "/activity"],
+    ],
+    handoffs: [[0, 1]],
+  },
+];
+
+function publicPageMap() {
+  const id = "composer-public-page-map";
+  const width = 204;
+  const gap = 34;
+  return {
+    id,
+    name: "Composer public page map",
+    description:
+      "Public page purposes and next steps, from discovery and building to demos and published work.",
+    collection: "composer",
+    width: 1160,
+    height: 550,
+    elements: [
+      text(`${id}-title`, 0, 0, "Composer public page map", { size: 32 }),
+      text(
+        `${id}-intro`,
+        0,
+        50,
+        "Follow the arrows for next steps. Open a card’s link to visit the page.",
+        { size: 18, color: MUTED },
+      ),
+      ...composerPageGroups.flatMap(
+        ({ id: group, title, pages, handoffs }, row) => {
+          const y = 96 + row * 108;
+          const key = `${id}-${group}`;
+          return [
+            text(`${key}-heading`, 0, y, title, { size: 19 }),
+            ...pages.map(([label, path], column) => {
+              const [card] = chip(
+                `${key}-${column}`,
+                column * (width + gap),
+                y + 30,
+                label,
+                {
+                  width,
+                  height: 58,
+                  size: 17,
+                  accent: BLUE,
+                  tint: BLUE_TINT,
+                },
+              );
+              return { ...card, link: `https://composer.loftwah.com${path}` };
+            }),
+            ...handoffs.map(([from, to]) => ({
+              ...arrow(
+                `${key}-${from}-to-${to}`,
+                from * (width + gap) + width,
+                y + 59,
+                gap,
+                0,
+                { stroke: BLUE },
+              ),
+              start: { id: `${key}-${from}` },
+              end: { id: `${key}-${to}` },
+            })),
+          ];
+        },
+      ),
+      text(
+        `${id}-source`,
+        0,
+        529,
+        "Composer main · d0322a1 · 17 November 2026",
+        { size: 15, color: MUTED },
+      ),
+    ],
+  };
+}
+
+function publicPageDecisionFlow() {
+  const id = "composer-public-page-decision";
+  const boxes = [
+    ["task", 0, 158, "Name the visitor’s task"],
+    ["question", 280, 158, "Same task and result?"],
+    ["reuse", 610, 84, "Use the existing page"],
+    ["link", 890, 84, "Link to it or improve it"],
+    ["place", 610, 232, "Choose a parent page"],
+    ["publish", 890, 232, "Give it one clear job"],
+  ];
+  const connections = [
+    ["task", "question", 226, 188, 54, 0],
+    ["question", "reuse", 506, 188, 104, -74],
+    ["question", "place", 506, 188, 104, 74],
+    ["reuse", "link", 836, 114, 54, 0],
+    ["place", "publish", 836, 262, 54, 0],
+  ];
+  return {
+    id,
+    name: "Does this need its own page?",
+    description:
+      "A public page review flowchart for spotting duplicate jobs and putting new pages under the right parent.",
+    collection: "composer",
+    width: 1120,
+    height: 418,
+    elements: [
+      text(`${id}-title`, 0, 0, "Does this need its own page?", { size: 32 }),
+      text(
+        `${id}-intro`,
+        0,
+        50,
+        "Before adding navigation, say what the visitor needs to do and what they leave with.",
+        { size: 18, color: MUTED },
+      ),
+      ...boxes.flatMap(([key, x, y, label]) =>
+        chip(`${id}-${key}`, x, y, label, {
+          width: 226,
+          height: 60,
+          size: 17,
+          accent: VIOLET,
+          tint: VIOLET_TINT,
+        }),
+      ),
+      ...connections.map(([from, to, x, y, dx, dy]) => ({
+        ...arrow(`${id}-${from}-to-${to}`, x, y, dx, dy, { stroke: VIOLET }),
+        start: { id: `${id}-${from}` },
+        end: { id: `${id}-${to}` },
+      })),
+      text(`${id}-yes`, 541, 127, "Yes", { size: 17 }),
+      text(`${id}-no`, 543, 245, "No", { size: 17 }),
+      line(`${id}-rule`, 0, 323, 1116, 0),
+      text(
+        `${id}-examples`,
+        0,
+        344,
+        "Prompts owns choosing and copying prompts. Docs can link to the relevant prompt.",
+        { size: 18 },
+      ),
+      text(
+        `${id}-contracts`,
+        0,
+        380,
+        "App library owns browsing and opening apps. Catalogue can explain the contracts.",
+        { size: 18 },
+      ),
+    ],
+  };
+}
+
 /** Library items, grouped by the collection ids above. */
 export const librarySpecs = [
   ...workflowStarters.map((starter) => workflowBlock(starter, "workflows")),
   ...portfolioWorkflows.map((starter) => workflowBlock(starter, "portfolio-workflows")),
+  publicPageMap(),
+  publicPageDecisionFlow(),
   ...apps.map((app) => ({
     id: `apps-${app.key}`,
     name: app.title,
