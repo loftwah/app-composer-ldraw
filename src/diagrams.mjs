@@ -342,8 +342,8 @@ function arrow(id, x, y, width, height, options = {}) {
     type: "arrow",
     x,
     y,
-    width,
-    height,
+    width: Math.abs(width),
+    height: Math.abs(height),
     points: [
       [0, 0],
       [width, height],
