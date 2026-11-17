@@ -15,6 +15,7 @@
     "format": "prettier --write src scripts tests *.json *.html",
     "scene": "node scripts/scene.mjs",
     "render": "node scripts/render.mjs",
+    "export:composer-diagrams": "node scripts/export-composer-diagrams.mjs",
     "mcp": "node scripts/mcp-server.mjs",
     "mcp:font-metrics": "node scripts/font-metrics.mjs",
     "qualify": "node scripts/qualify.mjs",
