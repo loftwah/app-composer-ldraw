@@ -24,7 +24,7 @@ node scripts/library-check.mjs   # built app + local Playwright
   three authored 16:9 compositions.
 - **18 source-verified architecture scenes** — native `.excalidraw` files with
   previews, provenance and a public handoff manifest.
-- **46 editable native blocks** — project cards, nine portfolio workflows,
+- **57 editable native blocks** — project cards, nine portfolio workflows,
   eight general workflow starters, and infrastructure, game, music and wireframe blocks.
 - **18 maintained projects** — App Composer, LDraw, Paperwork, Here / there,
   Linkarooie, Link Check, Carry / forward, Hello World, Launch Kit, Asset
@@ -67,14 +67,30 @@ The original 18 blocks and the owner's own Excalidraw library items are retained
 Built-in native items keep stable `ldraw-*` IDs and merge with, never replace,
 personal items.
 
-### App Composer page planning
+### App Composer engineering diagrams
 
-In **Portfolio → Blocks → App Composer**, insert **Composer public page map** to
-see where people find apps, try a sample, build, and find published work. The
-cards link to the public pages and the map records the Composer revision it
-describes. Insert **Does this need its own page?** to review a proposed page or
-navigation item against the destinations that already exist. Both diagrams use
-editable native text, boxes and arrows.
+Open **Portfolio → Blocks → App Composer** and start with **What App Composer
+is for**. It shows the creator’s job, the role of a chosen agent, working paths
+and the broader product direction. Companion diagrams cover building, capability
+contracts, agent authority, release and runtime, publication and operations,
+creative work, guides and independent apps. The public page map and review
+flowchart show where things belong and how to spot two pages doing the same job.
+
+The editable originals are authored in [`src/composer-maps.mjs`](src/composer-maps.mjs)
+and [`src/diagrams.mjs`](src/diagrams.mjs). To make a portable folder of originals
+and previews, build LDraw and run:
+
+```sh
+pnpm build
+pnpm export:composer-diagrams
+```
+
+The export writes a linked index and native `.excalidraw`, PNG and SVG files
+under `output/app-composer-diagrams/`. It includes the reviewed project
+architecture scenes already in LDraw. The
+[Composer diagram atlas](https://composer.loftwah.com/diagrams) owns its own
+lifecycle, approval, environment and contribution diagrams, with committed
+originals in Composer’s `public/diagrams/ldraw/`.
 
 ## Architecture library
 

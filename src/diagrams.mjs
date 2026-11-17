@@ -12,6 +12,7 @@ import {
   architectureModels,
 } from "./architecture.mjs";
 import { compositionSpecs } from "./compositions.mjs";
+import { composerMapDate, composerMapSource, composerMaps, composerPageDecisionId } from "./composer-maps.mjs";
 
 export const INK = "#1D2330";
 export const MUTED = "#6B645C";
@@ -798,82 +799,26 @@ function workflowBlock({ id, name, description, stages, accent, tint, note }, co
   };
 }
 
-const composerPageGroups = [
-  {
-    id: "start",
-    title: "Find or start work",
-    pages: [
-      ["Browse by task", "/discover"],
-      ["App library", "/apps"],
-      ["Learn", "/learn"],
-      ["Get Ready", "/ready"],
-      ["Create an app", "/init"],
-    ],
-    handoffs: [
-      [0, 1],
-      [2, 3],
-      [3, 4],
-    ],
-  },
-  {
-    id: "try",
-    title: "Try something before building",
-    pages: [
-      ["Demos", "/demo"],
-      ["Working examples", "/demo/examples"],
-      ["Paperwork sample", "/demo/examples/print-shop"],
-    ],
-    handoffs: [
-      [0, 1],
-      [1, 2],
-    ],
-  },
-  {
-    id: "published",
-    title: "Find something already published",
-    pages: [
-      ["Share artwork", "/share"],
-      ["Media Studio films", "/media-studio/films"],
-      ["Published stacks", "/studio/published"],
-      ["Project stories", "/projects"],
-    ],
-    handoffs: [],
-  },
-  {
-    id: "reference",
-    title: "Look something up or take it away",
-    pages: [
-      ["Documentation", "/docs"],
-      ["Prompt library", "/prompts"],
-      ["App contracts", "/catalogue"],
-      ["App activity", "/activity"],
-    ],
-    handoffs: [[0, 1]],
-  },
-];
-
-function publicPageMap() {
-  const id = "composer-public-page-map";
+function composerMapBlock({ id, name, description, groups, reference, intro }) {
   const width = 204;
   const gap = 34;
   return {
     id,
-    name: "Composer public page map",
-    description:
-      "Public page purposes and next steps, from discovery and building to demos and published work.",
+    name,
+    description,
     collection: "composer",
     width: 1160,
     height: 550,
     elements: [
-      text(`${id}-title`, 0, 0, "Composer public page map", { size: 32 }),
+      text(`${id}-title`, 0, 0, name, { size: 32 }),
       text(
         `${id}-intro`,
         0,
         50,
-        "Follow the arrows for next steps. Open a card’s link to visit the page.",
+        intro ?? "Arrows show the handoffs. Linked cards open supporting pages.",
         { size: 18, color: MUTED },
       ),
-      ...composerPageGroups.flatMap(
+      ...groups.flatMap(
         ({ id: group, title, pages, handoffs }, row) => {
           const y = 96 + row * 108;
           const key = `${id}-${group}`;
@@ -893,7 +838,9 @@ function publicPageMap() {
                   tint: BLUE_TINT,
                 },
               );
-              return { ...card, link: `https://composer.loftwah.com${path}` };
+              return path
+                ? { ...card, link: new URL(path, "https://composer.loftwah.com").href }
+                : card;
             }),
             ...handoffs.map(([from, to]) => ({
               ...arrow(
@@ -914,7 +861,7 @@ function publicPageMap() {
         `${id}-source`,
         0,
         529,
-        "Composer main · d0322a1 · 17 November 2026",
+        reference ?? `Composer reference · ${composerMapSource.slice(0, 7)} · ${composerMapDate}`,
         { size: 15, color: MUTED },
       ),
     ],
@@ -922,7 +869,7 @@ function publicPageMap() {
 }
 
 function publicPageDecisionFlow() {
-  const id = "composer-public-page-decision";
+  const id = composerPageDecisionId;
   const boxes = [
     ["task", 0, 158, "Name the visitor’s task"],
     ["question", 280, 158, "Same task and result?"],
@@ -994,7 +941,7 @@ function publicPageDecisionFlow() {
 export const librarySpecs = [
   ...workflowStarters.map((starter) => workflowBlock(starter, "workflows")),
   ...portfolioWorkflows.map((starter) => workflowBlock(starter, "portfolio-workflows")),
-  publicPageMap(),
+  ...composerMaps.map(composerMapBlock),
   publicPageDecisionFlow(),
   ...apps.map((app) => ({
     id: `apps-${app.key}`,
