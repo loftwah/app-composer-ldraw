@@ -81,12 +81,13 @@ codex mcp add ldraw -- node /absolute/path/to/scripts/mcp-server.mjs \
   --workspace /absolute/path/to/drawings
 ```
 
-OpenCode V2 (`opencode.jsonc`, from the official
+OpenCode V2 (project-local `opencode.jsonc`, from the official
 [MCP server docs](https://opencode.ai/v2/docs/mcp-servers)):
 
 ```jsonc
 {
   "$schema": "https://opencode.ai/config.json",
+  "codemode": false,
   "mcp": {
     "servers": {
       "ldraw": {
@@ -103,8 +104,8 @@ OpenCode V2 (`opencode.jsonc`, from the official
 }
 ```
 
-OpenCode's default Code Mode exposes these as `tools.ldraw.*`; add
-`"codemode": false` if you want them on the native tool list.
+This configuration exposes the five LDraw actions on the native tool list.
+OpenCode documents `tools.ldraw.*` for its default Code Mode.
 
 Any other MCP stdio client works if it can launch a command with arguments:
 `node scripts/mcp-server.mjs --workspace /absolute/path [--read-only]`.
@@ -115,9 +116,14 @@ Any other MCP stdio client works if it can launch a command with arguments:
   `StdioClientTransport` and `Client` from `@modelcontextprotocol/client@2.4.0`,
   lists tools, creates a scene and closes the connection.
 - Codex CLI 0.145.0 read the config above from a throw-away `CODEX_HOME` and
-  reported the server as an enabled `stdio` transport. No model-driven Codex or
-  OpenCode session was run, because that needs the owner's authenticated model
-  budget.
+  reported the server as an enabled `stdio` transport.
+- A separate OpenCode 2.3.0 run used the project-local configuration above and
+  the native tools through stdio. It listed templates, created the Composer
+  Creator Hub block, added one label against the exact scene revision, read it
+  back, and rendered editable Excalidraw source plus PNG and SVG files inside
+  the selected workspace. On that install, `opencode mcp list` reported no
+  servers from the project-local configuration. The interactive tool results
+  and saved files confirmed the connection.
 
 ## Tools
 
