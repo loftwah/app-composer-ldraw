@@ -13,8 +13,9 @@ release.
 pnpm install --frozen-lockfile
 pnpm dev
 pnpm check
-pnpm audit --audit-level low
+pnpm run audit
 pnpm build
+pnpm qualify
 node scripts/library-check.mjs   # built app + local Playwright
 ```
 
@@ -259,9 +260,31 @@ claimed by the source. Standalone and Composer-mounted origins never share
 browser storage. Composer should adopt an exact independent source pin.
 
 `pnpm deploy` requires clean pushed `main`, exact account/hostname, no service
-bindings, a fresh `output/qualification.json` for the release SHA, passing audit,
-check and build, then checks live `/build.json`. Root coordinates DNS and live
-interaction proof. No GitHub Actions, new account or provider is required.
+bindings and the checked share-card provenance. It starts one monotonic
+`release-timing/v1` run, then runs the dependency audit, `pnpm check`, one
+`pnpm build`, qualification of that exact build, the upload, and exact live
+`/build.json` plus SEO checks. Qualification writes the receipt after the current
+build passes. The guard checks that the receipt names the release SHA, that
+main still matches before upload, and that the same source is served after
+upload. Run `pnpm deploy` to run that sequence once. Root coordinates DNS and
+live interaction proof. No
+GitHub Actions, new account or provider is required.
+
+`pnpm run audit` (scripts/audit-dependencies.mjs) runs the untouched npm audit
+report and permits only `GHSA-fc5q-39xc-vjpf` for the two reviewed picomatch
+parser backports in `patches/`. It fails closed unless both installed parsers
+match their recorded SHA-256 and every locked and installed resolution points at
+one of those two copies. The upstream tracking and removal condition are in App Composer #804.
+
+Qualification-to-live time is recorded in a redacted `release-timing/v1`
+receipt under ignored `.release/timing/`. A run at or over 300 seconds still
+completes, then opens or updates one deduplicated `[DELIVERY SLA]` issue; a
+failed GitHub write is queued and never shown as delivered. Set
+`LDRAW_FIRST_EDIT_AT` to an exact UTC `date -u +%Y-%m-%dT%H:%M:%SZ` value to add
+the opt-in first-edit gap. `node scripts/release-watchdog.mjs` reports stale
+runs with `--check-stuck` and retries queued alerts with `--retry-pending`, given
+`--repo loftwah/app-composer-ldraw`.
+
 Device metadata starts `unknown`; desktop browser checks and physical phone/
 tablet editing are distinct evidence. A responsive screenshot proves layout.
 

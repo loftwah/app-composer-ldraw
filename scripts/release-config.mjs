@@ -29,3 +29,11 @@ export async function readReleaseConfig() {
     ),
   );
 }
+
+export function verifyQualification(qualification, sha) {
+  if (qualification?.source !== sha || qualification?.status !== "passed")
+    throw new Error(
+      "Fresh qualification did not pass for the exact release source.",
+    );
+  return qualification;
+}
