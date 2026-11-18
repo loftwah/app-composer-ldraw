@@ -144,6 +144,7 @@ export function App() {
   const theme: ResolvedTheme = resolveTheme(appearance, prefersDark);
   const fileInput = useRef<HTMLInputElement>(null);
   const previewDialog = useRef<HTMLDialogElement>(null);
+  const previewOpener = useRef<HTMLButtonElement>(null);
   const workspace = useRef<HTMLElement>(null);
   const initialized = useRef(false);
   const enabled = useRef(false);
@@ -570,7 +571,7 @@ export function App() {
       if (fileInput.current) fileInput.current.value = "";
     }
   }
-  async function previewExport(kind: ExportKind) {
+  async function previewExport(kind: ExportKind, opener: HTMLButtonElement) {
     setBusy(true);
     try {
       const blob = await exportBlob(kind);
@@ -579,6 +580,7 @@ export function App() {
         .some(
           (element) => (element.customData as any)?.ldrawPresentation === true,
         );
+      previewOpener.current = opener;
       setPreview({
         blob,
         kind,
@@ -595,6 +597,11 @@ export function App() {
     } finally {
       setBusy(false);
     }
+  }
+  function dismissPreview() {
+    setPreview(undefined);
+    previewOpener.current?.focus({ preventScroll: true });
+    previewOpener.current = null;
   }
   async function insertPreset() {
     if (!api || !ready || busy || fontError) return;
@@ -1139,13 +1146,13 @@ export function App() {
             </select>
           </label>
           <button
-            onClick={() => void previewExport("png")}
+            onClick={(event) => void previewExport("png", event.currentTarget)}
             disabled={!ready || busy}
           >
             Export PNG
           </button>
           <button
-            onClick={() => void previewExport("svg")}
+            onClick={(event) => void previewExport("svg", event.currentTarget)}
             disabled={!ready || busy}
           >
             Export SVG
@@ -1252,14 +1259,14 @@ export function App() {
       {preview ? (
         <dialog
           ref={previewDialog}
-          onCancel={() => setPreview(undefined)}
+          onClose={dismissPreview}
           className="preview"
           aria-label={`${preview.kind.toUpperCase()} export preview`}
         >
           <div className="preview-heading">
             <strong>{preview.kind.toUpperCase()} preview</strong>
             <button
-              onClick={() => setPreview(undefined)}
+              onClick={() => previewDialog.current?.close()}
               aria-label="Close export preview"
             >
               ×
