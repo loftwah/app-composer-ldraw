@@ -559,7 +559,11 @@ export function LibraryDialog({
                     <button
                       className={`asset-favourite ${favourites.has(entryKey(item)) ? "active" : ""}`}
                       onClick={() => toggleFav(item)}
-                      aria-label={`Favourite ${item.title} architecture`}
+                      aria-label={
+                        favourites.has(entryKey(item))
+                          ? `Remove ${item.title} architecture from favourites`
+                          : `Add ${item.title} architecture to favourites`
+                      }
                       title="Favourite"
                     >
                       {favourites.has(entryKey(item)) ? "★" : "☆"}
