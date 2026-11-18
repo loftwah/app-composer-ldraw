@@ -562,9 +562,11 @@ export function App() {
       setError("");
     } catch (failure) {
       setError(
-        failure instanceof Error
-          ? failure.message
-          : "The file could not be opened. Your drawing is unchanged.",
+        failure instanceof SyntaxError
+          ? "LDraw couldn’t read that drawing file. Choose a valid .excalidraw file or continue editing the open drawing."
+          : failure instanceof Error
+            ? failure.message
+            : "The file could not be opened. Your drawing is unchanged.",
       );
     } finally {
       setBusy(false);
