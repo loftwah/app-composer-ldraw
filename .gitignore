@@ -4,6 +4,7 @@ public/excalidraw-assets/
 .wrangler/
 .vite/
 output/
+.release/
 .env*
 .dev.vars*
 *.db*

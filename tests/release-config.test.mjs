@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   readReleaseConfig,
   validateReleaseConfig,
+  verifyQualification,
 } from "../scripts/release-config.mjs";
 
 test("actual release configuration parses and passes the deployed guard parser", async () => {
@@ -40,4 +41,21 @@ test("release rejects accidental production service or data bindings", async () 
       () => validateReleaseConfig({ ...config, [binding]: [{}] }),
       /cannot deploy/,
     );
+});
+test("release only accepts fresh qualification of the exact source", () => {
+  const sha = "a".repeat(40);
+  assert.equal(
+    verifyQualification({ source: sha, status: "passed" }, sha).source,
+    sha,
+  );
+  assert.throws(
+    () =>
+      verifyQualification({ source: "b".repeat(40), status: "passed" }, sha),
+    /exact release source/,
+  );
+  assert.throws(
+    () => verifyQualification({ source: sha, status: "failed" }, sha),
+    /exact release source/,
+  );
+  assert.throws(() => verifyQualification(null, sha), /exact release source/);
 });
